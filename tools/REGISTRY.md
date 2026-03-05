@@ -12,6 +12,8 @@ Quick reference for tools available in this repository.
 | hubspot | CRM | ✓ | - | - | ✓ | [hubspot.md](integrations/hubspot.md) |
 | hunter | Email Outreach | ✓ | - | [✓](clis/hunter.js) | - | [hunter.md](integrations/hunter.md) |
 | lemlist | Email Outreach | ✓ | - | [✓](clis/lemlist.js) | - | [lemlist.md](integrations/lemlist.md) |
+| resend | Email | ✓ | ✓ | - | ✓ | [resend.md](integrations/resend.md) |
+| stripe | Payments | ✓ | ✓ | - | ✓ | [stripe.md](integrations/stripe.md) |
 
 ## Notes
 
