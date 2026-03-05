@@ -10,6 +10,8 @@ Quick reference for tools available in this repository.
 | instantly | Email Outreach | ✓ | - | [✓](clis/instantly.js) | - | [instantly.md](integrations/instantly.md) |
 | apollo | Data Enrichment | ✓ | - | [✓](clis/apollo.js) | - | [apollo.md](integrations/apollo.md) |
 | hubspot | CRM | ✓ | - | - | ✓ | [hubspot.md](integrations/hubspot.md) |
+| hunter | Email Outreach | ✓ | - | - | - | [hunter.md](integrations/hunter.md) |
+| lemlist | Email Outreach | ✓ | - | - | - | [lemlist.md](integrations/lemlist.md) |
 
 ## Notes
 
