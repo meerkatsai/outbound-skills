@@ -9,6 +9,7 @@ Quick reference for tools available in this repository.
 | smartlead | Email Outreach | ✓ | ✓ | [✓](clis/smartlead.js) | - | [smartlead.md](integrations/smartlead.md) |
 | instantly | Email Outreach | ✓ | - | [✓](clis/instantly.js) | - | [instantly.md](integrations/instantly.md) |
 | apollo | Data Enrichment | ✓ | - | [✓](clis/apollo.js) | - | [apollo.md](integrations/apollo.md) |
+| hubspot | CRM | ✓ | - | - | ✓ | [hubspot.md](integrations/hubspot.md) |
 
 ## Notes
 
