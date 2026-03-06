@@ -1,5 +1,9 @@
 # Versions
 
+## 0.1.1 - 2026-03-06
+
+- Added `product-marketing-context` skill to `skills/`.
+
 ## 0.1.0 - 2026-03-06
 
 - Added baseline repository docs and contribution guidance.
