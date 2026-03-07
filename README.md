@@ -5,7 +5,7 @@ Reusable GTM-focused skills, integration guides, and zero-dependency Node.js CLI
 ## What's Included
 
 - `skills/`: agent skills (`SKILL.md`) and supporting references
-  - Current skills: `apollo-outbound`, `competitor-alternatives`, `product-marketing-context`, `smartlead-outbound`
+  - Current skills: `apollo-outbound`, `competitor-alternatives`, `pipedrive-crm`, `product-marketing-context`, `resend-email`, `smartlead-outbound`
 - `tools/clis/`: runnable CLIs for Smartlead, Instantly, Apollo, Hunter, Lemlist, Resend, Google Ads, and Meta Ads
 - `tools/integrations/`: integration-level guides and auth setup notes
 - `validate-skills.sh`: local validation entrypoint

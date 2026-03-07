@@ -164,5 +164,5 @@ await resend.emails.send({
 
 ## Relevant Skills
 
-- email-sequence
-- onboarding-cro
+- resend-email
+- smartlead-outbound
