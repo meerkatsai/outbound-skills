@@ -1,5 +1,9 @@
 # Versions
 
+## 0.1.4 - 2026-03-07
+
+- Added `web-search-scrape` skill to route web search/scrape tasks after user selects `parallel-ai`, `tavily-ai`, or `firecrawl`.
+
 ## 0.1.3 - 2026-03-07
 
 - Added `pipedrive-crm` skill under `skills/pipedrive-crm/`.

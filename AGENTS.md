@@ -194,7 +194,10 @@ tools/
 │   ├── lemlist.js
 │   ├── resend.js
 │   ├── google-ads.js
-│   └── meta-ads.js
+│   ├── meta-ads.js
+│   ├── firecrawl.js
+│   ├── parallel-ai.js
+│   └── tavily-ai.js
 └── integrations/
     ├── apollo.md
     ├── smartlead.md
@@ -202,6 +205,9 @@ tools/
     ├── hunter.md
     ├── lemlist.md
     ├── resend.md
+    ├── firecrawl.md
+    ├── parallel-ai.md
+    ├── tavily-ai.md
     ├── google-ads.md
     ├── meta-ads.md
     ├── hubspot.md

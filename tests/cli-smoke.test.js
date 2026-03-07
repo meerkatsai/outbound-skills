@@ -18,13 +18,16 @@ function runCli(relativePath, args) {
 test('all CLIs allow --dry-run without integration env vars', () => {
   const scripts = [
     'tools/clis/apollo.js',
+    'tools/clis/firecrawl.js',
     'tools/clis/google-ads.js',
     'tools/clis/hunter.js',
     'tools/clis/instantly.js',
     'tools/clis/lemlist.js',
     'tools/clis/meta-ads.js',
+    'tools/clis/parallel-ai.js',
     'tools/clis/resend.js',
     'tools/clis/smartlead.js',
+    'tools/clis/tavily-ai.js',
   ]
 
   for (const script of scripts) {

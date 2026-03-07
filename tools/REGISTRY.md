@@ -16,6 +16,9 @@ Quick reference for tools available in this repository.
 | stripe | Payments | ✓ | ✓ | - | ✓ | [stripe.md](integrations/stripe.md) |
 | google-ads | Ads | ✓ | ✓ | [✓](clis/google-ads.js) | ✓ | [google-ads.md](integrations/google-ads.md) |
 | meta-ads | Ads | ✓ | - | [✓](clis/meta-ads.js) | ✓ | [meta-ads.md](integrations/meta-ads.md) |
+| firecrawl | Web Crawling | ✓ | ✓ | [✓](clis/firecrawl.js) | ✓ | [firecrawl.md](integrations/firecrawl.md) |
+| parallel-ai | Web Research | ✓ | ✓ | [✓](clis/parallel-ai.js) | ✓ | [parallel-ai.md](integrations/parallel-ai.md) |
+| tavily-ai | Web Research | ✓ | ✓ | [✓](clis/tavily-ai.js) | ✓ | [tavily-ai.md](integrations/tavily-ai.md) |
 
 ## Notes
 
