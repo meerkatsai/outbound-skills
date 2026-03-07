@@ -8,7 +8,7 @@ Frontend cloud platform for deployments, preview environments, domains, and edge
 |-------------|-----------|-------|
 | API | ✓ | Vercel REST API for projects, deployments, domains |
 | MCP | ✓ | Official MCP server at `https://mcp.vercel.com` |
-| CLI | ✓ | Official `vercel` CLI |
+| CLI | ✓ | Local CLI: [vercel.js](../clis/vercel.js); official `vercel` CLI also available |
 | SDK | ✓ | Official SDKs and API clients |
 
 ## Authentication
@@ -16,7 +16,7 @@ Frontend cloud platform for deployments, preview environments, domains, and edge
 - **Type**: OAuth (MCP) and API token (REST API)
 - **MCP server**: `https://mcp.vercel.com`
 - **REST header**: `Authorization: Bearer {VERCEL_TOKEN}`
-- **Env var**: `VERCEL_TOKEN` (for REST API/CLI workflows)
+- **Env var**: `VERCEL_TOKEN` (required for `tools/clis/vercel.js` unless `--dry-run`)
 
 ## Common Agent Operations
 
