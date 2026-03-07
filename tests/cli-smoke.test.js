@@ -25,6 +25,7 @@ test('all CLIs allow --dry-run without integration env vars', () => {
     'tools/clis/meta-ads.js',
     'tools/clis/resend.js',
     'tools/clis/smartlead.js',
+    'tools/clis/vercel.js',
   ]
 
   for (const script of scripts) {

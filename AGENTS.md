@@ -194,7 +194,8 @@ tools/
 │   ├── lemlist.js
 │   ├── resend.js
 │   ├── google-ads.js
-│   └── meta-ads.js
+│   ├── meta-ads.js
+│   └── vercel.js
 └── integrations/
     ├── apollo.md
     ├── smartlead.md
@@ -204,6 +205,8 @@ tools/
     ├── resend.md
     ├── google-ads.md
     ├── meta-ads.md
+    ├── vercel.md
+    ├── pipedrive.md
     ├── hubspot.md
     └── stripe.md
 ```
