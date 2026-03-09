@@ -6,7 +6,7 @@ Reusable GTM-focused skills, integration guides, and zero-dependency Node.js CLI
 
 - `skills/`: agent skills (`SKILL.md`) and supporting references
   - Current skills: `apollo-outbound`, `competitor-alternatives`, `email-find-verify`, `pipedrive-crm`, `product-marketing-context`, `resend-email`, `smartlead-outbound`, `web-search-scrape`
-- `tools/clis/`: runnable CLIs for Smartlead, Instantly, Apollo, Icypeas, Findymail, NeverBounce, MillionVerifier, Prospeo, RocketReach, Hunter, Lemlist, Resend, Google Ads, Meta Ads, Firecrawl, Parallel AI, and Tavily AI
+- `tools/clis/`: runnable CLIs for Smartlead, Instantly, Apollo, Icypeas, Findymail, NeverBounce, MillionVerifier, Prospeo, RocketReach, BuiltWith, Hunter, Lemlist, Resend, Google Ads, Meta Ads, Firecrawl, Parallel AI, and Tavily AI
 - `tools/integrations/`: integration-level guides and auth setup notes
 - `validate-skills.sh`: local validation entrypoint
 

@@ -18,6 +18,7 @@ function runCli(relativePath, args) {
 test('all CLIs allow --dry-run without integration env vars', () => {
   const scripts = [
     'tools/clis/apollo.js',
+    'tools/clis/builtwith.js',
     'tools/clis/firecrawl.js',
     'tools/clis/findymail.js',
     'tools/clis/google-ads.js',

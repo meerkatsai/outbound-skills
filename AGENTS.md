@@ -194,6 +194,7 @@ tools/
 │   ├── millionverifier.js
 │   ├── prospeo.js
 │   ├── rocketreach.js
+│   ├── builtwith.js
 │   ├── smartlead.js
 │   ├── instantly.js
 │   ├── hunter.js
@@ -212,11 +213,16 @@ tools/
     ├── millionverifier.md
     ├── prospeo.md
     ├── rocketreach.md
+    ├── reversecontact.md
+    ├── builtwith.md
+    ├── heyreach.md
+    ├── lagrowthmachine.md
     ├── smartlead.md
     ├── instantly.md
     ├── hunter.md
     ├── lemlist.md
     ├── resend.md
+    ├── vercel.md
     ├── firecrawl.md
     ├── parallel-ai.md
     ├── tavily-ai.md

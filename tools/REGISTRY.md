@@ -15,11 +15,16 @@ Quick reference for tools available in this repository.
 | millionverifier | Data Enrichment | ✓ | - | [✓](clis/millionverifier.js) | - | [millionverifier.md](integrations/millionverifier.md) |
 | prospeo | Data Enrichment | ✓ | - | [✓](clis/prospeo.js) | - | [prospeo.md](integrations/prospeo.md) |
 | rocketreach | Data Enrichment | ✓ | - | [✓](clis/rocketreach.js) | ✓ | [rocketreach.md](integrations/rocketreach.md) |
+| reversecontact | Data Enrichment | ✓ | - | - | - | [reversecontact.md](integrations/reversecontact.md) |
+| builtwith | Web Intelligence | ✓ | - | [✓](clis/builtwith.js) | - | [builtwith.md](integrations/builtwith.md) |
+| heyreach | Outreach Automation | ✓ | ✓ | - | - | [heyreach.md](integrations/heyreach.md) |
+| lagrowthmachine | Outreach Automation | ✓ | - | - | - | [lagrowthmachine.md](integrations/lagrowthmachine.md) |
 | hubspot | CRM | ✓ | - | - | ✓ | [hubspot.md](integrations/hubspot.md) |
 | hunter | Email Outreach | ✓ | - | [✓](clis/hunter.js) | - | [hunter.md](integrations/hunter.md) |
 | lemlist | Email Outreach | ✓ | - | [✓](clis/lemlist.js) | - | [lemlist.md](integrations/lemlist.md) |
 | resend | Email | ✓ | ✓ | [✓](clis/resend.js) | ✓ | [resend.md](integrations/resend.md) |
 | stripe | Payments | ✓ | ✓ | - | ✓ | [stripe.md](integrations/stripe.md) |
+| vercel | Deployment | ✓ | ✓ | - | ✓ | [vercel.md](integrations/vercel.md) |
 | google-ads | Ads | ✓ | ✓ | [✓](clis/google-ads.js) | ✓ | [google-ads.md](integrations/google-ads.md) |
 | meta-ads | Ads | ✓ | - | [✓](clis/meta-ads.js) | ✓ | [meta-ads.md](integrations/meta-ads.md) |
 | firecrawl | Web Crawling | ✓ | ✓ | [✓](clis/firecrawl.js) | ✓ | [firecrawl.md](integrations/firecrawl.md) |
