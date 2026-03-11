@@ -26,6 +26,8 @@ npm test
 
 Users can load and use these skills directly from the Meerkats.ai Skill Store (no local clone required).
 
+![Meerkats.ai Skill Store](docs/skill-store.png)
+
 Follow this flow in Meerkats.ai (as shown in the Skill Store screenshot):
 
 1. Open **Skill Store** in the left sidebar.
