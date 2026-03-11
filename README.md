@@ -28,6 +28,8 @@ Users can load and use these skills directly from the Meerkats.ai Skill Store (n
 
 ![Meerkats.ai Skill Store](docs/skill-store.png)
 
+Video walkthrough: [Browse Skills.mp4](docs/browse-skills.mp4)
+
 Follow this flow in Meerkats.ai (as shown in the Skill Store screenshot):
 
 1. Open **Skill Store** in the left sidebar.
