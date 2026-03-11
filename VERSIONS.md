@@ -1,5 +1,12 @@
 # Versions
 
+## 0.1.6 - 2026-03-11
+
+- Added `meerkats-product-context` skill with pre-filled Meerkats.ai product marketing context for automation.
+- Added `web-content-researcher` skill for data-driven content topic discovery across 5 research categories.
+- Added `content-calendar` skill for 7-day multi-channel content planning (LinkedIn, YouTube, blog).
+- Added `content-refresh-scheduler` skill to orchestrate the full content pipeline and save to Notion.
+
 ## 0.1.5 - 2026-03-07
 
 - Added `email-find-verify` skill to route email discovery/verification tasks after user chooses a provider tool.
