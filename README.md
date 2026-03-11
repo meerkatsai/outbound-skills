@@ -22,6 +22,22 @@ npm test
 ./validate-skills.sh
 ```
 
+## Load Skills Directly in Meerkats.ai
+
+Users can load and use these skills directly from the Meerkats.ai Skill Store (no local clone required).
+
+Follow this flow in Meerkats.ai (as shown in the Skill Store screenshot):
+
+1. Open **Skill Store** in the left sidebar.
+2. Click **Browse Skills**.
+3. In **Search skills...**, type `gtm` or a skill name like `apollo-outbound`.
+4. Select skills published from `meerkatsai/gtm-skills` (for example, `gtm-skills Agent`, `apollo-outbound`, `smartlead-outbound`, `pipedrive-crm`).
+5. Click **Try** on the skill card to load and run it in chat.
+
+Tips:
+- Use filters like **Popular**, **All Prices**, and **All Publishers** to narrow results.
+- You can load individual skills directly (for example `email-find-verify`) instead of loading the whole set first.
+
 ## Safety
 
 - Use `--dry-run` for write operations before running live API calls.
