@@ -214,6 +214,7 @@ tools/
     ├── prospeo.md
     ├── rocketreach.md
     ├── reversecontact.md
+    ├── rb2b.md
     ├── builtwith.md
     ├── heyreach.md
     ├── lagrowthmachine.md
@@ -223,6 +224,7 @@ tools/
     ├── lemlist.md
     ├── resend.md
     ├── vercel.md
+    ├── trigify.md
     ├── firecrawl.md
     ├── parallel-ai.md
     ├── tavily-ai.md

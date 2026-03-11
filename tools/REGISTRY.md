@@ -16,6 +16,7 @@ Quick reference for tools available in this repository.
 | prospeo | Data Enrichment | ✓ | - | [✓](clis/prospeo.js) | - | [prospeo.md](integrations/prospeo.md) |
 | rocketreach | Data Enrichment | ✓ | - | [✓](clis/rocketreach.js) | ✓ | [rocketreach.md](integrations/rocketreach.md) |
 | reversecontact | Data Enrichment | ✓ | - | - | - | [reversecontact.md](integrations/reversecontact.md) |
+| rb2b | Website Visitor ID | - | - | - | - | [rb2b.md](integrations/rb2b.md) |
 | builtwith | Web Intelligence | ✓ | - | [✓](clis/builtwith.js) | - | [builtwith.md](integrations/builtwith.md) |
 | heyreach | Outreach Automation | ✓ | ✓ | - | - | [heyreach.md](integrations/heyreach.md) |
 | lagrowthmachine | Outreach Automation | ✓ | - | - | - | [lagrowthmachine.md](integrations/lagrowthmachine.md) |
@@ -25,8 +26,10 @@ Quick reference for tools available in this repository.
 | resend | Email | ✓ | ✓ | [✓](clis/resend.js) | ✓ | [resend.md](integrations/resend.md) |
 | stripe | Payments | ✓ | ✓ | - | ✓ | [stripe.md](integrations/stripe.md) |
 | vercel | Deployment | ✓ | ✓ | - | ✓ | [vercel.md](integrations/vercel.md) |
+| trigify | Social Signal Automation | - | - | - | - | [trigify.md](integrations/trigify.md) |
 | google-ads | Ads | ✓ | ✓ | [✓](clis/google-ads.js) | ✓ | [google-ads.md](integrations/google-ads.md) |
 | meta-ads | Ads | ✓ | - | [✓](clis/meta-ads.js) | ✓ | [meta-ads.md](integrations/meta-ads.md) |
+| x.com | Social Media | ✓ | - | - | ✓ | [x-com.md](integrations/x-com.md) |
 | firecrawl | Web Crawling | ✓ | ✓ | [✓](clis/firecrawl.js) | ✓ | [firecrawl.md](integrations/firecrawl.md) |
 | parallel-ai | Web Research | ✓ | ✓ | [✓](clis/parallel-ai.js) | ✓ | [parallel-ai.md](integrations/parallel-ai.md) |
 | tavily-ai | Web Research | ✓ | ✓ | [✓](clis/tavily-ai.js) | ✓ | [tavily-ai.md](integrations/tavily-ai.md) |
