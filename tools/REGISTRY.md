@@ -15,8 +15,11 @@ Quick reference for tools available in this repository.
 | millionverifier | Data Enrichment | ✓ | - | [✓](clis/millionverifier.js) | - | [millionverifier.md](integrations/millionverifier.md) |
 | prospeo | Data Enrichment | ✓ | - | [✓](clis/prospeo.js) | - | [prospeo.md](integrations/prospeo.md) |
 | rocketreach | Data Enrichment | ✓ | - | [✓](clis/rocketreach.js) | ✓ | [rocketreach.md](integrations/rocketreach.md) |
+| ocean | Data Enrichment | ✓ | ✓ | [✓](clis/ocean.js) | - | [ocean.md](integrations/ocean.md) |
 | reversecontact | Data Enrichment | ✓ | - | - | - | [reversecontact.md](integrations/reversecontact.md) |
 | rb2b | Website Visitor ID | - | - | - | - | [rb2b.md](integrations/rb2b.md) |
+| canva | Design | ✓ | - | [✓](clis/canva.js) | ✓ | [canva.md](integrations/canva.md) |
+| remotion | Video Creation | - | - | ✓ | ✓ | [remotion.md](integrations/remotion.md) |
 | builtwith | Web Intelligence | ✓ | - | [✓](clis/builtwith.js) | - | [builtwith.md](integrations/builtwith.md) |
 | heyreach | Outreach Automation | ✓ | ✓ | - | - | [heyreach.md](integrations/heyreach.md) |
 | lagrowthmachine | Outreach Automation | ✓ | - | - | - | [lagrowthmachine.md](integrations/lagrowthmachine.md) |
