@@ -15,7 +15,11 @@ Quick reference for tools available in this repository.
 | millionverifier | Data Enrichment | ✓ | - | [✓](clis/millionverifier.js) | - | [millionverifier.md](integrations/millionverifier.md) |
 | prospeo | Data Enrichment | ✓ | - | [✓](clis/prospeo.js) | - | [prospeo.md](integrations/prospeo.md) |
 | rocketreach | Data Enrichment | ✓ | - | [✓](clis/rocketreach.js) | ✓ | [rocketreach.md](integrations/rocketreach.md) |
+| lusha | Data Enrichment | ✓ | ✓ | [✓](clis/lusha.js) | - | [lusha.md](integrations/lusha.md) |
 | ocean | Data Enrichment | ✓ | ✓ | [✓](clis/ocean.js) | - | [ocean.md](integrations/ocean.md) |
+| cognism | Data Enrichment | ✓ | - | [✓](clis/cognism.js) | - | [cognism.md](integrations/cognism.md) |
+| zoominfo | Data Enrichment | ✓ | ✓ | [✓](clis/zoominfo.js) | - | [zoominfo.md](integrations/zoominfo.md) |
+| uplead | Data Enrichment | ✓ | - | [✓](clis/uplead.js) | - | [uplead.md](integrations/uplead.md) |
 | reversecontact | Data Enrichment | ✓ | - | - | - | [reversecontact.md](integrations/reversecontact.md) |
 | rb2b | Website Visitor ID | - | - | - | - | [rb2b.md](integrations/rb2b.md) |
 | canva | Design | ✓ | - | [✓](clis/canva.js) | ✓ | [canva.md](integrations/canva.md) |
@@ -29,7 +33,8 @@ Quick reference for tools available in this repository.
 | resend | Email | ✓ | ✓ | [✓](clis/resend.js) | ✓ | [resend.md](integrations/resend.md) |
 | stripe | Payments | ✓ | ✓ | - | ✓ | [stripe.md](integrations/stripe.md) |
 | vercel | Deployment | ✓ | ✓ | - | ✓ | [vercel.md](integrations/vercel.md) |
-| trigify | Social Signal Automation | - | - | - | - | [trigify.md](integrations/trigify.md) |
+| trigify | Social Signal Automation | - | - | [✓](clis/trigify.js) | - | [trigify.md](integrations/trigify.md) |
+| timelinesai | WhatsApp Integration | ✓ | - | [✓](clis/timelinesai.js) | - | [timelinesai.md](integrations/timelinesai.md) |
 | google-ads | Ads | ✓ | ✓ | [✓](clis/google-ads.js) | ✓ | [google-ads.md](integrations/google-ads.md) |
 | meta-ads | Ads | ✓ | - | [✓](clis/meta-ads.js) | ✓ | [meta-ads.md](integrations/meta-ads.md) |
 | x.com | Social Media | ✓ | - | - | ✓ | [x-com.md](integrations/x-com.md) |

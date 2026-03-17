@@ -8,7 +8,7 @@ Signal intelligence and workflow automation platform for listening to social act
 |-------------|-----------|-------|
 | API | - | No public Trigify REST API is documented for end users |
 | MCP | - | No public MCP server documented |
-| CLI | - | No local `tools/clis/trigify.js` in this repo |
+| CLI | [✓](../clis/trigify.js) | Local helper CLI for HTTP Request, webhook, signal, and search node templates |
 | SDK | - | No public SDK documented |
 | Webhook | ✓ | Trigify supports inbound webhook triggers and outbound webhook/HTTP request actions |
 | Native Integrations | ✓ | Trigify documents native integrations for tools like HubSpot, Smartlead, Instantly, HeyReach, and others |
@@ -47,6 +47,12 @@ Example body:
 }
 ```
 
+Helper CLI:
+
+```bash
+node tools/clis/trigify.js http-request template --url https://your-app.com/api/webhook --body-template lead
+```
+
 ### Auto-push leads to a webhook
 
 Trigify documents webhook auto-push for sending newly discovered leads to an external endpoint.
@@ -58,6 +64,12 @@ Typical setup:
 3. Add the destination endpoint URL.
 4. Select subscribed events.
 5. Save and activate.
+
+Helper CLI:
+
+```bash
+node tools/clis/trigify.js webhook template --url https://your-app.com/api/trigify/webhook --events new_lead
+```
 
 ### Start a Trigify workflow from an external system
 
@@ -72,10 +84,32 @@ For supported tools, authenticate directly inside Trigify:
 
 Examples documented by Trigify include HubSpot, Smartlead, Instantly, and HeyReach.
 
+Helper CLI:
+
+```bash
+node tools/clis/trigify.js native list
+```
+
+### Configure signals and monitoring nodes
+
+Trigify also documents workflow primitives such as:
+
+- `Configure Signal`
+- `Create Social Listening Search`
+- `Create Profile Monitoring Search`
+
+Helper CLI:
+
+```bash
+node tools/clis/trigify.js signal template --name "Intent Signal" --severity high --category SALES
+node tools/clis/trigify.js search template --type social-listening --platforms LinkedIn,Twitter --keywords "looking for crm","recommendation"
+```
+
 ## Notes
 
 - Trigify acts primarily as an orchestration layer, not as a public API platform.
 - The `HTTP Request` node is the escape hatch for unsupported destinations.
+- The local CLI in this repo is a config/template generator for documented Trigify workflow nodes, not a Trigify API client.
 - Auto-push webhook delivery sends data as it is discovered, so downstream qualification or filtering may be needed.
 - Native integrations are preferable when available because they provide tool-specific actions and field mapping in the workflow UI.
 

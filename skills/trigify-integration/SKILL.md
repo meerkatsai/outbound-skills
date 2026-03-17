@@ -92,3 +92,4 @@ Return:
 ## Reference
 
 - Integration guide: `tools/integrations/trigify.md`
+- Helper CLI: `tools/clis/trigify.js`
