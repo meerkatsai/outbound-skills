@@ -39,6 +39,7 @@ Quick reference for tools available in this repository.
 | meta-ads | Ads | ✓ | - | [✓](clis/meta-ads.js) | ✓ | [meta-ads.md](integrations/meta-ads.md) |
 | x.com | Social Media | ✓ | - | - | ✓ | [x-com.md](integrations/x-com.md) |
 | firecrawl | Web Crawling | ✓ | ✓ | [✓](clis/firecrawl.js) | ✓ | [firecrawl.md](integrations/firecrawl.md) |
+| apify | Web Crawling | ✓ | ✓ | [✓](clis/apify.js) | ✓ | [apify.md](integrations/apify.md) |
 | parallel-ai | Web Research | ✓ | ✓ | [✓](clis/parallel-ai.js) | ✓ | [parallel-ai.md](integrations/parallel-ai.md) |
 | tavily-ai | Web Research | ✓ | ✓ | [✓](clis/tavily-ai.js) | ✓ | [tavily-ai.md](integrations/tavily-ai.md) |
 
