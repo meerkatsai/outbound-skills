@@ -8,6 +8,7 @@ Quick reference for tools available in this repository.
 |------|----------|:---:|:---:|:---:|:---:|-------|
 | smartlead | Email Outreach | ✓ | ✓ | [✓](clis/smartlead.js) | - | [smartlead.md](integrations/smartlead.md) |
 | instantly | Email Outreach | ✓ | - | [✓](clis/instantly.js) | - | [instantly.md](integrations/instantly.md) |
+| masterinbox | Email Inbox | ✓ | - | [✓](clis/masterinbox.js) | - | [masterinbox.md](integrations/masterinbox.md) |
 | apollo | Data Enrichment | ✓ | - | [✓](clis/apollo.js) | - | [apollo.md](integrations/apollo.md) |
 | icypeas | Data Enrichment | ✓ | - | [✓](clis/icypeas.js) | - | [icypeas.md](integrations/icypeas.md) |
 | findymail | Data Enrichment | ✓ | - | [✓](clis/findymail.js) | - | [findymail.md](integrations/findymail.md) |
