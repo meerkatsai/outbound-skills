@@ -15,7 +15,7 @@ Use this skill for Instantly campaign, lead, account, blocklist, and analytics w
 2. Use direct API requests only when the user needs a payload or endpoint the CLI does not cover.
 3. Treat account health and warmup status as a first-class dependency before changing campaign volume.
 
-Do not assume Instantly uses bearer auth. Its documented API uses `api_key` as a query parameter.
+Authentication varies by endpoint version: many v1 endpoints use `api_key` as a query parameter, while v2 email verification uses Bearer auth with the same `INSTANTLY_API_KEY`.
 
 ## Required First Step
 

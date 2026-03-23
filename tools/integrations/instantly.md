@@ -6,15 +6,16 @@ Cold email platform with built-in email warmup and campaign management at scale.
 
 | Integration | Available | Notes |
 |-------------|-----------|-------|
-| API | ✓ | REST API for campaigns, leads, accounts, analytics |
+| API | ✓ | REST API for campaigns, leads, accounts, analytics, email verification |
 | MCP | - | Not available |
 | CLI | [✓](../clis/instantly.js) | Zero-dependency Node.js CLI |
 | SDK | - | API-only |
 
 ## Authentication
 
-- **Type**: API Key (query parameter)
-- **Parameter**: `api_key={key}`
+- **Type**: Mixed by endpoint version
+- **V1 endpoints**: API key query parameter (`api_key={key}`)
+- **V2 email verification**: `Authorization: Bearer {INSTANTLY_API_KEY}`
 - **Env var**: `INSTANTLY_API_KEY`
 - **Get key**: [Instantly Settings > Integrations > API](https://app.instantly.ai/app/settings/integrations)
 
@@ -89,6 +90,19 @@ node tools/clis/instantly.js blocklist list
 
 # Add to blocklist
 node tools/clis/instantly.js blocklist add --entries "competitor.com,spam@example.com"
+```
+
+### Verify emails
+
+```bash
+# Create a verification request
+node tools/clis/instantly.js email-verification create --email "user@example.com"
+
+# Create verification and receive async callback if pending
+node tools/clis/instantly.js email-verification create --email "user@example.com" --webhook-url "https://example.com/webhooks/instantly-email-verification"
+
+# Check verification status
+node tools/clis/instantly.js email-verification status --email "user@example.com"
 ```
 
 ## Rate Limits

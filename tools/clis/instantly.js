@@ -2,6 +2,7 @@
 
 const API_KEY = process.env.INSTANTLY_API_KEY
 const BASE_URL = 'https://api.instantly.ai/api/v1'
+const BASE_URL_V2 = 'https://api.instantly.ai/api/v2'
 const IS_DRY_RUN = process.argv.includes('--dry-run')
 
 if (!API_KEY && !IS_DRY_RUN) {
@@ -23,6 +24,39 @@ async function api(method, path, body) {
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  })
+  const text = await res.text()
+  try {
+    return JSON.parse(text)
+  } catch {
+    return { status: res.status, body: text }
+  }
+}
+
+async function apiV2(method, path, body) {
+  const url = `${BASE_URL_V2}${path}`
+  if (args['dry-run']) {
+    const maskedBody = body ? JSON.parse(JSON.stringify(body)) : undefined
+    return {
+      _dry_run: true,
+      method,
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ***',
+      },
+      body: maskedBody
+    }
+  }
+  const res = await fetch(url, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${API_KEY}`,
     },
     body: body ? JSON.stringify(body) : undefined,
   })
@@ -226,6 +260,27 @@ async function main() {
       }
       break
 
+    case 'email-verification':
+      switch (sub) {
+        case 'create': {
+          const email = args.email
+          if (!email) { result = { error: '--email required' }; break }
+          const body = { email }
+          if (args['webhook-url']) body.webhook_url = args['webhook-url']
+          result = await apiV2('POST', '/email-verification', body)
+          break
+        }
+        case 'status': {
+          const email = args.email
+          if (!email) { result = { error: '--email required' }; break }
+          result = await apiV2('GET', `/email-verification/${encodeURIComponent(email)}`)
+          break
+        }
+        default:
+          result = { error: 'Unknown email-verification subcommand. Use: create, status' }
+      }
+      break
+
     default:
       result = {
         error: 'Unknown command',
@@ -256,6 +311,10 @@ async function main() {
           blocklist: {
             list: 'blocklist list',
             add: 'blocklist add --entries <email-or-domain,email-or-domain>',
+          },
+          'email-verification': {
+            create: 'email-verification create --email <email> [--webhook-url <url>]',
+            status: 'email-verification status --email <email>',
           },
           options: '--dry-run (show request without executing)',
         }
