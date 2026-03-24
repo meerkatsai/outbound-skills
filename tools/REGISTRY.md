@@ -10,6 +10,7 @@ Quick reference for tools available in this repository.
 | instantly | Email Outreach | ✓ | - | [✓](clis/instantly.js) | - | [instantly.md](integrations/instantly.md) |
 | masterinbox | Email Inbox | ✓ | - | [✓](clis/masterinbox.js) | - | [masterinbox.md](integrations/masterinbox.md) |
 | apollo | Data Enrichment | ✓ | - | [✓](clis/apollo.js) | - | [apollo.md](integrations/apollo.md) |
+| databar-ai | Data Enrichment | ✓ | ✓ | - | ✓ | [databar-ai.md](integrations/databar-ai.md) |
 | icypeas | Data Enrichment | ✓ | - | [✓](clis/icypeas.js) | - | [icypeas.md](integrations/icypeas.md) |
 | findymail | Data Enrichment | ✓ | - | [✓](clis/findymail.js) | - | [findymail.md](integrations/findymail.md) |
 | neverbounce | Data Enrichment | ✓ | - | [✓](clis/neverbounce.js) | - | [neverbounce.md](integrations/neverbounce.md) |
@@ -27,6 +28,7 @@ Quick reference for tools available in this repository.
 | remotion | Video Creation | - | - | ✓ | ✓ | [remotion.md](integrations/remotion.md) |
 | builtwith | Web Intelligence | ✓ | - | [✓](clis/builtwith.js) | - | [builtwith.md](integrations/builtwith.md) |
 | heyreach | Outreach Automation | ✓ | ✓ | - | - | [heyreach.md](integrations/heyreach.md) |
+| dripify | Outreach Automation | - | - | [✓](clis/dripify.js) | - | [dripify.md](integrations/dripify.md) |
 | lagrowthmachine | Outreach Automation | ✓ | - | - | - | [lagrowthmachine.md](integrations/lagrowthmachine.md) |
 | hubspot | CRM | ✓ | - | - | ✓ | [hubspot.md](integrations/hubspot.md) |
 | hunter | Email Outreach | ✓ | - | [✓](clis/hunter.js) | - | [hunter.md](integrations/hunter.md) |
