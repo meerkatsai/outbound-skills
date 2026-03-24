@@ -64,11 +64,21 @@ Use these boolean queries to find healthcare hiring posts via web search or Link
 ("healthcare staffing" OR "nurse staffing") AND (hiring OR recruiting)
 ```
 
+### Freshness Rule
+
+**CRITICAL**: Only ingest posts from the last 14 days. Older posts are stale signals and must be discarded.
+
+- When running web searches, always append a date filter to restrict results to the last 14 days (e.g., `after:YYYY-MM-DD` where the date is 14 days before today).
+- When ingesting rows, check `post_date` — skip any post where `post_date` is older than 14 days from the current date.
+- After AI columns run, add a validation step: the `Post Age Check` AI column (see below) flags any post older than 14 days for removal.
+
 ### Execution
 
-1. Run web searches using the boolean queries above.
-2. For each result, extract: `post_url`, `post_text`, `author_name`, `author_linkedin_url`, `author_company`, `post_date`.
-3. Create a Meerkats table called **"Healthcare Hiring Signals"** with Input columns for the raw fields.
+1. Calculate the cutoff date: **today minus 14 days** (e.g., if today is 2026-03-24, cutoff is 2026-03-10).
+2. Run web searches using the boolean queries above, restricted to posts published after the cutoff date.
+3. For each result, extract: `post_url`, `post_text`, `author_name`, `author_linkedin_url`, `author_company`, `post_date`.
+4. **Discard any result where `post_date` is before the cutoff date.** Do not add stale posts to the table.
+5. Create a Meerkats table called **"Healthcare Hiring Signals"** with Input columns for the raw fields.
 
 **Create table command**:
 
@@ -157,6 +167,19 @@ Based on {Post Text} and {Author Company}, classify the company type:
 Return ONLY the category name.
 ```
 
+### AI Column: `Post Age Check`
+
+**Prompt**:
+```
+Today's date is {{current_date}}. The post date is {Post Date}.
+
+Calculate the number of days between the post date and today. If the post is older than 14 days, return "STALE". If 14 days or fewer, return "FRESH".
+
+Return ONLY "FRESH" or "STALE".
+```
+
+> **Important**: After running this column, filter out all rows where `Post Age Check` = "STALE". These are expired signals and should not proceed through the pipeline.
+
 ### AI Column: `Pain Signal`
 
 **Prompt**:
@@ -175,6 +198,7 @@ Keep the response under 15 words.
 After AI columns have run, filter the table to keep only qualified leads.
 
 **Filter criteria**:
+- `Post Age Check` = "FRESH" (discard anything older than 14 days)
 - `Is Healthcare Hiring` = "YES"
 - `Is US Relevant` = "YES" or "UNCLEAR"
 - `Signal Strength` IN ("VERY_HIGH", "HIGH", "MEDIUM")
