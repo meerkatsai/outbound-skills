@@ -59,15 +59,17 @@ Feed these boolean queries into Apify's LinkedIn Post Scraper as the search inpu
 | Healthcare Context | hospital hiring, clinic hiring, patient care jobs |
 | Hashtags | #hiring #nowhiring #nursejobs #healthcarejobs |
 
-**High-Intent Boolean Queries** (use as Apify search input):
+**High-Intent Boolean Queries** (use as Apify search input — all include US geo-signals):
 
 ```
-("we are hiring" OR "now hiring" OR "urgent hiring") AND (nurse OR RN OR CNA OR LPN OR caregiver OR "patient care")
-("hiring RN" OR "hiring CNA" OR "hiring nurses") AND (hospital OR clinic OR healthcare)
-("#hiring" OR "#nowhiring") AND (nurse OR healthcare OR RN)
-("looking for nurses" OR "need nurses urgently")
-("healthcare staffing" OR "nurse staffing") AND (hiring OR recruiting)
+("we are hiring" OR "now hiring" OR "urgent hiring") AND (nurse OR RN OR CNA OR LPN OR caregiver OR "patient care") AND (USA OR "United States" OR Texas OR California OR Florida OR New York OR Ohio OR Pennsylvania OR Illinois OR Georgia OR North Carolina OR Michigan)
+("hiring RN" OR "hiring CNA" OR "hiring nurses") AND (hospital OR clinic OR healthcare) AND (USA OR "United States" OR Texas OR California OR Florida OR New York OR Ohio OR Pennsylvania)
+("#hiring" OR "#nowhiring") AND (nurse OR healthcare OR RN) AND (USA OR "United States")
+("looking for nurses" OR "need nurses urgently") AND (USA OR "United States")
+("healthcare staffing" OR "nurse staffing") AND (hiring OR recruiting) AND (USA OR "United States")
 ```
+
+> **Why US geo-terms?** The target segment is strictly US-based healthcare staffing agencies and providers. Adding state names and "USA"/"United States" to every query ensures Apify returns US-relevant posts and filters out international results (India, Philippines, UK, Middle East — all major healthcare hiring markets that would otherwise pollute the dataset).
 
 ### Freshness Rule
 
@@ -84,16 +86,19 @@ Use an Apify LinkedIn Post Scraper actor. Key configuration:
 ```json
 {
   "searchQueries": [
-    "(\"we are hiring\" OR \"now hiring\" OR \"urgent hiring\") AND (nurse OR RN OR CNA OR LPN OR caregiver OR \"patient care\")",
-    "(\"hiring RN\" OR \"hiring CNA\" OR \"hiring nurses\") AND (hospital OR clinic OR healthcare)",
-    "(\"#hiring\" OR \"#nowhiring\") AND (nurse OR healthcare OR RN)",
-    "(\"looking for nurses\" OR \"need nurses urgently\")",
-    "(\"healthcare staffing\" OR \"nurse staffing\") AND (hiring OR recruiting)"
+    "(\"we are hiring\" OR \"now hiring\" OR \"urgent hiring\") AND (nurse OR RN OR CNA OR LPN OR caregiver OR \"patient care\") AND (USA OR \"United States\" OR Texas OR California OR Florida OR New York OR Ohio)",
+    "(\"hiring RN\" OR \"hiring CNA\" OR \"hiring nurses\") AND (hospital OR clinic OR healthcare) AND (USA OR \"United States\")",
+    "(\"#hiring\" OR \"#nowhiring\") AND (nurse OR healthcare OR RN) AND (USA OR \"United States\")",
+    "(\"looking for nurses\" OR \"need nurses urgently\") AND (USA OR \"United States\")",
+    "(\"healthcare staffing\" OR \"nurse staffing\") AND (hiring OR recruiting) AND (USA OR \"United States\")"
   ],
   "maxResults": 500,
-  "dateRange": "past-14-days"
+  "dateRange": "past-14-days",
+  "geo": "United States"
 }
 ```
+
+> **Note**: Set `geo` to "United States" if the Apify actor supports geo-filtering. The boolean queries also include US terms as a secondary filter in case the actor doesn't support native geo-filtering.
 
 ### Apify Output Fields
 
@@ -191,25 +196,38 @@ Does the post in {Post Text} specifically relate to healthcare hiring (nurses, R
 Return "YES" or "NO" only.
 ```
 
-### AI Column: `Is US Relevant`
+### AI Column: `Is US Based`
 
 **Prompt**:
 ```
-Based on {Post Text} and {Author Company}, does this post appear to be about US-based hiring? Look for US state names, US cities, or US-based companies.
+This pipeline targets ONLY US-based healthcare hiring. Determine if this post is about hiring in the United States.
 
-Return "YES", "NO", or "UNCLEAR".
+Analyze {Post Text}, {Author Company}, and {Author Info} for US indicators:
+- US state names (Texas, California, Florida, New York, Ohio, etc.)
+- US city names (Houston, Los Angeles, Miami, Chicago, etc.)
+- US-based company (check if {Author Company} is a known US healthcare staffing agency or US hospital/health system)
+- US-specific terms: "travel nurse", "per diem", "PRN", state license abbreviations
+
+If there are ANY non-US indicators (India, UK, Philippines, UAE, Canada, Australia, NHS, etc.), return "NO" even if US terms are also present.
+
+If there are clear US indicators, return "YES".
+If there are NO location indicators at all, return "NO".
+
+Return ONLY "YES" or "NO". Do NOT return "UNCLEAR" — when in doubt, return "NO".
 ```
+
+> **Strict US filter**: Unlike previous versions, "UNCLEAR" is not an option. If the post can't be confirmed as US-based, it's excluded. This prevents international leads from polluting the pipeline.
 
 ### AI Column: `Company Type`
 
 **Prompt**:
 ```
-Based on {Post Text} and {Author Company}, classify the company type:
+Based on {Post Text} and {Author Company}, classify the company into one of these categories. We ONLY target US-based healthcare staffing agencies and large healthcare providers.
 
-- STAFFING_AGENCY: Healthcare staffing or recruitment agency
-- HEALTHCARE_PROVIDER: Hospital, clinic, health system, care facility
-- RECRUITER_INDEPENDENT: Independent recruiter or talent consultant
-- OTHER: Not clearly healthcare staffing related
+- STAFFING_AGENCY: US healthcare staffing or recruitment agency (e.g., AMN Healthcare, Aya Healthcare, Cross Country Healthcare, Medical Solutions, Supplemental Health Care, or similar staffing firms)
+- HEALTHCARE_PROVIDER: US hospital, clinic, health system, large care facility (e.g., HCA Healthcare, Ascension, CommonSpirit, Kaiser Permanente, or similar provider organizations)
+- RECRUITER_INDEPENDENT: Independent recruiter or small talent consultant specializing in healthcare
+- OTHER: Not a US healthcare staffing agency or provider — includes non-healthcare companies, international companies, job boards, or unrelated organizations
 
 Return ONLY the category name.
 ```
@@ -244,14 +262,18 @@ Keep the response under 15 words.
 
 After AI columns have run, filter the table to keep only qualified leads.
 
-**Filter criteria**:
+**Filter criteria** (ALL must be true — strict US-only targeting):
+
 - `Post Age Check` = "FRESH" (discard anything older than 14 days)
 - `Is Healthcare Hiring` = "YES"
-- `Is US Relevant` = "YES" or "UNCLEAR"
+- `Is US Based` = "YES" (strict — no "UNCLEAR", no exceptions)
 - `Signal Strength` IN ("VERY_HIGH", "HIGH", "MEDIUM")
 - `Intent Type` NOT "PASSIVE_CONTENT"
+- `Company Type` IN ("STAFFING_AGENCY", "HEALTHCARE_PROVIDER", "RECRUITER_INDEPENDENT") — exclude "OTHER"
 
-Use `filter_table_rows` or create a Meerkats sheet called **"Qualified Leads"** containing only rows that pass the filter.
+Use `filter_table_rows` or create a Meerkats sheet called **"Qualified Leads"** containing only rows that pass ALL filters.
+
+> **Why so strict?** The client targets only US-based healthcare staffing agencies and large healthcare providers actively hiring. Every lead that passes this filter should be a real US healthcare hiring signal from a relevant company type. False positives waste outreach effort and damage sender reputation.
 
 ---
 
@@ -474,8 +496,8 @@ When running this pipeline, follow these steps in order:
 
 1. **Scrape**: Run Apify LinkedIn Post Scraper with the boolean queries (last 14 days only)
 2. **Ingest**: Create Meerkats table and bulk-add Apify results as rows
-3. **Classify**: Add AI columns (Intent Type, Signal Strength, Is Healthcare Hiring, Is US Relevant, Company Type, Post Age Check, Pain Signal) and run them
-4. **Filter**: Filter to qualified leads only (FRESH, healthcare, US-relevant, HIGH/MEDIUM signal)
+3. **Classify**: Add AI columns (Intent Type, Signal Strength, Is Healthcare Hiring, Is US Based, Company Type, Post Age Check, Pain Signal) and run them
+4. **Filter**: Filter to qualified leads only (FRESH + US-based YES + healthcare YES + STAFFING_AGENCY/HEALTHCARE_PROVIDER/RECRUITER_INDEPENDENT + HIGH/MEDIUM signal)
 5. **Enrich**: Add enrichment AI columns (Contact First Name, Hiring Role, Role Hint, Email, Phone) and run them
 6. **Deduplicate**: Run dedup on Post URL + Author Company
 7. **Qualify**: Add Outreach Priority AI column and run it
