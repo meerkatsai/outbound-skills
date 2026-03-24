@@ -1,13 +1,15 @@
 ---
 name: healthcare-signal-detection
-description: "Use when the user wants to detect healthcare hiring signals from LinkedIn posts, classify intent, enrich leads, and build an outreach pipeline. Trigger on phrases like 'healthcare hiring signals,' 'nurse hiring leads,' 'staffing agency leads,' 'healthcare staffing pipeline,' 'hiring intent detection,' 'RN hiring signals,' 'CNA hiring leads,' 'healthcare outbound,' or 'signal detection pipeline.' Covers the full workflow: signal capture via web search, AI-powered intent classification, lead enrichment, deduplication, CRM export, and outreach sequence generation."
+description: "Use when the user wants to detect healthcare hiring signals from LinkedIn posts, classify intent, enrich leads, and build an outreach pipeline. Trigger on phrases like 'healthcare hiring signals,' 'nurse hiring leads,' 'staffing agency leads,' 'healthcare staffing pipeline,' 'hiring intent detection,' 'RN hiring signals,' 'CNA hiring leads,' 'healthcare outbound,' or 'signal detection pipeline.' Covers the full workflow: Apify LinkedIn scraping, Meerkats AI-powered intent classification, lead enrichment, deduplication, HubSpot CRM export, and outreach sequence generation."
 metadata:
-  version: 1.0.0
+  version: 2.0.0
 ---
 
 # Healthcare Hiring Signal Detection & Conversion Pipeline
 
-You are an expert in detecting high-intent healthcare hiring signals from LinkedIn posts, classifying them, enriching leads, and converting them into outreach-ready pipeline entries. All processing runs through Meerkats.ai tables and AI columns — no Clay dependency.
+You are an expert in detecting high-intent healthcare hiring signals from LinkedIn posts, classifying them, enriching leads, and converting them into outreach-ready pipeline entries.
+
+**Tool stack**: Apify (LinkedIn scraping) → Meerkats.ai tables + AI columns (classification, enrichment, filtering, dedup) → HubSpot (CRM) → Email/LinkedIn (outreach). Meerkats replaces Clay for all AI classification, filtering, and data processing. All other tools remain unchanged.
 
 ## Objective
 
@@ -17,8 +19,8 @@ You are an expert in detecting high-intent healthcare hiring signals from Linked
 
 ## When to Use This Skill
 
-- Detecting healthcare hiring signals from LinkedIn or web sources
-- Classifying hiring intent from scraped posts
+- Detecting healthcare hiring signals from LinkedIn posts
+- Classifying hiring intent from Apify-scraped LinkedIn posts
 - Enriching healthcare leads with contact and company data
 - Building qualified lead lists for healthcare staffing outreach
 - Generating personalized email sequences for hiring decision-makers
@@ -26,23 +28,26 @@ You are an expert in detecting high-intent healthcare hiring signals from Linked
 
 ## Pipeline Overview
 
-| Step | Action | Meerkats Tool | Output |
-|------|--------|---------------|--------|
-| 1 | Search for hiring posts (boolean queries) | Web search + Meerkats table (Input columns) | Raw posts |
-| 2 | Classify hiring intent | Meerkats AI column | Intent type + signal strength |
-| 3 | Filter high-quality leads | Meerkats filter_table_rows | Qualified leads |
-| 4 | Extract contact/company data | Meerkats AI column | Email, company, phone |
-| 5 | Deduplicate | Meerkats check_duplicate_rows / delete_duplicate_rows | Clean dataset |
-| 6 | Push to CRM | HubSpot integration skill or export | Company + Contact + Deal |
-| 7 | Generate outreach | Meerkats AI column or outreach-crafter skill | Email sequences |
+| Step | Action | Tool | Output |
+|------|--------|------|--------|
+| 1 | Scrape LinkedIn posts (boolean queries) | **Apify** (LinkedIn Post Scraper) | Raw posts with author data |
+| 2 | Ingest into table | **Meerkats** table (Input columns) | Structured rows |
+| 3 | Classify hiring intent | **Meerkats** AI columns | Intent type + signal strength |
+| 4 | Filter high-quality leads | **Meerkats** filter_table_rows | Qualified leads |
+| 5 | Extract contact/company data | **Meerkats** AI columns | Email, role, first name |
+| 6 | Deduplicate | **Meerkats** check/delete_duplicate_rows | Clean dataset |
+| 7 | Push to CRM | **HubSpot** | Company + Contact + Deal |
+| 8 | Generate outreach | **Meerkats** AI columns | Email sequences |
 
 ---
 
-## Step 1 — Signal Capture
+## Step 1 — Signal Capture (Apify)
+
+Apify scrapes **LinkedIn feed posts** (not job listing pages). This means each result includes the **author's name, LinkedIn profile URL, company, and role** — because a real person wrote the post.
 
 ### Keyword Strategy
 
-Use these boolean queries to find healthcare hiring posts via web search or LinkedIn scraping.
+Feed these boolean queries into Apify's LinkedIn Post Scraper as the search input.
 
 **Core Hiring Keywords**:
 
@@ -54,7 +59,7 @@ Use these boolean queries to find healthcare hiring posts via web search or Link
 | Healthcare Context | hospital hiring, clinic hiring, patient care jobs |
 | Hashtags | #hiring #nowhiring #nursejobs #healthcarejobs |
 
-**High-Intent Boolean Queries**:
+**High-Intent Boolean Queries** (use as Apify search input):
 
 ```
 ("we are hiring" OR "now hiring" OR "urgent hiring") AND (nurse OR RN OR CNA OR LPN OR caregiver OR "patient care")
@@ -68,17 +73,56 @@ Use these boolean queries to find healthcare hiring posts via web search or Link
 
 **CRITICAL**: Only ingest posts from the last 14 days. Older posts are stale signals and must be discarded.
 
-- When running web searches, always append a date filter to restrict results to the last 14 days (e.g., `after:YYYY-MM-DD` where the date is 14 days before today).
+- Configure Apify's `publishedAt` or date range filter to the last 14 days.
 - When ingesting rows, check `post_date` — skip any post where `post_date` is older than 14 days from the current date.
-- After AI columns run, add a validation step: the `Post Age Check` AI column (see below) flags any post older than 14 days for removal.
+- The `Post Age Check` AI column (Step 3) acts as a safety net to catch any stale posts that slip through.
+
+### Apify Configuration
+
+Use an Apify LinkedIn Post Scraper actor. Key configuration:
+
+```json
+{
+  "searchQueries": [
+    "(\"we are hiring\" OR \"now hiring\" OR \"urgent hiring\") AND (nurse OR RN OR CNA OR LPN OR caregiver OR \"patient care\")",
+    "(\"hiring RN\" OR \"hiring CNA\" OR \"hiring nurses\") AND (hospital OR clinic OR healthcare)",
+    "(\"#hiring\" OR \"#nowhiring\") AND (nurse OR healthcare OR RN)",
+    "(\"looking for nurses\" OR \"need nurses urgently\")",
+    "(\"healthcare staffing\" OR \"nurse staffing\") AND (hiring OR recruiting)"
+  ],
+  "maxResults": 500,
+  "dateRange": "past-14-days"
+}
+```
+
+### Apify Output Fields
+
+Each scraped post returns structured data including:
+
+| Apify Field | Description |
+|-------------|-------------|
+| `post_url` | URL of the LinkedIn post |
+| `post_text` | Full text content of the post |
+| `author_name` | Name of the person who posted |
+| `author_linkedin_url` | LinkedIn profile URL of the author |
+| `author_company` | Company name from the author's profile |
+| `author_info` | Author's headline/role from their profile |
+| `post_date` | When the post was published |
+| `contentAttributes.textLink` | Any links embedded in the post text |
 
 ### Execution
 
-1. Calculate the cutoff date: **today minus 14 days** (e.g., if today is 2026-03-24, cutoff is 2026-03-10).
-2. Run web searches using the boolean queries above, restricted to posts published after the cutoff date.
-3. For each result, extract: `post_url`, `post_text`, `author_name`, `author_linkedin_url`, `author_company`, `post_date`.
-4. **Discard any result where `post_date` is before the cutoff date.** Do not add stale posts to the table.
-5. Create a Meerkats table called **"Healthcare Hiring Signals"** with Input columns for the raw fields.
+1. Configure and run the Apify LinkedIn Post Scraper with the boolean queries above.
+2. Set the date range to the last 14 days.
+3. Download/export the Apify results.
+4. **Discard any result where `post_date` is older than 14 days.**
+5. Create a Meerkats table and bulk-add the Apify results as rows.
+
+---
+
+## Step 2 — Ingest into Meerkats Table
+
+Create a Meerkats table and load the Apify output as rows.
 
 **Create table command**:
 
@@ -88,20 +132,23 @@ Use mcp tool: create_table
   columns: (add after creation via add_table_column)
 ```
 
-**Input columns to add**:
+**Input columns to add** (mapped from Apify output):
 
-| Column Name | Data Type | Type |
-|-------------|-----------|------|
-| Post URL | url | Input |
-| Post Text | text | Input |
-| Author Name | text | Input |
-| Author LinkedIn | url | Input |
-| Author Company | text | Input |
-| Post Date | date | Input |
+| Column Name | Data Type | Type | Apify Source Field |
+|-------------|-----------|------|--------------------|
+| Post URL | url | Input | `post_url` |
+| Post Text | text | Input | `post_text` |
+| Author Name | text | Input | `author_name` |
+| Author LinkedIn | url | Input | `author_linkedin_url` |
+| Author Company | text | Input | `author_company` |
+| Author Info | text | Input | `author_info` (headline/role) |
+| Post Date | date | Input | `post_date` |
+
+Use `add_table_rows_bulk` to load all scraped posts into the table at once.
 
 ---
 
-## Step 2 — Intent Classification (AI Columns)
+## Step 3 — Intent Classification (Meerkats AI Columns)
 
 Add AI columns to classify each post. These replace Clay AI.
 
@@ -193,7 +240,7 @@ Keep the response under 15 words.
 
 ---
 
-## Step 3 — Filter Qualified Leads
+## Step 4 — Filter Qualified Leads
 
 After AI columns have run, filter the table to keep only qualified leads.
 
@@ -208,13 +255,23 @@ Use `filter_table_rows` or create a Meerkats sheet called **"Qualified Leads"** 
 
 ---
 
-## Step 4 — Contact & Company Enrichment (AI Columns)
+## Step 5 — Contact & Company Enrichment (Meerkats AI Columns)
 
-Add AI columns to the qualified leads sheet for enrichment.
+The author data from Apify gives us the person who posted. Now extract additional fields for outreach.
 
-### AI Column: `Contact Name`
+### AI Column: `Contact First Name`
 
-**Prompt**: `Extract the full name of the person who posted from {Author Name}. Return just the name.`
+**Prompt**:
+```
+Extract ONLY the first name from {Author Name}.
+
+Examples:
+- "Sarah Johnson" → "Sarah"
+- "Dr. Michael Chen" → "Michael"
+- "Jennifer Smith-Rodriguez" → "Jennifer"
+
+Return ONLY the first name, nothing else.
+```
 
 ### AI Column: `Hiring Role`
 
@@ -229,7 +286,7 @@ Return a comma-separated list of roles. If unclear, return "Healthcare Staff".
 
 **Prompt**:
 ```
-Based on {Author Name} and {Author Company} and {Post Text}, what is the likely job title of the person posting? Examples: "Recruiter", "TA Head", "Staffing Agency Owner", "HR Director", "Ops Leader".
+Based on {Author Name}, {Author Company}, and {Author Info}, what is the likely job title/role of this person? Examples: "Recruiter", "TA Head", "Staffing Agency Owner", "HR Director", "Ops Leader".
 
 Return the most likely title in 1-3 words.
 ```
@@ -241,13 +298,20 @@ Return the most likely title in 1-3 words.
 Check if {Post Text} contains any email address. If yes, extract it. If no, return "NOT_FOUND".
 ```
 
-> **Note**: For leads where email is NOT_FOUND, use the `email-find-verify` skill to look up emails using the contact name and company domain.
+### AI Column: `Phone`
+
+**Prompt**:
+```
+Check if {Post Text} contains any phone number. If yes, extract it in standard format. If no, return "NOT_FOUND".
+```
+
+> **Note**: For leads where email is NOT_FOUND, use the `email-find-verify` skill to look up emails using `{Author Name}` and the company domain.
 
 ---
 
-## Step 5 — Deduplication
+## Step 6 — Deduplication
 
-Run deduplication on the qualified leads table to remove duplicate entries.
+Run deduplication on the qualified leads table to remove duplicate entries. Dedup on `post_url` (same post scraped twice) and `Author Company` (multiple posts from same company).
 
 ```
 Use mcp tool: check_duplicate_rows
@@ -262,7 +326,7 @@ If duplicates found:
 
 ---
 
-## Step 6 — Lead Qualification & Prioritization
+## Step 7 — Lead Qualification & Prioritization
 
 Apply this qualification logic to determine outreach priority:
 
@@ -289,9 +353,9 @@ Return ONLY the priority code.
 
 ---
 
-## Step 7 — CRM Export Structure
+## Step 8 — CRM Export (HubSpot)
 
-When pushing to CRM (HubSpot or other), use this mapping:
+When pushing to HubSpot, use this mapping:
 
 **Company object**:
 - `name` ← Author Company
@@ -299,13 +363,14 @@ When pushing to CRM (HubSpot or other), use this mapping:
 - `signal_strength` ← Signal Strength (custom property)
 
 **Contact object**:
-- `name` ← Contact Name
+- `firstname` ← Contact First Name
+- `lastname` ← (extracted from Author Name)
 - `linkedin_url` ← Author LinkedIn
 - `email` ← Email
-- `role` ← Role Hint
+- `jobtitle` ← Role Hint
 
 **Deal object**:
-- `deal_name` ← "Hiring Signal — {Author Company}"
+- `dealname` ← "Hiring Signal — {Author Company}"
 - `hiring_signal` ← Intent Type
 - `post_url` ← Post URL
 - `pain_signal` ← Pain Signal
@@ -315,7 +380,7 @@ When pushing to CRM (HubSpot or other), use this mapping:
 
 ---
 
-## Step 8 — Email Outreach Sequence
+## Step 9 — Email Outreach Sequence
 
 ### Target Personas
 
@@ -338,9 +403,9 @@ When pushing to CRM (HubSpot or other), use this mapping:
 
 **Prompt**:
 ```
-Write a short, personalized cold email (under 100 words) for {Contact Name} at {Author Company}.
+Write a short, personalized cold email (under 100 words) for {Contact First Name} at {Author Company}.
 
-Context: They posted about hiring {Hiring Role} on LinkedIn. Their pain signal is: {Pain Signal}.
+Context: They posted on LinkedIn about hiring {Hiring Role}. Their pain signal is: {Pain Signal}.
 
 Structure:
 - Subject line: Reference their hiring post
@@ -355,7 +420,7 @@ Tone: Casual, peer-to-peer, no hard sell. Sign off with "– {{Your Name}}".
 
 **Prompt**:
 ```
-Write a follow-up email (under 80 words) for {Contact Name} about hiring {Hiring Role}.
+Write a follow-up email (under 80 words) for {Contact First Name} about hiring {Hiring Role}.
 
 Theme: Pain amplification. Mention common healthcare hiring struggles:
 - Inconsistent candidate quality
@@ -372,7 +437,7 @@ Sign off with "– {{Your Name}}".
 
 **Prompt**:
 ```
-Write a value-proposition email (under 80 words) for {Contact Name}.
+Write a value-proposition email (under 80 words) for {Contact First Name}.
 
 Theme: How other teams solved healthcare hiring challenges by automating parts of sourcing and screening. Benefits: reduced time-to-hire, improved candidate quality, handling higher volumes.
 
@@ -407,27 +472,30 @@ Sign off with "– {{Your Name}}".
 
 When running this pipeline, follow these steps in order:
 
-1. **Search**: Run boolean queries via web search to find healthcare hiring posts
-2. **Ingest**: Create Meerkats table and bulk-add raw post data as rows
-3. **Classify**: Add AI columns (Intent Type, Signal Strength, Is Healthcare Hiring, Is US Relevant, Company Type, Pain Signal) and run them
-4. **Filter**: Filter to qualified leads only (HIGH/MEDIUM signal, healthcare, US-relevant)
-5. **Enrich**: Add enrichment AI columns (Hiring Role, Role Hint, Email extraction) and run them
+1. **Scrape**: Run Apify LinkedIn Post Scraper with the boolean queries (last 14 days only)
+2. **Ingest**: Create Meerkats table and bulk-add Apify results as rows
+3. **Classify**: Add AI columns (Intent Type, Signal Strength, Is Healthcare Hiring, Is US Relevant, Company Type, Post Age Check, Pain Signal) and run them
+4. **Filter**: Filter to qualified leads only (FRESH, healthcare, US-relevant, HIGH/MEDIUM signal)
+5. **Enrich**: Add enrichment AI columns (Contact First Name, Hiring Role, Role Hint, Email, Phone) and run them
 6. **Deduplicate**: Run dedup on Post URL + Author Company
 7. **Qualify**: Add Outreach Priority AI column and run it
-8. **Email Lookup**: For leads with no email, use `email-find-verify` skill
+8. **Email Lookup**: For leads with no email, use `email-find-verify` skill with Author Name + company domain
 9. **Outreach**: Add email draft AI columns and run them
 10. **Export**: Push to CRM via `hubspot-integration` skill or export table
 
 ## Dependencies on Other Skills
 
-- `web-search-scrape` — for running boolean search queries
 - `email-find-verify` — for finding missing email addresses
 - `hubspot-integration` — for CRM push (optional)
+
+## External Tool Dependencies
+
+- **Apify** — LinkedIn Post Scraper actor for signal capture (Step 1). Requires an Apify account and API key.
 
 ## Output
 
 After running the full pipeline, deliver:
-- Total posts scraped
+- Total posts scraped from Apify
 - Number of qualified leads (by priority tier)
 - Meerkats table link with all enriched data
 - Email drafts ready for review
