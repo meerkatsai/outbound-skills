@@ -1,40 +1,49 @@
 ---
 name: saas-churn-signal-detection
-description: "Use when the user wants to detect SaaS tool-switching signals from LinkedIn posts — people complaining about their current tools, evaluating alternatives, or announcing migrations. Trigger on phrases like 'competitor churn signals,' 'tool switching leads,' 'SaaS replacement pipeline,' 'alternative seekers,' 'competitor dissatisfaction signals,' 'migration leads,' 'tool evaluation signals,' or 'churn signal detection.' Covers the full workflow: Apify LinkedIn scraping, Meerkats AI-powered intent classification, lead enrichment, deduplication, HubSpot CRM export, and outreach sequence generation."
+description: "Use when the user wants to detect SaaS tool-switching signals from LinkedIn posts — founders, ops leads, and small team leads asking for recommendations, complaining about pricing, outgrowing current tools, or announcing switches. Optimized for early-stage SaaS products targeting SMBs/SMEs. Trigger on phrases like 'competitor churn signals,' 'tool switching leads,' 'SaaS replacement pipeline,' 'alternative seekers,' 'pricing frustration signals,' 'recommendation requests,' 'outgrown tools,' or 'churn signal detection.' Covers the full workflow: Apify LinkedIn scraping, Meerkats AI-powered intent classification, lead enrichment, deduplication, HubSpot CRM export, and outreach sequence generation."
 metadata:
-  version: 1.0.0
+  version: 2.0.0
 ---
 
-# SaaS Competitor Churn Signal Detection & Conversion Pipeline
+# SaaS Tool-Switch Signal Detection for SMBs
 
-You are an expert in detecting high-intent SaaS tool-switching signals from LinkedIn posts — people publicly expressing dissatisfaction with their current tools, asking for recommendations, evaluating alternatives, or announcing migrations. You classify these signals, enrich the leads, and convert them into outreach-ready pipeline entries.
+You are an expert in detecting high-intent SaaS tool-switching signals from LinkedIn posts, specifically from **SMB/SME buyers** — founders, ops leads, and small team managers who buy tools differently than enterprises.
 
-**Tool stack**: Apify (LinkedIn scraping) → Meerkats.ai tables + AI columns (classification, enrichment, filtering, dedup) → HubSpot (CRM) → Email/LinkedIn (outreach). Meerkats handles all AI classification, filtering, and data processing.
+**How SMBs buy tools differently**:
+- They ask their network: "What do you all use for X?"
+- They complain publicly: "X just raised prices, any alternatives?"
+- They outgrow tools: "We've outgrown spreadsheets, need a real X"
+- Decisions are fast — one founder conversation, not a 6-month procurement cycle
+- Price sensitivity is HIGH — "too expensive for a 10-person team" is the #1 churn signal
+- The person posting IS usually the decision-maker (founder, CEO, head of ops)
+
+**Tool stack**: Apify (LinkedIn scraping) → Meerkats.ai tables + AI columns (classification, enrichment, filtering, dedup) → HubSpot (CRM) → Email/LinkedIn (outreach).
 
 ## Objective
 
-- **Target Segment**: Decision-makers at companies actively looking to switch away from a competitor SaaS tool (CRM, marketing automation, project management, analytics, etc.)
-- **Goal**: Identify tool-switching signals → classify intent → enrich → push to CRM → trigger personalized outreach
-- **Success Metric**: Demo requests booked with prospects already in an active evaluation or switching cycle
+- **Target Segment**: SMBs/SMEs (5-200 employees) actively looking to switch, replace, or adopt a new tool in your product category
+- **Goal**: Detect tool-switching signals → classify urgency → enrich → push to CRM → trigger founder-to-founder style outreach
+- **Success Metric**: Demo requests and trial signups from prospects already in a buying window
 
 ## When to Use This Skill
 
-- Detecting signals that companies are unhappy with or switching from a competitor tool
-- Classifying tool-switching intent from LinkedIn posts
-- Enriching leads with contact, company, and tech stack data
-- Building qualified pipeline of prospects in active evaluation cycles
-- Generating personalized outreach referencing their specific tool frustration
-- Running the end-to-end churn-signal-to-outreach pipeline
+- Detecting signals that small companies are unhappy with or switching from a competitor
+- Finding founders/leaders asking their network for tool recommendations
+- Identifying pricing-driven churn from competitors
+- Catching "outgrown current tool" signals
+- Building qualified pipeline of SMBs in active evaluation mode
+- Generating personalized, casual outreach that feels like a peer recommendation
 
-## Customization — Define Your Competitors
+## Customization — Define Your Product & Competitors
 
 Before running this pipeline, the user MUST define:
 
-1. **Your product name**: The SaaS product you are selling
-2. **Competitor list**: 3-10 competitor tools to monitor (e.g., "Salesforce", "HubSpot", "Pipedrive")
-3. **Product category**: What category your tool belongs to (e.g., "CRM", "marketing automation", "project management")
+1. **Your product name**: e.g., "Meerkats.ai"
+2. **Competitor list**: 3-10 competitor tools to monitor (e.g., "Clay", "Apollo", "ZoomInfo")
+3. **Product category**: What your tool does in plain language (e.g., "lead enrichment", "CRM", "email marketing", "project management")
+4. **Your sweet spot**: Company size and type you serve best (e.g., "startups and agencies under 100 people")
 
-The boolean queries, AI prompts, and outreach templates below use `{{your_product}}`, `{{competitor_list}}`, and `{{product_category}}` as placeholders. Replace them before running.
+Placeholders used throughout: `{{your_product}}`, `{{competitor_1}}`, `{{competitor_2}}`, `{{competitor_3}}`, `{{product_category}}`, `{{sweet_spot}}`
 
 ## Pipeline Overview
 
@@ -43,59 +52,74 @@ The boolean queries, AI prompts, and outreach templates below use `{{your_produc
 | 1 | Scrape LinkedIn posts (boolean queries) | **Apify** (LinkedIn Post Scraper) | Raw posts with author data |
 | 2 | Ingest into table | **Meerkats** table (Input columns) | Structured rows |
 | 3 | Classify switching intent | **Meerkats** AI columns | Intent type + signal strength |
-| 4 | Filter high-quality signals | **Meerkats** filter_table_rows | Qualified leads |
+| 4 | Filter qualified signals | **Meerkats** filter_table_rows | Qualified SMB leads |
 | 5 | Enrich contact/company data | **Meerkats** AI columns | Email, role, first name, competitor |
 | 6 | Deduplicate | **Meerkats** check/delete_duplicate_rows | Clean dataset |
 | 7 | Push to CRM | **HubSpot** | Company + Contact + Deal |
-| 8 | Generate outreach | **Meerkats** AI columns | Email sequences |
+| 8 | Generate outreach | **Meerkats** AI columns | Casual email sequences |
 
 ---
 
 ## Step 1 — Signal Capture (Apify)
 
-Apify scrapes **LinkedIn feed posts** where real people publicly discuss their frustrations, ask for recommendations, or announce tool changes. Each result includes the author's name, LinkedIn URL, company, and role.
+Apify scrapes **LinkedIn feed posts** where real people discuss tools, ask for recommendations, or vent frustrations. At SMBs, these posts are often from founders or team leads asking their network directly.
+
+### SMB-Specific Signal Types
+
+SMBs don't post formal RFP announcements. Their signals look like this:
+
+| Signal Type | What It Looks Like | Why It Matters |
+|---|---|---|
+| Recommendation request | "What do you use for X? Looking to switch from Y" | Highest intent — actively shopping |
+| Price frustration | "Y just raised prices again" / "too expensive for our team" | Price is #1 SMB churn driver |
+| Outgrown current tool | "We've outgrown spreadsheets" / "need something more than Y" | Ready to upgrade — budget exists |
+| Feature frustration | "Y doesn't support X" / "missing basic features" | Specific pain = easy to address |
+| Public switch | "Just moved from Y to Z — best decision" | Too late for this lead, but validates the trend |
+| Tool recommendation thread | "What's the best X for small teams?" | Multiple prospects in the comments |
 
 ### Keyword Strategy
 
-Feed these boolean queries into Apify's LinkedIn Post Scraper as the search input. Replace `{{competitor}}` with each competitor name.
+Feed these boolean queries into Apify's LinkedIn Post Scraper.
 
 **Core Signal Keywords**:
 
 | Category | Keywords |
 |----------|----------|
-| Dissatisfaction | "frustrated with", "disappointed with", "hate using", "struggling with" |
-| Switching | "switching from", "migrating from", "moving away from", "replacing" |
-| Evaluation | "looking for alternative", "evaluating options", "any recommendations for", "what do you use instead of" |
-| Comparison | "vs", "compared to", "better than", "alternative to" |
-| Announcement | "just switched to", "we moved from", "finally ditched", "goodbye" |
+| Asking for recs | "what do you use for", "any recommendations", "suggest a tool", "best tool for" |
+| Price pain | "too expensive", "raised prices", "pricing is crazy", "can't afford", "cheaper alternative" |
+| Outgrowing | "outgrown", "need something better", "looking for something more", "scaling beyond" |
+| Switching | "switching from", "moving away from", "replacing", "ditching" |
+| Frustration | "frustrated with", "struggling with", "hate using", "worst part about" |
+| Small team context | "small team", "startup", "growing team", "lean team", "bootstrap" |
 
 **High-Intent Boolean Queries** (use as Apify search input):
 
 ```
-("switching from" OR "migrating from" OR "moving away from" OR "replacing") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})
-("frustrated with" OR "disappointed with" OR "struggling with" OR "hate using") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})
-("looking for alternative" OR "alternative to" OR "replacement for") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})
-("any recommendations" OR "what do you use instead" OR "suggest a better") AND ({{product_category}} OR {{competitor_1}} OR {{competitor_2}})
-("just switched from" OR "we moved from" OR "finally ditched" OR "goodbye") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})
-("#{{product_category}}" OR "#SaaS") AND ("alternative" OR "switching" OR "recommendation") AND ({{competitor_1}} OR {{competitor_2}})
+("what do you use for" OR "any recommendations for" OR "suggest a tool" OR "best tool for") AND ({{product_category}} OR {{competitor_1}} OR {{competitor_2}})
+("too expensive" OR "raised prices" OR "pricing" OR "cheaper alternative") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})
+("switching from" OR "moving away from" OR "replacing" OR "ditching") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})
+("frustrated with" OR "struggling with" OR "hate using" OR "worst part about") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})
+("outgrown" OR "need something better" OR "scaling beyond") AND ({{product_category}} OR {{competitor_1}} OR {{competitor_2}})
+("small team" OR "startup" OR "lean team") AND ({{product_category}}) AND ("looking for" OR "recommend" OR "alternative")
 ```
 
-**Example** (if you sell a CRM and your competitors are Salesforce, HubSpot, Pipedrive):
+**Example** (if you sell lead enrichment and your competitors are Clay, Apollo, ZoomInfo):
 
 ```
-("switching from" OR "migrating from" OR "moving away from" OR "replacing") AND (Salesforce OR HubSpot OR Pipedrive)
-("frustrated with" OR "disappointed with" OR "struggling with") AND (Salesforce OR HubSpot OR Pipedrive)
-("looking for alternative" OR "alternative to" OR "replacement for") AND (Salesforce OR HubSpot OR Pipedrive)
-("any recommendations" OR "what do you use instead") AND (CRM OR Salesforce OR HubSpot)
-("just switched from" OR "we moved from" OR "finally ditched") AND (Salesforce OR HubSpot OR Pipedrive)
+("what do you use for" OR "any recommendations for" OR "best tool for") AND ("lead enrichment" OR "Clay" OR "Apollo")
+("too expensive" OR "raised prices" OR "cheaper alternative") AND (Clay OR Apollo OR ZoomInfo)
+("switching from" OR "moving away from" OR "ditching") AND (Clay OR Apollo OR ZoomInfo)
+("frustrated with" OR "struggling with") AND (Clay OR Apollo OR ZoomInfo)
+("outgrown" OR "need something better") AND ("lead enrichment" OR "prospecting" OR Clay OR Apollo)
+("small team" OR "startup") AND ("lead enrichment" OR "prospecting") AND ("looking for" OR "recommend" OR "alternative")
 ```
 
 ### Freshness Rule
 
-**CRITICAL**: Only ingest posts from the last 14 days. Older posts are stale — the prospect may have already chosen a replacement.
+**CRITICAL**: Only ingest posts from the last 14 days. SMBs decide fast — a 3-week-old post means they've probably already picked a tool.
 
-- Configure Apify's `publishedAt` or date range filter to the last 14 days.
-- When ingesting rows, check `post_date` — skip any post older than 14 days.
+- Configure Apify's date range filter to the last 14 days.
+- When ingesting rows, skip any post where `post_date` is older than 14 days.
 - The `Post Age Check` AI column (Step 3) acts as a safety net.
 
 ### Apify Configuration
@@ -103,11 +127,12 @@ Feed these boolean queries into Apify's LinkedIn Post Scraper as the search inpu
 ```json
 {
   "searchQueries": [
-    "(\"switching from\" OR \"migrating from\" OR \"moving away from\") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})",
-    "(\"frustrated with\" OR \"disappointed with\" OR \"struggling with\") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})",
-    "(\"looking for alternative\" OR \"alternative to\" OR \"replacement for\") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})",
-    "(\"any recommendations\" OR \"what do you use instead\") AND ({{product_category}} OR {{competitor_1}} OR {{competitor_2}})",
-    "(\"just switched from\" OR \"we moved from\" OR \"finally ditched\") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})"
+    "(\"what do you use for\" OR \"any recommendations for\" OR \"best tool for\") AND ({{product_category}} OR {{competitor_1}} OR {{competitor_2}})",
+    "(\"too expensive\" OR \"raised prices\" OR \"cheaper alternative\") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})",
+    "(\"switching from\" OR \"moving away from\" OR \"ditching\") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})",
+    "(\"frustrated with\" OR \"struggling with\") AND ({{competitor_1}} OR {{competitor_2}} OR {{competitor_3}})",
+    "(\"outgrown\" OR \"need something better\") AND ({{product_category}} OR {{competitor_1}})",
+    "(\"small team\" OR \"startup\") AND ({{product_category}}) AND (\"looking for\" OR \"recommend\")"
   ],
   "maxResults": 500,
   "dateRange": "past-14-days"
@@ -115,8 +140,6 @@ Feed these boolean queries into Apify's LinkedIn Post Scraper as the search inpu
 ```
 
 ### Apify Output Fields
-
-Each scraped post returns structured data including:
 
 | Apify Field | Description |
 |-------------|-------------|
@@ -127,29 +150,23 @@ Each scraped post returns structured data including:
 | `author_company` | Company name from the author's profile |
 | `author_info` | Author's headline/role from their profile |
 | `post_date` | When the post was published |
-| `contentAttributes.textLink` | Any links embedded in the post text |
 
 ### Execution
 
-1. Replace all `{{competitor}}` and `{{product_category}}` placeholders with actual values.
-2. Configure and run the Apify LinkedIn Post Scraper with the boolean queries above.
+1. Replace all `{{placeholder}}` values with your actual product, competitors, and category.
+2. Configure and run the Apify LinkedIn Post Scraper with the boolean queries.
 3. Set the date range to the last 14 days.
 4. Download/export the Apify results.
 5. **Discard any result where `post_date` is older than 14 days.**
-6. Create a Meerkats table and bulk-add the Apify results as rows.
+6. Create a Meerkats table and bulk-add the results as rows.
 
 ---
 
 ## Step 2 — Ingest into Meerkats Table
 
-Create a Meerkats table and load the Apify output as rows.
-
-**Create table command**:
-
 ```
 Use mcp tool: create_table
-  name: "SaaS Churn Signals — {{your_product}} — {date}"
-  columns: (add after creation via add_table_column)
+  name: "Tool Switch Signals — {{your_product}} — {date}"
 ```
 
 **Input columns to add** (mapped from Apify output):
@@ -161,114 +178,97 @@ Use mcp tool: create_table
 | Author Name | text | Input | `author_name` |
 | Author LinkedIn | url | Input | `author_linkedin_url` |
 | Author Company | text | Input | `author_company` |
-| Author Info | text | Input | `author_info` (headline/role) |
+| Author Info | text | Input | `author_info` |
 | Post Date | date | Input | `post_date` |
 
-Use `add_table_rows_bulk` to load all scraped posts into the table at once.
+Use `add_table_rows_bulk` to load all scraped posts at once.
 
 ---
 
 ## Step 3 — Intent Classification (Meerkats AI Columns)
 
-Add AI columns to classify each post's switching intent.
-
 ### AI Column: `Intent Type`
 
 **Prompt**:
 ```
-Analyze the LinkedIn post in {Post Text} and classify the tool-switching intent into exactly one of these categories:
+Analyze the LinkedIn post in {Post Text} and classify the tool-related intent into exactly one category. We are targeting SMBs looking to switch or adopt tools.
 
-- ACTIVE_SWITCHING: Person or company is currently in the process of switching away from a tool. Uses language like "we're migrating from", "replacing our current", "in the middle of switching"
-- EVALUATING: Person is actively evaluating alternatives or asking for recommendations. Uses language like "looking for alternative to", "any recommendations for", "evaluating options", "what do you use instead of"
-- FRUSTRATED: Person is expressing dissatisfaction with their current tool but hasn't committed to switching yet. Uses language like "frustrated with", "struggling with", "hate using", "so many issues with"
-- RECENTLY_SWITCHED: Person has already completed a switch and is sharing their experience. Uses language like "just switched to", "we moved from", "finally ditched", "goodbye [tool]"
-- COMPARISON_DISCUSSION: Person is discussing/comparing tools without clear switching intent. Uses language like "X vs Y", "compared to", "how does X stack up"
-- NOT_RELEVANT: Post mentions a tool name but has no switching, dissatisfaction, or evaluation signal. Includes job posts, feature announcements, tips/tutorials, or general praise
+- ASKING_FOR_RECS: Person is asking their network for tool recommendations. "What do you all use for X?", "Any recommendations for a good X?", "Looking for a tool that does X". This is the highest-intent SMB signal — they are actively shopping.
+- PRICE_CHURN: Person is complaining about pricing, cost increases, or affordability of a tool. "X just raised prices", "too expensive for our team", "can't justify the cost". Price is the #1 SMB switching trigger.
+- OUTGROWING_TOOL: Person says they've outgrown their current tool or need something more powerful. "Outgrown spreadsheets", "need something more robust than X", "X doesn't scale". They have budget and need — ready to buy.
+- ACTIVE_SWITCHING: Person is currently switching or has decided to switch. "Moving away from X", "replacing X with something else", "in the process of migrating from X". Immediate opportunity.
+- FRUSTRATED: Person is venting about a tool but hasn't committed to switching. "Frustrated with X", "X is so buggy", "worst part about X". Pain is real — they need a nudge.
+- RECENTLY_SWITCHED: Person already completed a switch. "Just moved from X to Y", "finally ditched X". Too late for this deal, but useful intel.
+- NOT_RELEVANT: Mentions a tool but no switching/frustration/evaluation signal. Tutorials, feature announcements, job posts, or praise for the tool.
 
-Return ONLY the category name, nothing else.
+Return ONLY the category name.
 ```
 
 ### AI Column: `Signal Strength`
 
 **Prompt**:
 ```
-Based on the post in {Post Text} and the intent type {Intent Type}, assign a signal strength:
+Based on {Post Text} and {Intent Type}, assign a signal strength for an early-stage SaaS targeting SMBs:
 
-- VERY_HIGH: ACTIVE_SWITCHING — person is currently migrating or has budget approved to switch. Immediate opportunity.
-- HIGH: EVALUATING — person is actively asking for alternatives and collecting options. Near-term opportunity.
-- HIGH: FRUSTRATED — person is expressing strong dissatisfaction, likely to switch soon. Pain is real and present.
-- MEDIUM: RECENTLY_SWITCHED — already switched (too late for this deal, but can learn from the switch and target similar companies). Also useful for case study/reference validation.
-- LOW: COMPARISON_DISCUSSION — casual comparison, no clear switching intent.
+- VERY_HIGH: ASKING_FOR_RECS or ACTIVE_SWITCHING — they are actively shopping or switching RIGHT NOW. Highest urgency.
+- HIGH: PRICE_CHURN or OUTGROWING_TOOL — strong pain that will lead to switching soon. The trigger event has happened.
+- MEDIUM: FRUSTRATED — pain exists but no action yet. Worth reaching out but lower conversion probability.
+- LOW: RECENTLY_SWITCHED — already made their choice. Useful for intel, not direct outreach.
 - NONE: NOT_RELEVANT — no signal.
 
-Return ONLY the strength level: "VERY_HIGH", "HIGH", "MEDIUM", "LOW", or "NONE".
+Return ONLY: "VERY_HIGH", "HIGH", "MEDIUM", "LOW", or "NONE".
 ```
 
 ### AI Column: `Competitor Mentioned`
 
 **Prompt**:
 ```
-From {Post Text}, identify which specific competitor tool(s) the person is discussing, frustrated with, switching from, or evaluating against.
+From {Post Text}, identify which specific tool(s) the person is discussing, frustrated with, switching from, or asking about alternatives to.
 
-Return the tool name(s) as a comma-separated list. Examples: "Salesforce", "HubSpot, Pipedrive", "Jira, Monday.com".
+Return the tool name(s) as a comma-separated list. Examples: "Clay", "Apollo, ZoomInfo", "Monday.com".
 
-If no specific tool is mentioned, return "UNSPECIFIED".
+If they're asking a general recommendation question without naming a specific tool (e.g., "best CRM for startups?"), return "GENERAL_CATEGORY".
+If no tool or category is relevant, return "UNSPECIFIED".
 ```
 
-### AI Column: `Frustration Reason`
+### AI Column: `Switching Trigger`
 
 **Prompt**:
 ```
-From {Post Text}, extract the specific reason for dissatisfaction, switching, or evaluation. What pain is driving this signal?
+From {Post Text}, extract the specific reason driving their tool search or frustration. Focus on SMB-relevant triggers:
 
 Examples:
-- "Too expensive at scale"
-- "Poor customer support"
-- "Missing integrations with their stack"
-- "Too complex for small team"
-- "Reporting/analytics not good enough"
-- "Slow and buggy"
-- "Forced into enterprise tier"
+- "Pricing increased 3x on renewal"
+- "Too complex for a 10-person team"
+- "Missing integration with Slack"
+- "No API, can't automate workflows"
+- "Support is non-existent at our plan tier"
+- "Outgrown spreadsheets, need real tool"
+- "Free tier too limited, paid tier too expensive"
+- "Forced into enterprise plan we don't need"
 
-If no clear reason is stated, return "Reason not specified".
+If no clear trigger is stated, return "Not specified".
 
 Keep the response under 15 words.
 ```
 
-### AI Column: `Company Size Estimate`
+### AI Column: `Is SMB Buyer`
 
 **Prompt**:
 ```
-Based on {Author Info}, {Author Company}, and {Post Text}, estimate the company size tier:
+Based on {Author Info}, {Author Company}, and {Post Text}, determine if this person is likely from an SMB/SME (under 200 employees) and is a tool decision-maker.
 
-- ENTERPRISE: 1000+ employees, large corporation, Fortune 500
-- MID_MARKET: 200-999 employees, established company, multiple departments
-- SMB: 50-199 employees, growing company, small-medium team references
-- STARTUP: Under 50 employees, early-stage, small team, founder-led
-- UNKNOWN: Cannot determine from available information
+SMB buyer signals — answer YES if ANY of these are true:
+- Title contains: Founder, Co-founder, CEO, COO, CTO, Owner, Head of, Director, Manager (at a small/unknown company)
+- Author Info mentions: "startup", "growing team", "small business", "agency", "consulting", "freelance"
+- Post references: "our small team", "we're a X-person company", "as a startup", "bootstrap"
+- Company is not a well-known large enterprise (not Fortune 500, not 1000+ employee brand names)
 
-Look for clues: "our team of 200", "we're a small startup", company name recognition, job title seniority.
-
-Return ONLY the size tier.
-```
-
-### AI Column: `Is Decision Maker`
-
-**Prompt**:
-```
-Based on {Author Info} and {Author Name}, determine if this person is likely a decision-maker who can influence or approve a tool purchase.
-
-Decision-maker signals:
-- C-suite titles: CEO, CTO, COO, CMO, CFO, CRO
-- VP/Director: VP of Sales, Director of Marketing, VP Engineering, Director of Operations
-- Head of: Head of Growth, Head of Revenue, Head of Product
-- Manager with tool ownership: RevOps Manager, Marketing Ops, Sales Ops, IT Manager
-- Founder/Owner/Co-founder
-
-NOT decision-makers:
-- Individual contributors (SDR, AE, Designer, Developer — unless at a startup)
-- Interns, assistants, coordinators
-- Content creators discussing tools editorially
+NOT an SMB buyer — answer NO if:
+- Person is at a well-known enterprise (Google, Salesforce, Amazon, etc.)
+- Title is clearly enterprise-level IC (they don't buy tools)
+- Post context is about enterprise-scale problems ("our 5000 sales reps", "across 50 offices")
+- Person is a content creator / influencer reviewing tools editorially
 
 Return "YES" or "NO".
 ```
@@ -279,37 +279,54 @@ Return "YES" or "NO".
 ```
 Today's date is {{current_date}}. The post date is {Post Date}.
 
-Calculate the number of days between the post date and today. If the post is older than 14 days, return "STALE". If 14 days or fewer, return "FRESH".
+If the post is older than 14 days, return "STALE". If 14 days or fewer, return "FRESH".
 
 Return ONLY "FRESH" or "STALE".
+```
+
+### AI Column: `Thread Opportunity`
+
+**Prompt**:
+```
+From {Post Text}, determine if this post is likely a recommendation thread where MULTIPLE people are asking or answering about tools. These are goldmine posts because:
+- The original poster is a lead
+- Commenters who agree with the frustration are also leads
+- People recommending alternatives reveal competitor landscape
+
+Indicators of a thread opportunity:
+- Questions like "What do you all use for X?"
+- "Drop your recommendations below"
+- "Curious what others are doing"
+- High engagement signals in the text
+
+Return "YES" if this is likely a multi-prospect thread, "NO" if it's a single-person post.
 ```
 
 ---
 
 ## Step 4 — Filter Qualified Leads
 
-After AI columns have run, filter the table to keep only qualified leads.
-
 **Filter criteria** (ALL must be true):
 
-- `Post Age Check` = "FRESH" (discard anything older than 14 days)
-- `Signal Strength` IN ("VERY_HIGH", "HIGH") — skip MEDIUM/LOW/NONE for outreach
-- `Intent Type` NOT "NOT_RELEVANT" and NOT "COMPARISON_DISCUSSION"
-- `Is Decision Maker` = "YES"
-- `Competitor Mentioned` is NOT "UNSPECIFIED"
+- `Post Age Check` = "FRESH"
+- `Signal Strength` IN ("VERY_HIGH", "HIGH", "MEDIUM")
+- `Intent Type` NOT "NOT_RELEVANT" and NOT "RECENTLY_SWITCHED"
+- `Is SMB Buyer` = "YES"
 
-Use `filter_table_rows` or create a Meerkats sheet called **"Qualified Churn Signals"** containing only rows that pass ALL filters.
+Use `filter_table_rows` or create a Meerkats sheet called **"Qualified Signals"**.
 
-**Secondary sheet — "Nurture Signals"**: Optionally create a second sheet for MEDIUM-strength and RECENTLY_SWITCHED signals. These aren't ready for direct outreach but are valuable for:
-- Understanding competitor weaknesses
-- Building case studies around switching stories
-- Nurture campaigns targeting similar companies
+**Separate sheets for different use cases**:
+
+| Sheet | Filter | Use |
+|-------|--------|-----|
+| **Hot Leads** | VERY_HIGH signal + ASKING_FOR_RECS or ACTIVE_SWITCHING | Immediate personal outreach |
+| **Warm Leads** | HIGH signal + PRICE_CHURN or OUTGROWING_TOOL | Outreach within 24-48 hours |
+| **Nurture** | MEDIUM signal + FRUSTRATED | Add to drip campaign |
+| **Thread Mining** | Thread Opportunity = YES (any signal strength) | Mine comments for additional leads |
 
 ---
 
 ## Step 5 — Contact & Company Enrichment (Meerkats AI Columns)
-
-The author data from Apify gives us the person who posted. Now extract additional fields for outreach.
 
 ### AI Column: `Contact First Name`
 
@@ -322,23 +339,22 @@ Examples:
 - "Dr. Michael Chen" → "Michael"
 - "Jennifer Smith-Rodriguez" → "Jennifer"
 
-Return ONLY the first name, nothing else.
+Return ONLY the first name.
 ```
 
-### AI Column: `Role Hint`
+### AI Column: `Buyer Role`
 
 **Prompt**:
 ```
-Based on {Author Name}, {Author Company}, and {Author Info}, what is this person's likely job function relevant to tool purchasing?
+Based on {Author Info} and {Author Company}, categorize this SMB buyer's role:
 
-Categorize into one of:
-- "RevOps / Sales Ops" — manages CRM, sales tools
-- "Marketing Ops" — manages marketing automation, analytics
-- "Engineering / IT" — manages dev tools, infrastructure
-- "Leadership" — CEO, founder, general management
-- "Product" — manages product tools, PM software
-- "Finance" — manages financial tools, billing
-- "Other" — doesn't fit above categories
+- "Founder / CEO" — runs the company, buys everything
+- "Ops / RevOps" — manages tools and workflows
+- "Marketing" — manages marketing stack
+- "Sales" — manages sales tools
+- "Engineering / Product" — manages dev/product tools
+- "Agency Owner" — runs a service business, buys tools for clients too
+- "Other" — doesn't fit above
 
 Return ONLY the category.
 ```
@@ -356,23 +372,21 @@ Check if {Post Text} contains any email address. If yes, extract it. If no, retu
 ```
 Based on {Author Company}, determine the most likely company website domain.
 
-Examples:
-- "Acme Corp" → "acmecorp.com"
-- "Stripe" → "stripe.com"
-- "Notion" → "notion.so"
+For SMBs, the company name often IS the domain. Examples:
+- "Acme Agency" → "acmeagency.com"
+- "GrowthHit" → "growthhit.com"
+- "Lemon Squeezy" → "lemonsqueezy.com"
 
 If you cannot determine the domain, return "UNKNOWN".
 
-Return ONLY the domain (e.g., "company.com"), nothing else.
+Return ONLY the domain.
 ```
 
-> **Note**: For leads where email is NOT_FOUND, use the `email-find-verify` skill to look up emails using `{Author Name}` and `{Company Domain}`.
+> **For leads where email is NOT_FOUND**: Use the `email-find-verify` skill with `{Author Name}` + `{Company Domain}`.
 
 ---
 
 ## Step 6 — Deduplication
-
-Run deduplication on the qualified leads table. Dedup on `Post URL` (same post scraped twice) and `Author Company` (multiple posts from same company — keep the highest signal).
 
 ```
 Use mcp tool: check_duplicate_rows
@@ -389,26 +403,23 @@ If duplicates found:
 
 ## Step 7 — Lead Qualification & Prioritization
 
-Apply this qualification logic to determine outreach priority:
-
 | Condition | Action | Priority |
 |-----------|--------|----------|
-| VERY_HIGH signal (ACTIVE_SWITCHING) + decision maker | Immediate outreach — they're switching NOW | P1 |
-| HIGH signal (EVALUATING) + decision maker | Fast outreach — get into their evaluation | P2 |
-| HIGH signal (FRUSTRATED) + decision maker | Outreach — plant the seed before they start evaluating | P2 |
-| MEDIUM signal (RECENTLY_SWITCHED) | Nurture list — learn from the switch | P3 |
-| LOW/NONE signal | Skip | — |
+| VERY_HIGH + Founder/CEO or Ops | Immediate — DM or email within hours | P1 |
+| HIGH + any SMB buyer role | Fast — outreach within 24h | P2 |
+| MEDIUM + any SMB buyer | Nurture — add to drip | P3 |
+| Thread Opportunity = YES | Mine the comments for more leads | P1 (for thread mining) |
 
 ### AI Column: `Outreach Priority`
 
 **Prompt**:
 ```
-Based on signal strength {Signal Strength}, intent type {Intent Type}, and decision-maker status {Is Decision Maker}, assign an outreach priority:
+Based on {Signal Strength}, {Intent Type}, {Is SMB Buyer}, and {Buyer Role}, assign an outreach priority:
 
-- P1_IMMEDIATE: ACTIVE_SWITCHING with VERY_HIGH signal and decision maker = YES
-- P2_FAST: EVALUATING or FRUSTRATED with HIGH signal and decision maker = YES
-- P3_NURTURE: RECENTLY_SWITCHED with MEDIUM signal (useful for intel, not direct outreach)
-- SKIP: LOW or NONE signal, or decision maker = NO
+- P1_NOW: Signal is VERY_HIGH (ASKING_FOR_RECS or ACTIVE_SWITCHING) and buyer is "Founder / CEO" or "Ops / RevOps" or "Agency Owner". These people are deciding THIS WEEK.
+- P2_FAST: Signal is HIGH (PRICE_CHURN or OUTGROWING_TOOL) and Is SMB Buyer = YES. Strong pain, will switch soon.
+- P3_NURTURE: Signal is MEDIUM (FRUSTRATED) and Is SMB Buyer = YES. Pain exists but needs warming up.
+- SKIP: Signal is LOW or NONE, or Is SMB Buyer = NO.
 
 Return ONLY the priority code.
 ```
@@ -417,12 +428,10 @@ Return ONLY the priority code.
 
 ## Step 8 — CRM Export (HubSpot)
 
-When pushing to HubSpot, use this mapping:
-
 **Company object**:
 - `name` ← Author Company
-- `industry` ← (inferred from Author Info or post context)
-- `company_size` ← Company Size Estimate (custom property)
+- `company_size` ← "SMB" (or estimated from context)
+- `current_tool` ← Competitor Mentioned (custom property)
 
 **Contact object**:
 - `firstname` ← Contact First Name
@@ -430,125 +439,145 @@ When pushing to HubSpot, use this mapping:
 - `linkedin_url` ← Author LinkedIn
 - `email` ← Email
 - `jobtitle` ← Author Info
-- `department` ← Role Hint
+- `buyer_role` ← Buyer Role
 
 **Deal object**:
-- `dealname` ← "Churn Signal — {Author Company} — switching from {Competitor Mentioned}"
-- `signal_type` ← Intent Type (custom property)
-- `competitor` ← Competitor Mentioned (custom property)
-- `frustration_reason` ← Frustration Reason (custom property)
+- `dealname` ← "Switch Signal — {Author Company} — from {Competitor Mentioned}"
+- `signal_type` ← Intent Type
+- `competitor` ← Competitor Mentioned
+- `switching_trigger` ← Switching Trigger
 - `post_url` ← Post URL
 - `priority` ← Outreach Priority
 
-> Use the `hubspot-integration` skill for actual CRM push, or export the qualified leads table for manual import.
+> Use the `hubspot-integration` skill for CRM push, or export the table.
 
 ---
 
 ## Step 9 — Email Outreach Sequence
 
+### SMB Outreach Philosophy
+
+SMB outreach must feel like a **peer recommendation**, not a sales pitch. These people get pitched constantly. What works:
+- Sound like a founder talking to a founder
+- Reference their EXACT post and pain
+- Be genuinely helpful — even if they don't buy your product
+- Short emails — SMB buyers don't read long ones
+- Quick path to trying the product (free trial > demo call for SMBs)
+
 ### Target Personas
 
-- RevOps / Sales Ops leaders
-- Marketing Ops managers
-- CTOs / VP Engineering
-- CEOs / Founders (at SMB/startup)
-- Department heads evaluating tools
+- Founders / CEOs asking for recs
+- Ops leads frustrated with current tools
+- Agency owners looking for client tools
+- Marketing / Sales leads at small teams
 
 ### Sequence Overview
 
 | Step | Day | Goal |
 |------|-----|------|
-| Email 1 | Day 0 | Empathy hook — reference their specific frustration |
-| Email 2 | Day 2 | Social proof — how similar companies solved the same problem |
-| Email 3 | Day 5 | Value bridge — connect their pain to your solution |
-| Email 4 | Day 8 | Soft CTA — 15-minute walkthrough |
-| Email 5 | Day 12 | Breakup — close the loop |
+| Email 1 | Day 0 | Helpful reply — answer their question, don't pitch |
+| Email 2 | Day 2 | Quick value — what similar teams did |
+| Email 3 | Day 5 | Offer — try it free, no call needed |
+| Email 4 | Day 9 | Breakup — one last nudge |
+
+> **Note**: 4 emails, not 5. SMBs have shorter attention spans and hate long sequences.
 
 ### AI Column: `Email 1 Draft`
 
 **Prompt**:
 ```
-Write a short, personalized cold email (under 100 words) for {Contact First Name} at {Author Company}.
+Write a very short cold email (under 80 words) for {Contact First Name} at {Author Company}.
 
-Context: They posted on LinkedIn expressing {Intent Type} regarding {Competitor Mentioned}. Their specific frustration: {Frustration Reason}. Their company size is approximately {Company Size Estimate}.
+Context: They posted on LinkedIn about {Intent Type} regarding {Competitor Mentioned}. Their specific trigger: {Switching Trigger}. They are an SMB buyer with role: {Buyer Role}.
+
+CRITICAL RULES for SMB outreach:
+- Sound like a peer/founder, NOT a salesperson
+- Reference their exact post and pain point
+- Do NOT pitch your product in this email
+- Do NOT use corporate language ("leverage", "synergize", "touch base")
+- Keep it casual — like a LinkedIn DM, not a formal email
 
 Structure:
-- Subject line: Reference their specific tool pain (NOT your product). Example: "re: your {Competitor Mentioned} frustration"
-- Opening: Acknowledge you saw their post about {Competitor Mentioned}. Show empathy — don't pitch immediately.
-- Middle: Briefly mention you've heard the same frustration from other {Company Size Estimate}-sized teams.
-- Close: Ask what's driving the evaluation / what they'd need in a replacement.
+- Subject line: Casual, reference their post. Example: "saw your post about {Competitor Mentioned}"
+- Opening: "Hey {Contact First Name}" — acknowledge you saw their post
+- Middle: Share ONE helpful insight or tip related to their frustration. Be genuinely useful.
+- Close: Ask a simple question about what matters most to them in a tool
 
-Tone: Empathetic, peer-to-peer, curious. NOT salesy. Do NOT mention {{your_product}} in Email 1. Sign off with "– {{Your Name}}".
+Sign off with just "– {{Your Name}}" (no title, no company, no links)
 ```
 
 ### AI Column: `Email 2 Draft`
 
 **Prompt**:
 ```
-Write a follow-up email (under 80 words) for {Contact First Name} about their {Competitor Mentioned} situation.
+Write a follow-up email (under 70 words) for {Contact First Name}.
 
-Theme: Social proof. Mention that other companies in a similar position (similar size, similar frustration) made the switch and saw specific improvements. Be vague enough to be credible but specific enough to be interesting.
+Theme: Quick story about a similar-sized team that had the same {Switching Trigger} problem. What did they do? What changed?
 
-Do NOT name {{your_product}} yet. Just reference "a team we work with" or "a similar company".
+Do NOT name {{your_product}} yet. Say "a tool" or "a different approach".
 
-Subject line: "Re: your {Competitor Mentioned} frustration"
-Sign off with "– {{Your Name}}".
+Keep it conversational. One short paragraph max.
+
+Subject line: "re: {Competitor Mentioned}"
+Sign off with "– {{Your Name}}"
 ```
 
 ### AI Column: `Email 3 Draft`
 
 **Prompt**:
 ```
-Write a value-bridge email (under 80 words) for {Contact First Name}.
+Write a trial-offer email (under 70 words) for {Contact First Name}.
 
-Theme: Now connect their specific pain ({Frustration Reason}) to how {{your_product}} solves it. This is the first email where you mention your product by name.
+NOW mention {{your_product}} by name. Connect their specific pain ({Switching Trigger}) to one concrete thing {{your_product}} does differently.
 
-Structure:
-- Acknowledge their frustration with {Competitor Mentioned}
-- State 1-2 specific ways {{your_product}} addresses that exact pain
-- Offer a quick walkthrough (no pressure)
+The CTA should be LOW FRICTION for SMBs:
+- "Here's a free trial link" (NOT "let's schedule a 30-minute demo")
+- "Try it and see if it fits" (NOT "I'd love to walk you through it")
+- Make it easy to say yes without a calendar commitment
 
-Subject line: "How teams are solving the {Competitor Mentioned} problem"
-Sign off with "– {{Your Name}}".
+Subject line: "quick option for the {Competitor Mentioned} thing"
+Sign off with "– {{Your Name}}"
 ```
 
-### LinkedIn Outreach (Optional)
+### LinkedIn Outreach (Preferred for P1 leads)
 
-| Step | Message Strategy |
-|------|-----------------|
-| Connect | Reference their specific post about {Competitor Mentioned} — show you understand the pain |
-| Follow-up | Ask what they're looking for in a replacement — be a consultant, not a seller |
-| CTA | Offer a 15-minute walkthrough tailored to their switching criteria |
+For VERY_HIGH signals (especially ASKING_FOR_RECS), **LinkedIn comment/DM is better than email**. The person posted publicly asking for recs — they WANT answers.
+
+| Step | Action | Tone |
+|------|--------|------|
+| Comment on post | Answer their question genuinely. Mention {{your_product}} as ONE option alongside others. Don't be the person who only pushes their own product. | Helpful community member |
+| Connect request | "Hey {Contact First Name} — saw your post about {Competitor Mentioned}. We built {{your_product}} to solve exactly that. Happy to chat if useful!" | Casual, founder-to-founder |
+| DM follow-up | Share a free trial link or a quick Loom video showing how your tool handles their specific pain | Helpful, async-friendly |
 
 ---
 
 ## Conversion Factors
 
-| Factor | Impact |
-|--------|--------|
-| Speed — reaching them while they're still evaluating | Decisive |
-| Empathy — acknowledging their frustration first, not pitching | Critical |
-| Specificity — referencing their EXACT competitor and pain | Very high |
-| Targeting decision-makers (not ICs complaining casually) | High |
-| Company size match to your product's sweet spot | High |
+| Factor | Impact | SMB-Specific Note |
+|--------|--------|-------------------|
+| Speed — responding within hours | Decisive | SMBs decide in days, not months |
+| LinkedIn comment on rec posts | Very high | They literally asked for suggestions |
+| Free trial > demo call | Critical | SMBs want to try, not sit through demos |
+| Founder-to-founder tone | High | Peer credibility beats sales polish |
+| Referencing their exact post | High | Proves you're not mass-blasting |
+| Price positioning | High | Show you're affordable for small teams |
 
 ---
 
 ## Execution Checklist
 
-When running this pipeline, follow these steps in order:
-
-1. **Configure**: Define your product name, competitor list (3-10), and product category
-2. **Scrape**: Run Apify LinkedIn Post Scraper with the boolean queries (last 14 days only)
-3. **Ingest**: Create Meerkats table and bulk-add Apify results as rows
-4. **Classify**: Add AI columns (Intent Type, Signal Strength, Competitor Mentioned, Frustration Reason, Company Size Estimate, Is Decision Maker, Post Age Check) and run them
-5. **Filter**: Filter to qualified signals only (FRESH + VERY_HIGH/HIGH + decision maker + competitor identified)
-6. **Enrich**: Add enrichment AI columns (Contact First Name, Role Hint, Email, Company Domain) and run them
+1. **Configure**: Define your product, 3-10 competitors, product category, and SMB sweet spot
+2. **Scrape**: Run Apify LinkedIn Post Scraper with boolean queries (last 14 days)
+3. **Ingest**: Create Meerkats table and bulk-add Apify results
+4. **Classify**: Add AI columns (Intent Type, Signal Strength, Competitor Mentioned, Switching Trigger, Is SMB Buyer, Post Age Check, Thread Opportunity) and run them
+5. **Filter**: Filter to qualified SMB signals (FRESH + VERY_HIGH/HIGH/MEDIUM + SMB buyer)
+6. **Enrich**: Add enrichment AI columns (Contact First Name, Buyer Role, Email, Company Domain) and run them
 7. **Deduplicate**: Run dedup on Post URL + Author Company
 8. **Qualify**: Add Outreach Priority AI column and run it
-9. **Email Lookup**: For leads with no email, use `email-find-verify` skill with Author Name + Company Domain
-10. **Outreach**: Add email draft AI columns and run them
-11. **Export**: Push to CRM via `hubspot-integration` skill or export table
+9. **Thread Mining**: For Thread Opportunity = YES posts, manually review comments for additional leads
+10. **Email Lookup**: For leads with no email, use `email-find-verify` skill
+11. **Outreach**: Add email draft AI columns and run them. For P1 leads, prefer LinkedIn comment/DM first.
+12. **Export**: Push to CRM via `hubspot-integration` skill or export table
 
 ## Dependencies on Other Skills
 
@@ -557,16 +586,17 @@ When running this pipeline, follow these steps in order:
 
 ## External Tool Dependencies
 
-- **Apify** — LinkedIn Post Scraper actor for signal capture (Step 1). Requires an Apify account and API key.
+- **Apify** — LinkedIn Post Scraper actor for signal capture. Requires Apify account and API key.
 
 ## Output
 
 After running the full pipeline, deliver:
 - Total posts scraped from Apify
-- Breakdown by intent type (switching, evaluating, frustrated, etc.)
-- Number of qualified leads by priority tier
+- Breakdown by intent type (asking for recs, price churn, outgrowing, etc.)
+- Number of qualified leads by priority tier (P1/P2/P3)
 - Top competitors mentioned (frequency count)
-- Top frustration reasons (frequency count)
+- Top switching triggers (frequency count)
+- Thread opportunities identified (for comment mining)
 - Meerkats table link with all enriched data
 - Email drafts ready for review
 - CRM export summary (if applicable)
