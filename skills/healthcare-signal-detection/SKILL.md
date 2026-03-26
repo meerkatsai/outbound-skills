@@ -504,61 +504,158 @@ When pushing to HubSpot, use this mapping:
 | Email 4 | Day 7 | Soft CTA — 15-minute call |
 | Email 5 | Day 10 | Breakup — close the loop |
 
-### AI Column: `Email 1 Draft`
+### AI Column: `Email 1 Draft` — Contextual Hook (Day 0)
 
 **Prompt**:
 ```
-Write a short, personalized cold email (under 100 words) for {Contact First Name} at {Author Company}.
+Generate Email 1 of a 5-email sequence for {Contact First Name} at {Author Company}.
 
-Context: They posted on LinkedIn about hiring {Hiring Role}. Their pain signal is: {Pain Signal}.
+This is the CONTEXTUAL HOOK email. Follow this exact structure:
 
-Structure:
-- Subject line: Reference their hiring post
-- Opening: Mention you saw their post about hiring {Hiring Role}
-- Middle: Briefly mention you work with healthcare teams facing similar hiring challenges
-- Close: Ask if filling these roles fast enough is a challenge
+Subject: Saw your hiring post – quick question
 
-Tone: Casual, peer-to-peer, no hard sell. Sign off with "– {{Your Name}}".
+Hi {Contact First Name},
+
+Came across your post about hiring {Hiring Role} — looks like you're actively scaling your team.
+
+We've been working with healthcare teams facing similar hiring spikes, especially for roles like {Hiring Role}, where speed and quality both matter.
+
+Curious — are you currently able to fill these roles fast enough, or is it becoming a bottleneck?
+
+– {{Your Name}}
+
+Rules:
+- Keep the structure and tone exactly as above
+- Replace {Contact First Name} and {Hiring Role} with actual values
+- Do NOT add extra paragraphs, bullet points, or calls to action
+- Under 80 words body text
+- Casual, peer-to-peer tone
 ```
 
-### AI Column: `Email 2 Draft`
+### AI Column: `Email 2 Draft` — Pain Amplification (Day 2)
 
 **Prompt**:
 ```
-Write a follow-up email (under 80 words) for {Contact First Name} about hiring {Hiring Role}.
+Generate Email 2 of a 5-email sequence for {Contact First Name} about hiring {Hiring Role}.
 
-Theme: Pain amplification. Mention common healthcare hiring struggles:
+This is the PAIN AMPLIFICATION email. Follow this exact structure:
+
+Subject: Re: hiring {Hiring Role}
+
+Hi {Contact First Name},
+
+Following up — one pattern we're seeing across healthcare hiring:
+
+Even when demand is high, teams struggle with:
 - Inconsistent candidate quality
 - Delays in screening
 - Drop-offs before joining
 
-Ask if they are experiencing something similar. Keep it conversational.
+This usually slows down hiring much more than expected.
 
-Subject line: "Re: hiring {Hiring Role}"
-Sign off with "– {{Your Name}}".
+Are you seeing something similar on your end?
+
+– {{Your Name}}
+
+Rules:
+- Keep the structure, bullet points, and tone exactly as above
+- Replace {Contact First Name} and {Hiring Role} with actual values
+- Do NOT change the three bullet points — they are tested copy
+- Under 70 words body text
+- Conversational, empathetic tone
 ```
 
-### AI Column: `Email 3 Draft`
+### AI Column: `Email 3 Draft` — Value Proposition (Day 4)
 
 **Prompt**:
 ```
-Write a value-proposition email (under 80 words) for {Contact First Name}.
+Generate Email 3 of a 5-email sequence for {Contact First Name}.
 
-Theme: How other teams solved healthcare hiring challenges by automating parts of sourcing and screening. Benefits: reduced time-to-hire, improved candidate quality, handling higher volumes.
+This is the VALUE PROPOSITION email. Follow this exact structure:
 
-Offer to share what is working. No hard CTA.
+Subject: How teams are fixing this
 
-Subject line: "How teams are fixing this"
-Sign off with "– {{Your Name}}".
+Hi {Contact First Name},
+
+Some teams we work with solved this by automating parts of sourcing + screening, while keeping control on final decisions.
+
+This helped them:
+- Reduce time-to-hire significantly
+- Improve candidate quality
+- Handle higher volumes without scaling recruiters
+
+Happy to share what's working if relevant.
+
+– {{Your Name}}
+
+Rules:
+- Keep the structure, bullet points, and tone exactly as above
+- Replace {Contact First Name} with actual value
+- Do NOT change the three bullet points — they are tested copy
+- No hard CTA in this email
+- Under 70 words body text
 ```
 
-### LinkedIn Outreach (Optional)
+### AI Column: `Email 4 Draft` — Soft CTA (Day 7)
 
-| Step | Message Strategy |
-|------|-----------------|
-| Connect | Reference their specific hiring post as connection reason |
-| Follow-up | Ask about their hiring challenges and current process |
-| CTA | Suggest a short call to compare notes |
+**Prompt**:
+```
+Generate Email 4 of a 5-email sequence for {Contact First Name}.
+
+This is the SOFT CTA email. Follow this exact structure:
+
+Subject: Worth exploring?
+
+Hi {Contact First Name},
+
+If hiring demand is still high on your side, this might be worth a quick discussion.
+
+Would it make sense to compare notes for 15 mins this week?
+
+– {{Your Name}}
+
+Rules:
+- Keep this email SHORT — exactly as above, no extra text
+- Replace {Contact First Name} with actual value
+- The CTA is a soft 15-minute ask, NOT a demo or sales call
+- Under 40 words body text
+```
+
+### AI Column: `Email 5 Draft` — Breakup (Day 10)
+
+**Prompt**:
+```
+Generate Email 5 of a 5-email sequence for {Contact First Name}.
+
+This is the BREAKUP email. Follow this exact structure:
+
+Subject: Should I close this?
+
+Hi {Contact First Name},
+
+Not sure if this is relevant right now.
+
+If hiring is already under control, I'll close this out.
+
+If not, happy to reconnect later when it becomes a priority.
+
+– {{Your Name}}
+
+Rules:
+- Keep this email SHORT — exactly as above, no extra text
+- Replace {Contact First Name} with actual value
+- Tone: respectful, no guilt-tripping, no pressure
+- This gives them an easy out which paradoxically increases reply rates
+- Under 40 words body text
+```
+
+### LinkedIn Outreach (Optional but Recommended)
+
+| Step | Day | Message |
+|------|-----|---------|
+| Connect Request | Day 0 | Reference their specific hiring post: "Hi {Contact First Name}, saw your post about hiring {Hiring Role} — we help healthcare teams fill these roles faster. Would love to connect." |
+| Follow-up DM | Day 3 | Ask about their hiring challenges: "Thanks for connecting! Are you finding it tough to fill {Hiring Role} positions fast enough? Seeing that a lot in healthcare right now." |
+| CTA | Day 6 | Short call ask: "Would it make sense to compare notes for 15 mins? Happy to share what's working for similar teams." |
 
 ---
 
