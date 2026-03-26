@@ -2,7 +2,7 @@
 name: healthcare-signal-detection
 description: "Use when the user wants to detect healthcare hiring signals from LinkedIn posts, classify intent, enrich leads, and build an outreach pipeline. Trigger on phrases like 'healthcare hiring signals,' 'nurse hiring leads,' 'staffing agency leads,' 'healthcare staffing pipeline,' 'hiring intent detection,' 'RN hiring signals,' 'CNA hiring leads,' 'healthcare outbound,' or 'signal detection pipeline.' Covers the full workflow: Apify LinkedIn scraping, Meerkats AI-powered intent classification, lead enrichment, deduplication, HubSpot CRM export, and outreach sequence generation."
 metadata:
-  version: 2.0.0
+  version: 2.1.0
 ---
 
 # Healthcare Hiring Signal Detection & Conversion Pipeline
@@ -155,37 +155,102 @@ Use `add_table_rows_bulk` to load all scraped posts into the table at once.
 
 ## Step 3 — Intent Classification (Meerkats AI Columns)
 
-Add AI columns to classify each post. These replace Clay AI.
+Add AI columns to classify each post. These replace Clay AI. All classification columns output **structured JSON** with confidence scores and evidence — this prevents blank/ambiguous results and gives downstream steps clear data to work with.
 
-### AI Column: `Intent Type`
-
-**Prompt**:
-```
-Analyze the LinkedIn post text in {Post Text} and classify the hiring intent into exactly one of these categories:
-
-- URGENT_HIRING: Post mentions urgently hiring nurses, immediate joiners, ASAP hiring
-- ACTIVE_HIRING: Post says "we are hiring" RN/CNA/staff — direct demand
-- EXPANSION_HIRING: Post mentions expanding teams, new facility hiring, scaling
-- AGENCY_HIRING: Recruiter or staffing agency hiring for clients (multiplier signal)
-- PIPELINE_BUILDING: Looking to partner, build talent pipeline — longer cycle
-- PASSIVE_CONTENT: Thought leadership, generic healthcare content — no hiring signal
-
-Return ONLY the category name, nothing else.
-```
-
-### AI Column: `Signal Strength`
+### AI Column: `Intent Classification`
 
 **Prompt**:
 ```
-Based on the post in {Post Text} and the intent type {Intent Type}, assign a signal strength:
+You are an intent-classification engine for healthcare hiring posts.
 
-- VERY_HIGH: Urgent requirements, immediate openings, ASAP language
-- HIGH: Active hiring posts, multi-role hiring, agency hiring for clients
-- MEDIUM: Pipeline building, partnership seeking
-- LOW: Thought leadership, generic content, no hiring signal
+Task: Classify the post into exactly ONE intent type using the taxonomy below.
 
-Return ONLY the strength level.
+Intent Types:
+
+1. urgent_hiring
+   - Immediate openings, urgent joins, "ASAP", "immediate joiners"
+   - Example: "Immediate openings for CNAs"
+
+2. active_hiring
+   - Direct hiring announcements for nurses/staff
+   - Example: "We are hiring RN/CNA/staff"
+
+3. agency_hiring
+   - Recruiters or staffing firms hiring for clients or multiple hospitals
+   - Example: "Hiring nurses for multiple hospitals"
+
+4. expansion_hiring
+   - New facility/team expansion driving hiring demand
+   - Example: "Expanding teams / new facility hiring"
+
+5. pipeline_building
+   - Partnership/pipeline/talent pool language; less immediate
+   - Example: "Looking to partner / build talent pipeline"
+
+6. passive_content
+   - Thought leadership, trends, general insights; no clear hiring ask
+   - Example: "Healthcare staffing trends"
+
+Instructions:
+- Read the post text carefully.
+- Pick the single best intent type.
+- Include a short rationale based only on text evidence.
+- If unclear, choose the closest type and set confidence lower.
+
+Post: {Post Text}
+
+Output JSON:
+{
+  "intent_type": "urgent_hiring|active_hiring|agency_hiring|expansion_hiring|pipeline_building|passive_content",
+  "confidence": 0.0-1.0,
+  "evidence_phrases": ["...", "..."],
+  "rationale": "1-2 sentences"
+}
 ```
+
+### AI Column: `Signal Scoring`
+
+**Prompt**:
+```
+You are a buying-signal detector for healthcare staffing demand in social posts.
+
+Task: Score hiring signal strength from the post and explain why.
+
+Signal Rules:
+- VERY_HIGH: explicit urgency + active hiring (e.g., "urgent", "immediate openings", "ASAP joiners")
+- HIGH: direct hiring demand, recruiter/agency hiring, multi-role hiring, or expansion hiring
+- MEDIUM: collaboration/pipeline-building intent without immediate openings
+- LOW: generic content, thought leadership, trends, no immediate hiring intent
+
+Also extract detected signal tags:
+- urgent_hiring
+- direct_job_post
+- recruiter_or_agency
+- multi_role_hiring
+- expansion_hiring
+- pipeline_or_collab
+- passive_content
+
+Post: {Post Text}
+
+Output JSON:
+{
+  "signal_strength": "VERY_HIGH|HIGH|MEDIUM|LOW",
+  "detected_tags": ["..."],
+  "conversion_implication": "fastest conversion|direct demand|longer cycle|no immediate value",
+  "confidence": 0.0-1.0,
+  "evidence_phrases": ["...", "..."],
+  "reason": "1-2 sentences"
+}
+```
+
+### How downstream steps use the JSON output
+
+The AI columns below and the filter step reference parsed fields from the JSON:
+- **Intent Type** → extracted from `Intent Classification` → `intent_type`
+- **Signal Strength** → extracted from `Signal Scoring` → `signal_strength`
+- **Signal Tags** → extracted from `Signal Scoring` → `detected_tags`
+- **Confidence** → use `Signal Scoring` → `confidence` to set quality thresholds (recommended: filter out anything below 0.6)
 
 ### AI Column: `Is Healthcare Hiring`
 
@@ -267,13 +332,16 @@ After AI columns have run, filter the table to keep only qualified leads.
 - `Post Age Check` = "FRESH" (discard anything older than 14 days)
 - `Is Healthcare Hiring` = "YES"
 - `Is US Based` = "YES" (strict — no "UNCLEAR", no exceptions)
-- `Signal Strength` IN ("VERY_HIGH", "HIGH", "MEDIUM")
-- `Intent Type` NOT "PASSIVE_CONTENT"
+- `Signal Scoring` → `signal_strength` IN ("VERY_HIGH", "HIGH", "MEDIUM")
+- `Signal Scoring` → `confidence` >= 0.6 (drop low-confidence classifications)
+- `Intent Classification` → `intent_type` NOT "passive_content"
 - `Company Type` IN ("STAFFING_AGENCY", "HEALTHCARE_PROVIDER", "RECRUITER_INDEPENDENT") — exclude "OTHER"
 
 Use `filter_table_rows` or create a Meerkats sheet called **"Qualified Leads"** containing only rows that pass ALL filters.
 
 > **Why so strict?** The client targets only US-based healthcare staffing agencies and large healthcare providers actively hiring. Every lead that passes this filter should be a real US healthcare hiring signal from a relevant company type. False positives waste outreach effort and damage sender reputation.
+>
+> **Why confidence >= 0.6?** Posts where the AI is less than 60% sure about the classification are ambiguous — they produce blank or inconsistent enrichment downstream. Better to discard them than waste outreach on misclassified leads.
 
 ---
 
@@ -363,14 +431,29 @@ Apply this qualification logic to determine outreach priority:
 
 **Prompt**:
 ```
-Based on signal strength {Signal Strength} and company type {Company Type}, assign an outreach priority:
+You are assigning outreach priority for a healthcare staffing sales team.
 
-- P1_IMMEDIATE: Signal is VERY_HIGH or HIGH and company is STAFFING_AGENCY or RECRUITER_INDEPENDENT
-- P2_STANDARD: Signal is VERY_HIGH or HIGH and company is HEALTHCARE_PROVIDER
-- P3_NURTURE: Signal is MEDIUM
-- SKIP: Signal is LOW or company is OTHER
+Inputs:
+- Signal scoring: {Signal Scoring}
+- Company type: {Company Type}
+- Intent classification: {Intent Classification}
 
-Return ONLY the priority code.
+Parse the signal_strength from Signal Scoring JSON and the intent_type from Intent Classification JSON, then apply these rules:
+
+Priority Rules:
+- P1_IMMEDIATE: signal_strength is VERY_HIGH or HIGH AND company is STAFFING_AGENCY or RECRUITER_INDEPENDENT. These are multiplier accounts (1 contact = many roles). Reach out within 24 hours.
+- P2_STANDARD: signal_strength is VERY_HIGH or HIGH AND company is HEALTHCARE_PROVIDER. Direct demand, reach out within 48 hours.
+- P3_NURTURE: signal_strength is MEDIUM. Longer cycle, add to nurture sequence.
+- SKIP: signal_strength is LOW OR company is OTHER. No outreach.
+
+Additional boost: If intent_type is "urgent_hiring" or "agency_hiring", upgrade P2 to P1.
+
+Output JSON:
+{
+  "priority": "P1_IMMEDIATE|P2_STANDARD|P3_NURTURE|SKIP",
+  "action": "reach out within 24h|reach out within 48h|add to nurture|skip",
+  "reason": "1 sentence"
+}
 ```
 
 ---
@@ -382,7 +465,7 @@ When pushing to HubSpot, use this mapping:
 **Company object**:
 - `name` ← Author Company
 - `industry` ← "Healthcare" or Company Type
-- `signal_strength` ← Signal Strength (custom property)
+- `signal_strength` ← Signal Scoring → signal_strength (custom property)
 
 **Contact object**:
 - `firstname` ← Contact First Name
@@ -393,7 +476,7 @@ When pushing to HubSpot, use this mapping:
 
 **Deal object**:
 - `dealname` ← "Hiring Signal — {Author Company}"
-- `hiring_signal` ← Intent Type
+- `hiring_signal` ← Intent Classification → intent_type
 - `post_url` ← Post URL
 - `pain_signal` ← Pain Signal
 - `priority` ← Outreach Priority
@@ -496,8 +579,8 @@ When running this pipeline, follow these steps in order:
 
 1. **Scrape**: Run Apify LinkedIn Post Scraper with the boolean queries (last 14 days only)
 2. **Ingest**: Create Meerkats table and bulk-add Apify results as rows
-3. **Classify**: Add AI columns (Intent Type, Signal Strength, Is Healthcare Hiring, Is US Based, Company Type, Post Age Check, Pain Signal) and run them
-4. **Filter**: Filter to qualified leads only (FRESH + US-based YES + healthcare YES + STAFFING_AGENCY/HEALTHCARE_PROVIDER/RECRUITER_INDEPENDENT + HIGH/MEDIUM signal)
+3. **Classify**: Add AI columns (Intent Classification, Signal Scoring, Is Healthcare Hiring, Is US Based, Company Type, Post Age Check, Pain Signal) and run them
+4. **Filter**: Filter to qualified leads only (FRESH + US-based YES + healthcare YES + STAFFING_AGENCY/HEALTHCARE_PROVIDER/RECRUITER_INDEPENDENT + signal_strength HIGH/MEDIUM + confidence >= 0.6)
 5. **Enrich**: Add enrichment AI columns (Contact First Name, Hiring Role, Role Hint, Email, Phone) and run them
 6. **Deduplicate**: Run dedup on Post URL + Author Company
 7. **Qualify**: Add Outreach Priority AI column and run it
