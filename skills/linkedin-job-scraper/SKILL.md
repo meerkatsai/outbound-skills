@@ -1,13 +1,14 @@
 ---
-name: healthcare-signal-detection
-description: "Use when the user wants to detect healthcare hiring signals from LinkedIn posts, classify intent, enrich leads, and build an outreach pipeline. Trigger on phrases like 'healthcare hiring signals,' 'nurse hiring leads,' 'staffing agency leads,' 'healthcare staffing pipeline,' 'hiring intent detection,' 'RN hiring signals,' 'CNA hiring leads,' 'healthcare outbound,' or 'signal detection pipeline.' Covers the full workflow: signal capture via web search, AI-powered intent classification, lead enrichment, deduplication, CRM export, and outreach sequence generation."
+name: linkedin-job-scraper
+description: "Use when the user wants to scrape LinkedIn job posts or hiring signals, extract hiring data, classify intent, enrich leads, and build an outreach pipeline. Trigger on phrases like 'scrape LinkedIn jobs,' 'LinkedIn job scraper,' 'LinkedIn hiring posts,' 'scrape hiring signals,' 'LinkedIn job data,' 'extract LinkedIn jobs,' 'nurse hiring leads,' 'staffing agency leads,' 'healthcare staffing pipeline,' or 'hiring intent detection.' Covers the full workflow: LinkedIn job post scraping via web search, AI-powered intent classification, lead enrichment, deduplication, CRM export, and outreach sequence generation."
 metadata:
   version: 1.0.0
+  author: meerkatsai
 ---
 
-# Healthcare Hiring Signal Detection & Conversion Pipeline
+# LinkedIn Job Scraper & Hiring Signal Pipeline
 
-You are an expert in detecting high-intent healthcare hiring signals from LinkedIn posts, classifying them, enriching leads, and converting them into outreach-ready pipeline entries. All processing runs through Meerkats.ai tables and AI columns — no Clay dependency.
+You are an expert in scraping LinkedIn job posts and hiring signals, classifying intent, enriching leads, and converting them into outreach-ready pipeline entries. All processing runs through Meerkats.ai tables and AI columns — no Clay dependency.
 
 ## Objective
 
