@@ -250,14 +250,64 @@ Based on {Author Name} and {Author Company} and {Post Text}, what is the likely 
 Return the most likely title in 1-3 words.
 ```
 
-### AI Column: `Email`
+### AI Column: `First Name`
+
+**Prompt**:
+```
+Extract ONLY the first name from {Author Name}. Return just the first name, nothing else.
+```
+
+### AI Column: `Last Name`
+
+**Prompt**:
+```
+Extract ONLY the last name from {Author Name}. Return just the last name, nothing else.
+```
+
+### AI Column: `Company Domain`
+
+**Prompt**:
+```
+Based on {Author Company}, determine the most likely company website domain (e.g., "Acme Health" → "acmehealth.com", "Johns Hopkins Hospital" → "hopkinsmedicine.org").
+
+If you can confidently determine the domain, return ONLY the domain (no https://, no trailing slash). If unsure, return "UNKNOWN".
+```
+
+### AI Column: `Email (from post)`
 
 **Prompt**:
 ```
 Check if {Post Text} contains any email address. If yes, extract it. If no, return "NOT_FOUND".
 ```
 
-> **Note**: For leads where email is NOT_FOUND, use the `email-find-verify` skill to look up emails using the contact name and company domain.
+### Step 4b — Email Lookup for Missing Emails
+
+After the enrichment AI columns have run, you must find emails for leads where `Email (from post)` is `NOT_FOUND`. This is the most critical enrichment step — without a verified email, the lead cannot be contacted.
+
+**Process**:
+
+1. **Filter leads needing email lookup**: Use `filter_table_rows` to find rows where `Email (from post)` = "NOT_FOUND" AND `Company Domain` ≠ "UNKNOWN".
+2. **For each lead**, call the `email-find-verify` skill with these inputs:
+   - `--firstname` ← value from `First Name` column
+   - `--lastname` ← value from `Last Name` column
+   - `--domain` ← value from `Company Domain` column
+3. **Write the found email back** to the row using `update_table_row`, setting a new column `Verified Email`.
+4. **Verify the email**: After finding, run the verification step from `email-find-verify` to confirm deliverability. Write the verification status to a `Email Status` column.
+5. **For leads where `Company Domain` is "UNKNOWN"**: Try using the `Author LinkedIn` URL with a tool like `apollo` or `rocketreach` that supports LinkedIn URL lookup instead of domain-based search.
+
+**Add these Input columns** for storing email lookup results:
+
+| Column Name | Data Type | Type |
+|-------------|-----------|------|
+| Verified Email | text | Input |
+| Email Status | text | Input |
+
+**Email mapping rule**: The `Verified Email` column is the authoritative email for outreach. Use this precedence:
+1. If `Email (from post)` has a valid email → use it as `Verified Email` (still verify it)
+2. If `Email (from post)` is `NOT_FOUND` → use the email returned by `email-find-verify`
+3. If both are empty → mark `Email Status` as "NO_EMAIL_FOUND" and skip outreach for this lead
+
+**Only generate outreach email drafts (Step 8) for rows where `Email Status` is "VERIFIED" or "LIKELY_VALID".** Do not draft emails for leads with no verified email.
 
 ---
 
@@ -317,7 +367,7 @@ When pushing to CRM (HubSpot or other), use this mapping:
 **Contact object**:
 - `name` ← Contact Name
 - `linkedin_url` ← Author LinkedIn
-- `email` ← Email
+- `email` ← Verified Email
 - `role` ← Role Hint
 
 **Deal object**:
@@ -427,11 +477,12 @@ When running this pipeline, follow these steps in order:
 2. **Ingest**: Create Meerkats table and bulk-add raw post data as rows
 3. **Classify**: Add AI columns (Intent Type, Signal Strength, Is Healthcare Hiring, Is US Relevant, Company Type, Pain Signal) and run them
 4. **Filter**: Filter to qualified leads only (HIGH/MEDIUM signal, healthcare, US-relevant)
-5. **Enrich**: Add enrichment AI columns (Hiring Role, Role Hint, Email extraction) and run them
+5. **Enrich**: Add enrichment AI columns (First Name, Last Name, Company Domain, Hiring Role, Role Hint, Email from post) and run them
 6. **Deduplicate**: Run dedup on Post URL + Author Company
 7. **Qualify**: Add Outreach Priority AI column and run it
-8. **Email Lookup**: For leads with no email, use `email-find-verify` skill
-9. **Outreach**: Add email draft AI columns and run them
+8. **Email Lookup**: For leads where `Email (from post)` is NOT_FOUND, call `email-find-verify` skill with First Name + Last Name + Company Domain. Write results to `Verified Email` and `Email Status` columns. Verify all found emails for deliverability.
+9. **Email Mapping**: Set `Verified Email` for all rows — use post-extracted email if available (verify it too), otherwise use lookup result. Mark rows with no email as NO_EMAIL_FOUND.
+10. **Outreach**: Add email draft AI columns and run them — **only for rows where Email Status is VERIFIED or LIKELY_VALID**
 10. **Export**: Push to CRM via `hubspot-integration` skill or export table
 
 ## Dependencies on Other Skills
