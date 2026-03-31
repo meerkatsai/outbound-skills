@@ -1,6 +1,6 @@
 ---
-name: linkedin-job-scraper
-description: "Scrapes LinkedIn hiring posts via Apify, classifies intent, enriches leads, and generates outreach sequences for healthcare staffing pipeline. Trigger on 'scrape LinkedIn jobs,' 'LinkedIn hiring posts,' 'hiring signals,' 'nurse hiring leads,' 'staffing agency leads,' 'healthcare staffing pipeline,' or 'hiring intent detection.' Splits leads into Individual vs Agency tables in Meerkats.ai. Replaces Clay-based workflows."
+name: healthcare-hiring-signals
+description: "Detects healthcare hiring signals from LinkedIn via Apify boolean search, classifies intent, enriches leads, and generates 5-email outreach sequences. Trigger on 'healthcare hiring signals,' 'hiring signal detection,' 'nurse hiring leads,' 'staffing agency pipeline,' 'healthcare staffing leads,' 'LinkedIn hiring scraper,' or 'signal-to-outreach pipeline.' Splits leads into Individual vs Agency tables in Meerkats.ai. Replaces Clay-based workflows."
 metadata:
   version: 2.0.0
   author: meerkatsai
