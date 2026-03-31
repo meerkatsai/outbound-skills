@@ -16,15 +16,6 @@ You are an expert in scraping LinkedIn job posts and hiring signals, classifying
 - **Goal**: Identify high-intent hiring signals → enrich → push to CRM → trigger outreach
 - **Success Metric**: Meetings booked with hiring decision-makers (TA heads, recruiters, ops leaders)
 
-## When to Use This Skill
-
-- Detecting healthcare hiring signals from LinkedIn or web sources
-- Classifying hiring intent from scraped posts
-- Enriching healthcare leads with contact and company data
-- Building qualified lead lists for healthcare staffing outreach
-- Generating personalized email sequences for hiring decision-makers
-- Running the end-to-end signal-to-outreach pipeline
-
 ## Pipeline Overview
 
 | Step | Action | Meerkats Tool | Output |
@@ -43,22 +34,11 @@ You are an expert in scraping LinkedIn job posts and hiring signals, classifying
 
 ### Recency Requirement
 
-**CRITICAL**: Only fetch LinkedIn posts from the last 14 days (2 weeks). This ensures signals are fresh and actionable.
+**CRITICAL**: Only fetch posts from the **last 14 days**. Calculate cutoff: `today - 14 days` in ISO format (YYYY-MM-DD). Posts older than 2 weeks are stale — discard them.
 
-Before running any search:
-1. Calculate the cutoff date: **today's date minus 14 days** (e.g., if today is 2026-03-31, the cutoff is 2026-03-17).
-2. Pass this cutoff date to the Apify scraper's date filter parameter.
-3. After ingestion, **discard any rows** where `Post Date` is older than the cutoff date as a safety check.
+### Search Platform & Configuration
 
-Posts older than 2 weeks are stale — the hiring need has likely been filled or the decision-maker has moved on. Do not include them.
-
-### Search Platform
-
-All boolean searches run on **LinkedIn** using the **Apify LinkedIn Posts Scraper** (actor: `apify/linkedin-post-search-scraper` or equivalent Apify LinkedIn actor). Do NOT use generic web search for this step — LinkedIn is the source of truth for hiring signal posts.
-
-### Apify Scraper Configuration
-
-When calling the Apify LinkedIn scraper, use these parameters:
+All boolean searches run on **LinkedIn** via **Apify LinkedIn Posts Scraper**. Do NOT use generic web search — LinkedIn is the source of truth.
 
 ```json
 {
@@ -74,41 +54,14 @@ When calling the Apify LinkedIn scraper, use these parameters:
 }
 ```
 
-> **`publishedAfter`**: Set this to the ISO date string for **today minus 14 days**. For example, if today is `2026-03-31`, set `publishedAfter` to `2026-03-17`. This is the primary recency filter — it tells Apify to only return posts published within the last 2 weeks.
-
-> **Note on Apify actor**: The exact actor name and parameter names may vary. Check the Apify marketplace for the latest LinkedIn post search actor. The key parameters to set are: (1) the boolean search queries, (2) maximum results, and (3) a date filter to restrict results to the last 14 days. Common actors include `curious_coder/linkedin-post-search-scraper`, `apify/linkedin-scraper`, or similar.
-
-### Keyword Strategy
-
-These boolean queries are used as `searchQueries` in the Apify LinkedIn scraper.
-
-**Core Hiring Keywords**:
-
-| Category | Keywords |
-|----------|----------|
-| Direct Hiring | "we are hiring", "now hiring", "hiring RN", "hiring nurses" |
-| Urgency | "urgent hiring", "immediate joiners", "ASAP hiring" |
-| Roles | RN, CNA, LPN, GNA, PCA, caregiver, clinical staff |
-| Healthcare Context | hospital hiring, clinic hiring, patient care jobs |
-| Hashtags | #hiring #nowhiring #nursejobs #healthcarejobs |
-
-**High-Intent Boolean Queries** (pass these as `searchQueries` to Apify):
-
-```
-("we are hiring" OR "now hiring" OR "urgent hiring") AND (nurse OR RN OR CNA OR LPN OR caregiver OR "patient care")
-("hiring RN" OR "hiring CNA" OR "hiring nurses") AND (hospital OR clinic OR healthcare)
-("#hiring" OR "#nowhiring") AND (nurse OR healthcare OR RN)
-("looking for nurses" OR "need nurses urgently")
-("healthcare staffing" OR "nurse staffing") AND (hiring OR recruiting)
-```
+Set `publishedAfter` to `today - 14 days` ISO string. The exact Apify actor name may vary — use whichever LinkedIn post search actor is available (e.g., `curious_coder/linkedin-post-search-scraper`, `apify/linkedin-scraper`).
 
 ### Execution
 
-1. **Calculate cutoff date**: Compute `today - 14 days` in ISO format (YYYY-MM-DD). This is your `publishedAfter` value.
-2. **Run Apify LinkedIn scraper**: Execute the Apify actor with the boolean queries above and the `publishedAfter` date filter set to the cutoff date. This searches LinkedIn posts directly — not generic web results.
-3. **Extract fields from Apify results**: For each post returned, extract: `post_url`, `post_text`, `author_name`, `author_linkedin_url`, `author_company`, `post_date`.
-4. **Validate recency**: Before ingesting, double-check that each post's `post_date` is within the last 14 days. Discard any that are older.
-5. Create a Meerkats table called **"Healthcare Hiring Signals"** with Input columns for the raw fields.
+1. **Run Apify LinkedIn scraper** with the boolean queries and `publishedAfter` date filter.
+2. **Extract fields**: `post_url`, `post_text`, `author_name`, `author_linkedin_url`, `author_company`, `post_date`.
+3. **Validate recency**: Discard any posts where `post_date` is older than the cutoff.
+4. Create a Meerkats table called **"Healthcare Hiring Signals"** with Input columns.
 
 **Create table command**:
 
@@ -135,18 +88,44 @@ Use mcp tool: create_table
 
 Add AI columns to classify each post. These replace Clay AI.
 
+### Intent Type Reference
+
+Use this mapping to understand intent types, their priority, and why they matter for conversion:
+
+| Intent Type | Description | Priority | Why It Matters |
+|-------------|-------------|----------|----------------|
+| URGENT_HIRING | Urgently hiring nurses / immediate joiners | HIGH | Strong pain — fastest conversion |
+| ACTIVE_HIRING | "We are hiring" RN / CNA / staff | HIGH | Direct demand |
+| EXPANSION_HIRING | Expanding teams / new facility hiring | HIGH | Scale-driven demand |
+| AGENCY_HIRING | Recruiters hiring for clients | HIGH | Multipliers (1 contact → many roles) |
+| PIPELINE_BUILDING | Looking to partner / build talent pipeline | MEDIUM | Slightly longer cycle |
+| PASSIVE_CONTENT | Thought leadership / generic | LOW | No immediate value |
+
+### Post Types Reference
+
+Use this table to map post patterns to signal strength during classification:
+
+| Post Type | Example Pattern | Signal Strength |
+|-----------|----------------|-----------------|
+| Direct job post | "We are hiring RNs in Texas" | HIGH |
+| Recruiter post | "Hiring nurses for multiple hospitals" | HIGH |
+| Urgent requirement | "Immediate openings for CNAs" | VERY_HIGH |
+| Multi-role hiring | "Hiring across clinical roles" | HIGH |
+| Pipeline/collab | "Looking to partner for healthcare staffing" | MEDIUM |
+| Content/insight | "Healthcare staffing trends" | LOW |
+
 ### AI Column: `Intent Type`
 
 **Prompt**:
 ```
 Analyze the LinkedIn post text in {Post Text} and classify the hiring intent into exactly one of these categories:
 
-- URGENT_HIRING: Post mentions urgently hiring nurses, immediate joiners, ASAP hiring
-- ACTIVE_HIRING: Post says "we are hiring" RN/CNA/staff — direct demand
-- EXPANSION_HIRING: Post mentions expanding teams, new facility hiring, scaling
-- AGENCY_HIRING: Recruiter or staffing agency hiring for clients (multiplier signal)
-- PIPELINE_BUILDING: Looking to partner, build talent pipeline — longer cycle
-- PASSIVE_CONTENT: Thought leadership, generic healthcare content — no hiring signal
+- URGENT_HIRING: Post mentions urgently hiring nurses, immediate joiners, ASAP hiring (Priority: HIGH — strong pain, fastest conversion)
+- ACTIVE_HIRING: Post says "we are hiring" RN/CNA/staff — direct demand (Priority: HIGH)
+- EXPANSION_HIRING: Post mentions expanding teams, new facility hiring, scaling (Priority: HIGH — scale-driven demand)
+- AGENCY_HIRING: Recruiter or staffing agency hiring for clients (Priority: HIGH — multiplier, 1 contact → many roles)
+- PIPELINE_BUILDING: Looking to partner, build talent pipeline — longer cycle (Priority: MEDIUM)
+- PASSIVE_CONTENT: Thought leadership, generic healthcare content — no hiring signal (Priority: LOW)
 
 Return ONLY the category name, nothing else.
 ```
@@ -155,12 +134,12 @@ Return ONLY the category name, nothing else.
 
 **Prompt**:
 ```
-Based on the post in {Post Text} and the intent type {Intent Type}, assign a signal strength:
+Based on the post in {Post Text} and the intent type {Intent Type}, assign a signal strength using these rules:
 
-- VERY_HIGH: Urgent requirements, immediate openings, ASAP language
-- HIGH: Active hiring posts, multi-role hiring, agency hiring for clients
-- MEDIUM: Pipeline building, partnership seeking
-- LOW: Thought leadership, generic content, no hiring signal
+- VERY_HIGH: Urgent requirements, immediate openings, ASAP language (e.g., "Immediate openings for CNAs")
+- HIGH: Active hiring posts, multi-role hiring, agency hiring for clients, direct job posts, recruiter posts (e.g., "We are hiring RNs in Texas", "Hiring nurses for multiple hospitals")
+- MEDIUM: Pipeline building, partnership seeking (e.g., "Looking to partner for healthcare staffing")
+- LOW: Thought leadership, generic content, no hiring signal (e.g., "Healthcare staffing trends")
 
 Return ONLY the strength level.
 ```
@@ -220,13 +199,32 @@ After AI columns have run, filter the table to keep only qualified leads.
 - `Signal Strength` IN ("VERY_HIGH", "HIGH", "MEDIUM")
 - `Intent Type` NOT "PASSIVE_CONTENT"
 
-Use `filter_table_rows` or create a Meerkats sheet called **"Qualified Leads"** containing only rows that pass the filter.
+Use `filter_table_rows` to apply these filters on the main table.
+
+---
+
+## Step 3b — Split into Two Tables (Individuals vs Agencies/Companies)
+
+After filtering, **split data into two separate Meerkats tables** using the `Company Type` column. Outreach strategy, messaging tone, and deal value differ between these segments.
+
+**Table 1 — "Individual Hiring Signals — {date}"**:
+- `Company Type` = `HEALTHCARE_PROVIDER` or `OTHER`
+- Direct hiring need, shorter sales cycle, personalized 1:1 outreach
+
+**Table 2 — "Agency Hiring Signals — {date}"**:
+- `Company Type` = `STAFFING_AGENCY` or `RECRUITER_INDEPENDENT`
+- Multiplier effect (1 contact → many roles), partnership-oriented outreach
+
+**Execution**:
+1. Create both tables via `create_table`
+2. Use `filter_table_rows` on the main table by `Company Type` → copy matching rows to the appropriate table via `add_table_rows_bulk`
+3. All subsequent steps (enrichment, email lookup, outreach) run on **both tables independently**. Report counts per table.
 
 ---
 
 ## Step 4 — Contact & Company Enrichment (AI Columns)
 
-Add AI columns to the qualified leads sheet for enrichment.
+Add AI columns to **both** the Individual and Agency tables for enrichment. The columns below apply to both tables.
 
 ### AI Column: `Contact Name`
 
@@ -248,6 +246,13 @@ Return a comma-separated list of roles. If unclear, return "Healthcare Staff".
 Based on {Author Name} and {Author Company} and {Post Text}, what is the likely job title of the person posting? Examples: "Recruiter", "TA Head", "Staffing Agency Owner", "HR Director", "Ops Leader".
 
 Return the most likely title in 1-3 words.
+```
+
+### AI Column: `Phone`
+
+**Prompt**:
+```
+Check if {Post Text} contains any phone number or contact number. If yes, extract it in standard format (e.g., "+1-555-123-4567"). If no phone number is found, return "NOT_FOUND".
 ```
 
 ### AI Column: `First Name`
@@ -282,49 +287,26 @@ Check if {Post Text} contains any email address. If yes, extract it. If no, retu
 
 ### Step 4b — Email Lookup for Missing Emails
 
-After the enrichment AI columns have run, you must find emails for leads where `Email (from post)` is `NOT_FOUND`. This is the most critical enrichment step — without a verified email, the lead cannot be contacted.
+Find emails for leads where `Email (from post)` = "NOT_FOUND". Without a verified email, the lead cannot be contacted.
 
 **Process**:
+1. Filter rows where `Email (from post)` = "NOT_FOUND" AND `Company Domain` ≠ "UNKNOWN".
+2. Call `email-find-verify` skill with `First Name` + `Last Name` + `Company Domain`. The skill supports multiple providers (icypeas, findymail, prospeo, rocketreach, hunter, apollo, etc.) — use whichever the user prefers. Do not hardcode a provider.
+3. Write found email to `Verified Email` column via `update_table_row`.
+4. Verify deliverability using `email-find-verify` verification step (or neverbounce, millionverifier). Write status to `Email Status` column.
+5. For leads where `Company Domain` = "UNKNOWN": use `Author LinkedIn` URL with a provider that supports LinkedIn URL lookup.
 
-1. **Filter leads needing email lookup**: Use `filter_table_rows` to find rows where `Email (from post)` = "NOT_FOUND" AND `Company Domain` ≠ "UNKNOWN".
-2. **For each lead**, call the `email-find-verify` skill with these inputs:
-   - `--firstname` ← value from `First Name` column
-   - `--lastname` ← value from `Last Name` column
-   - `--domain` ← value from `Company Domain` column
-3. **Write the found email back** to the row using `update_table_row`, setting a new column `Verified Email`.
-4. **Verify the email**: After finding, run the verification step from `email-find-verify` to confirm deliverability. Write the verification status to a `Email Status` column.
-5. **For leads where `Company Domain` is "UNKNOWN"**: Try using the `Author LinkedIn` URL with a tool like `apollo` or `rocketreach` that supports LinkedIn URL lookup instead of domain-based search.
+**Additional Input columns** for email results: `Verified Email` (text), `Email Status` (text).
 
-**Add these Input columns** for storing email lookup results:
+**Email precedence**: (1) Post-extracted email → verify → use as `Verified Email`. (2) Lookup email from provider. (3) If both empty → `Email Status` = "NO_EMAIL_FOUND", skip outreach.
 
-| Column Name | Data Type | Type |
-|-------------|-----------|------|
-| Verified Email | text | Input |
-| Email Status | text | Input |
-
-**Email mapping rule**: The `Verified Email` column is the authoritative email for outreach. Use this precedence:
-1. If `Email (from post)` has a valid email → use it as `Verified Email` (still verify it)
-2. If `Email (from post)` is `NOT_FOUND` → use the email returned by `email-find-verify`
-3. If both are empty → mark `Email Status` as "NO_EMAIL_FOUND" and skip outreach for this lead
-
-**Only generate outreach email drafts (Step 8) for rows where `Email Status` is "VERIFIED" or "LIKELY_VALID".** Do not draft emails for leads with no verified email.
+**Only generate outreach drafts for rows where `Email Status` is "VERIFIED" or "LIKELY_VALID".**
 
 ---
 
 ## Step 5 — Deduplication
 
-Run deduplication on the qualified leads table to remove duplicate entries.
-
-```
-Use mcp tool: check_duplicate_rows
-  tableId: {table_id}
-  attributeKeys: ["Post URL", "Author Company"]
-
-If duplicates found:
-  Use mcp tool: delete_duplicate_rows
-    tableId: {table_id}
-    attributeKeys: ["Post URL", "Author Company"]
-```
+Run `check_duplicate_rows` then `delete_duplicate_rows` on both tables using `attributeKeys: ["Post URL", "Author Company"]`.
 
 ---
 
@@ -357,98 +339,111 @@ Return ONLY the priority code.
 
 ## Step 7 — CRM Export Structure
 
-When pushing to CRM (HubSpot or other), use this mapping:
-
-**Company object**:
-- `name` ← Author Company
-- `industry` ← "Healthcare" or Company Type
-- `signal_strength` ← Signal Strength (custom property)
-
-**Contact object**:
-- `name` ← Contact Name
-- `linkedin_url` ← Author LinkedIn
-- `email` ← Verified Email
-- `role` ← Role Hint
-
-**Deal object**:
-- `deal_name` ← "Hiring Signal — {Author Company}"
-- `hiring_signal` ← Intent Type
-- `post_url` ← Post URL
-- `pain_signal` ← Pain Signal
-- `priority` ← Outreach Priority
-
-> Use the `hubspot-integration` skill for actual CRM push, or export the qualified leads table for manual import.
+CRM mapping (HubSpot or other): **Company** → name, industry, signal_strength | **Contact** → name, linkedin_url, Verified Email, Role Hint | **Deal** → "Hiring Signal — {Company}", Intent Type, Post URL, Pain Signal, Outreach Priority. Use `hubspot-integration` skill or export tables.
 
 ---
 
 ## Step 8 — Email Outreach Sequence
 
-### Target Personas
-
-- Recruiters
-- TA Heads
-- Staffing agency operators
-- Ops leaders in healthcare orgs
-
-### Sequence Overview
+**Target Personas**: Recruiters, TA Heads, Staffing agency operators, Ops leaders in healthcare orgs
 
 | Step | Day | Goal |
 |------|-----|------|
 | Email 1 | Day 0 | Contextual hook — reference their hiring post |
-| Email 2 | Day 2 | Pain amplification — common healthcare hiring struggles |
+| Email 2 | Day 2 | Pain amplification — healthcare hiring struggles |
 | Email 3 | Day 4 | Value proposition — how teams are solving this |
 | Email 4 | Day 7 | Soft CTA — 15-minute call |
 | Email 5 | Day 10 | Breakup — close the loop |
 
-### AI Column: `Email 1 Draft`
+### AI Column: `Email 1 Draft` — Contextual Hook (Day 0)
 
 **Prompt**:
 ```
-Write a short, personalized cold email (under 100 words) for {Contact Name} at {Author Company}.
+Write a short, personalized cold email (under 100 words) for {First Name} at {Author Company}.
 
 Context: They posted about hiring {Hiring Role} on LinkedIn. Their pain signal is: {Pain Signal}.
 
+Subject line: "Saw your hiring post – quick question"
+
 Structure:
-- Subject line: Reference their hiring post
-- Opening: Mention you saw their post about hiring {Hiring Role}
-- Middle: Briefly mention you work with healthcare teams facing similar hiring challenges
-- Close: Ask if filling these roles fast enough is a challenge
+- Open with: "Came across your post about hiring {Hiring Role} — looks like you're actively scaling your team."
+- Middle: Mention you've been working with healthcare teams facing similar hiring spikes, especially for roles like {Hiring Role}, where speed and quality both matter.
+- Close with a question: "Are you currently able to fill these roles fast enough, or is it becoming a bottleneck?"
 
 Tone: Casual, peer-to-peer, no hard sell. Sign off with "– {{Your Name}}".
 ```
 
-### AI Column: `Email 2 Draft`
+### AI Column: `Email 2 Draft` — Pain Amplification (Day 2)
 
 **Prompt**:
 ```
-Write a follow-up email (under 80 words) for {Contact Name} about hiring {Hiring Role}.
-
-Theme: Pain amplification. Mention common healthcare hiring struggles:
-- Inconsistent candidate quality
-- Delays in screening
-- Drop-offs before joining
-
-Ask if they are experiencing something similar. Keep it conversational.
+Write a follow-up email (under 80 words) for {First Name} about hiring {Hiring Role}.
 
 Subject line: "Re: hiring {Hiring Role}"
-Sign off with "– {{Your Name}}".
+
+Structure:
+- Open with: "Following up — one pattern we're seeing across healthcare hiring:"
+- Middle: "Even when demand is high, teams struggle with:" then list these three pain points:
+  • Inconsistent candidate quality
+  • Delays in screening
+  • Drop-offs before joining
+- Add: "This usually slows down hiring much more than expected."
+- Close: "Are you seeing something similar on your end?"
+
+Tone: Conversational, empathetic. Sign off with "– {{Your Name}}".
 ```
 
-### AI Column: `Email 3 Draft`
+### AI Column: `Email 3 Draft` — Value Proposition (Day 4)
 
 **Prompt**:
 ```
-Write a value-proposition email (under 80 words) for {Contact Name}.
-
-Theme: How other teams solved healthcare hiring challenges by automating parts of sourcing and screening. Benefits: reduced time-to-hire, improved candidate quality, handling higher volumes.
-
-Offer to share what is working. No hard CTA.
+Write a value-proposition email (under 80 words) for {First Name}.
 
 Subject line: "How teams are fixing this"
-Sign off with "– {{Your Name}}".
+
+Structure:
+- Open with: "Some teams we work with solved this by automating parts of sourcing + screening, while keeping control on final decisions."
+- Middle: "This helped them:" then list:
+  • Reduce time-to-hire significantly
+  • Improve candidate quality
+  • Handle higher volumes without scaling recruiters
+- Close: "Happy to share what's working if relevant."
+
+Tone: Helpful, no hard CTA. Sign off with "– {{Your Name}}".
 ```
 
-### LinkedIn Outreach (Optional)
+### AI Column: `Email 4 Draft` — Soft CTA (Day 7)
+
+**Prompt**:
+```
+Write a short soft-CTA email (under 60 words) for {First Name}.
+
+Subject line: "Worth exploring?"
+
+Structure:
+- Open with: "If hiring demand is still high on your side, this might be worth a quick discussion."
+- Close with: "Would it make sense to compare notes for 15 mins this week?"
+
+Tone: Low-pressure, brief, respectful of their time. Sign off with "– {{Your Name}}".
+```
+
+### AI Column: `Email 5 Draft` — Breakup (Day 10)
+
+**Prompt**:
+```
+Write a short breakup email (under 60 words) for {First Name}.
+
+Subject line: "Should I close this?"
+
+Structure:
+- Open with: "Not sure if this is relevant right now."
+- Middle: "If hiring is already under control, I'll close this out."
+- Close: "If not, happy to reconnect later when it becomes a priority."
+
+Tone: Graceful exit, no guilt. Sign off with "– {{Your Name}}".
+```
+
+### LinkedIn Outreach (Optional but Recommended)
 
 | Step | Message Strategy |
 |------|-----------------|
@@ -477,25 +472,28 @@ When running this pipeline, follow these steps in order:
 2. **Ingest**: Create Meerkats table and bulk-add raw post data as rows
 3. **Classify**: Add AI columns (Intent Type, Signal Strength, Is Healthcare Hiring, Is US Relevant, Company Type, Pain Signal) and run them
 4. **Filter**: Filter to qualified leads only (HIGH/MEDIUM signal, healthcare, US-relevant)
-5. **Enrich**: Add enrichment AI columns (First Name, Last Name, Company Domain, Hiring Role, Role Hint, Email from post) and run them
-6. **Deduplicate**: Run dedup on Post URL + Author Company
-7. **Qualify**: Add Outreach Priority AI column and run it
-8. **Email Lookup**: For leads where `Email (from post)` is NOT_FOUND, call `email-find-verify` skill with First Name + Last Name + Company Domain. Write results to `Verified Email` and `Email Status` columns. Verify all found emails for deliverability.
-9. **Email Mapping**: Set `Verified Email` for all rows — use post-extracted email if available (verify it too), otherwise use lookup result. Mark rows with no email as NO_EMAIL_FOUND.
-10. **Outreach**: Add email draft AI columns and run them — **only for rows where Email Status is VERIFIED or LIKELY_VALID**
-10. **Export**: Push to CRM via `hubspot-integration` skill or export table
+5. **Split Tables**: Create two separate Meerkats tables — "Individual Hiring Signals" (HEALTHCARE_PROVIDER, OTHER) and "Agency Hiring Signals" (STAFFING_AGENCY, RECRUITER_INDEPENDENT). Copy filtered rows into the appropriate table based on Company Type.
+6. **Enrich** (both tables): Add enrichment AI columns (First Name, Last Name, Company Domain, Hiring Role, Role Hint, Phone, Email from post) and run them
+7. **Deduplicate** (both tables): Run dedup on Post URL + Author Company
+8. **Qualify** (both tables): Add Outreach Priority AI column and run it
+9. **Email Lookup** (both tables): For leads where `Email (from post)` is NOT_FOUND, call `email-find-verify` skill with First Name + Last Name + Company Domain. Use whichever email data provider the user has configured. Write results to `Verified Email` and `Email Status` columns. Verify all found emails for deliverability.
+10. **Email Mapping** (both tables): Set `Verified Email` for all rows — use post-extracted email if available (verify it too), otherwise use lookup result. Mark rows with no email as NO_EMAIL_FOUND.
+11. **Outreach** (both tables): Add all 5 email draft AI columns (Email 1–5) and run them — **only for rows where Email Status is VERIFIED or LIKELY_VALID**
+12. **Export**: Push to CRM via `hubspot-integration` skill or export both tables
 
 ## Dependencies on Other Skills
 
 - `apify` — Apify LinkedIn Posts Scraper for running boolean search queries on LinkedIn (primary data source)
-- `email-find-verify` — for finding missing email addresses
+- `email-find-verify` — for finding and verifying email addresses (supports multiple providers: icypeas, findymail, prospeo, rocketreach, hunter, apollo, neverbounce, millionverifier — use whichever the user prefers)
 - `hubspot-integration` — for CRM push (optional)
 
 ## Output
 
 After running the full pipeline, deliver:
-- Total posts scraped
-- Number of qualified leads (by priority tier)
-- Meerkats table link with all enriched data
-- Email drafts ready for review
+- Total posts scraped (with recency: all within last 14 days)
+- Number of qualified leads split by table:
+  - **Individual Hiring Signals**: count by priority tier (P1/P2/P3)
+  - **Agency Hiring Signals**: count by priority tier (P1/P2/P3)
+- Meerkats table links for both tables with all enriched data
+- Email drafts ready for review (Emails 1–5 for each qualified lead with verified email)
 - CRM export summary (if applicable)
