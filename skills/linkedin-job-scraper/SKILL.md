@@ -29,7 +29,7 @@ You are an expert in scraping LinkedIn job posts and hiring signals, classifying
 
 | Step | Action | Meerkats Tool | Output |
 |------|--------|---------------|--------|
-| 1 | Search for hiring posts (boolean queries) | Web search + Meerkats table (Input columns) | Raw posts |
+| 1 | Search for hiring posts (boolean queries on LinkedIn via Apify) | Apify LinkedIn scraper + Meerkats table (Input columns) | Raw posts (last 14 days only) |
 | 2 | Classify hiring intent | Meerkats AI column | Intent type + signal strength |
 | 3 | Filter high-quality leads | Meerkats filter_table_rows | Qualified leads |
 | 4 | Extract contact/company data | Meerkats AI column | Email, company, phone |
@@ -39,11 +39,48 @@ You are an expert in scraping LinkedIn job posts and hiring signals, classifying
 
 ---
 
-## Step 1 — Signal Capture
+## Step 1 — Signal Capture (LinkedIn via Apify)
+
+### Recency Requirement
+
+**CRITICAL**: Only fetch LinkedIn posts from the last 14 days (2 weeks). This ensures signals are fresh and actionable.
+
+Before running any search:
+1. Calculate the cutoff date: **today's date minus 14 days** (e.g., if today is 2026-03-31, the cutoff is 2026-03-17).
+2. Pass this cutoff date to the Apify scraper's date filter parameter.
+3. After ingestion, **discard any rows** where `Post Date` is older than the cutoff date as a safety check.
+
+Posts older than 2 weeks are stale — the hiring need has likely been filled or the decision-maker has moved on. Do not include them.
+
+### Search Platform
+
+All boolean searches run on **LinkedIn** using the **Apify LinkedIn Posts Scraper** (actor: `apify/linkedin-post-search-scraper` or equivalent Apify LinkedIn actor). Do NOT use generic web search for this step — LinkedIn is the source of truth for hiring signal posts.
+
+### Apify Scraper Configuration
+
+When calling the Apify LinkedIn scraper, use these parameters:
+
+```json
+{
+  "searchQueries": [
+    "(\"we are hiring\" OR \"now hiring\" OR \"urgent hiring\") AND (nurse OR RN OR CNA OR LPN OR caregiver OR \"patient care\")",
+    "(\"hiring RN\" OR \"hiring CNA\" OR \"hiring nurses\") AND (hospital OR clinic OR healthcare)",
+    "(\"#hiring\" OR \"#nowhiring\") AND (nurse OR healthcare OR RN)",
+    "(\"looking for nurses\" OR \"need nurses urgently\")",
+    "(\"healthcare staffing\" OR \"nurse staffing\") AND (hiring OR recruiting)"
+  ],
+  "maxResults": 100,
+  "publishedAfter": "{cutoff_date_ISO}"
+}
+```
+
+> **`publishedAfter`**: Set this to the ISO date string for **today minus 14 days**. For example, if today is `2026-03-31`, set `publishedAfter` to `2026-03-17`. This is the primary recency filter — it tells Apify to only return posts published within the last 2 weeks.
+
+> **Note on Apify actor**: The exact actor name and parameter names may vary. Check the Apify marketplace for the latest LinkedIn post search actor. The key parameters to set are: (1) the boolean search queries, (2) maximum results, and (3) a date filter to restrict results to the last 14 days. Common actors include `curious_coder/linkedin-post-search-scraper`, `apify/linkedin-scraper`, or similar.
 
 ### Keyword Strategy
 
-Use these boolean queries to find healthcare hiring posts via web search or LinkedIn scraping.
+These boolean queries are used as `searchQueries` in the Apify LinkedIn scraper.
 
 **Core Hiring Keywords**:
 
@@ -55,7 +92,7 @@ Use these boolean queries to find healthcare hiring posts via web search or Link
 | Healthcare Context | hospital hiring, clinic hiring, patient care jobs |
 | Hashtags | #hiring #nowhiring #nursejobs #healthcarejobs |
 
-**High-Intent Boolean Queries**:
+**High-Intent Boolean Queries** (pass these as `searchQueries` to Apify):
 
 ```
 ("we are hiring" OR "now hiring" OR "urgent hiring") AND (nurse OR RN OR CNA OR LPN OR caregiver OR "patient care")
@@ -67,9 +104,11 @@ Use these boolean queries to find healthcare hiring posts via web search or Link
 
 ### Execution
 
-1. Run web searches using the boolean queries above.
-2. For each result, extract: `post_url`, `post_text`, `author_name`, `author_linkedin_url`, `author_company`, `post_date`.
-3. Create a Meerkats table called **"Healthcare Hiring Signals"** with Input columns for the raw fields.
+1. **Calculate cutoff date**: Compute `today - 14 days` in ISO format (YYYY-MM-DD). This is your `publishedAfter` value.
+2. **Run Apify LinkedIn scraper**: Execute the Apify actor with the boolean queries above and the `publishedAfter` date filter set to the cutoff date. This searches LinkedIn posts directly — not generic web results.
+3. **Extract fields from Apify results**: For each post returned, extract: `post_url`, `post_text`, `author_name`, `author_linkedin_url`, `author_company`, `post_date`.
+4. **Validate recency**: Before ingesting, double-check that each post's `post_date` is within the last 14 days. Discard any that are older.
+5. Create a Meerkats table called **"Healthcare Hiring Signals"** with Input columns for the raw fields.
 
 **Create table command**:
 
@@ -373,7 +412,7 @@ Sign off with "– {{Your Name}}".
 
 | Factor | Impact |
 |--------|--------|
-| Real-time signals (posts < 24h old) | Very high |
+| Fresh signals (posts < 14 days old, sourced via Apify) | Very high |
 | Personalization (referencing their actual post) | Critical |
 | Targeting staffing agencies | Multiplier effect (1 contact → many roles) |
 | Speed of outreach | Decisive — first responder wins |
@@ -384,7 +423,7 @@ Sign off with "– {{Your Name}}".
 
 When running this pipeline, follow these steps in order:
 
-1. **Search**: Run boolean queries via web search to find healthcare hiring posts
+1. **Search**: Run boolean queries on LinkedIn via Apify scraper — only fetch posts from the last 14 days (set `publishedAfter` to today minus 14 days)
 2. **Ingest**: Create Meerkats table and bulk-add raw post data as rows
 3. **Classify**: Add AI columns (Intent Type, Signal Strength, Is Healthcare Hiring, Is US Relevant, Company Type, Pain Signal) and run them
 4. **Filter**: Filter to qualified leads only (HIGH/MEDIUM signal, healthcare, US-relevant)
@@ -397,7 +436,7 @@ When running this pipeline, follow these steps in order:
 
 ## Dependencies on Other Skills
 
-- `web-search-scrape` — for running boolean search queries
+- `apify` — Apify LinkedIn Posts Scraper for running boolean search queries on LinkedIn (primary data source)
 - `email-find-verify` — for finding missing email addresses
 - `hubspot-integration` — for CRM push (optional)
 
