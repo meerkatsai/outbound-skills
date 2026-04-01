@@ -24,7 +24,8 @@ Scrapes LinkedIn hiring posts via Apify boolean search, classifies hiring intent
 |------|--------|------|--------|
 | 1 | Scrape LinkedIn posts (boolean queries) | Apify | Raw posts (last 14 days) |
 | 2 | Classify intent + tag poster type | Meerkats AI column | Intent, signal strength, poster type |
-| 3 | Filter qualified leads | Meerkats filter_table_rows | Qualified leads (single table) |
+| 3 | Filter qualified leads | Meerkats filter_table_rows | Qualified leads (source table intact) |
+| 3b | Split into Person + Company derived tables | Meerkats create_table + add_table_rows_bulk | 2 derived tables; source unchanged |
 | 4 | Enrich contact/company data | Meerkats AI column | Email, phone, company domain |
 | 5 | Deduplicate | Meerkats dedup tools | Clean dataset |
 | 6 | Email lookup + verification | email-find-verify skill | Verified emails |
@@ -176,7 +177,30 @@ If no clear pain signal exists, return "No clear pain signal". Keep under 15 wor
 
 Use `filter_table_rows` to apply filters. Optionally create a Meerkats sheet **"Qualified Leads"** for the filtered view.
 
-To segment by poster type at any point, filter on `Poster Type` = "PERSON_POST" or "COMPANY_POST".
+---
+
+## Step 3b — Split into Two Derived Tables (by Poster Type)
+
+**The source table remains intact.** After the `Poster Type` AI column has run on all rows, create two additional Meerkats tables by copying rows from the source table. The source table is never modified or deleted.
+
+**Table 1 — "Person Hiring Signals — {date}"**:
+- Filter source table: `Poster Type` = `PERSON_POST`
+- Represents individual recruiters, TA heads, HR directors, ops leaders posting their own hiring needs
+- Use for personalized 1:1 outreach
+
+**Table 2 — "Company Hiring Signals — {date}"**:
+- Filter source table: `Poster Type` = `COMPANY_POST`
+- Represents staffing agencies, recruitment firms, companies posting on behalf of their business
+- Use for partnership-oriented outreach
+
+**Execution**:
+1. Run `filter_table_rows` on the source table with `Poster Type` = `PERSON_POST` → capture rows
+2. `create_table` named **"Person Hiring Signals — {date}"** with the same columns as the source table
+3. `add_table_rows_bulk` — copy the filtered rows into the new table
+4. Repeat for `Poster Type` = `COMPANY_POST` → create **"Company Hiring Signals — {date}"**
+5. Confirm source table still has all original rows (no deletions)
+
+All subsequent enrichment, dedup, email lookup, and outreach steps run on **all three tables** — the source table plus both derived tables — or on the derived tables only, depending on your workflow preference.
 
 ---
 
@@ -283,15 +307,16 @@ Only generate drafts for rows where `Email Status` is "VERIFIED" or "LIKELY_VALI
 ## Execution Checklist
 
 1. **Search**: Run boolean queries on LinkedIn via Apify — only posts from last 14 days
-2. **Ingest**: Create single Meerkats table and bulk-add raw post data
+2. **Ingest**: Create single Meerkats source table and bulk-add raw post data
 3. **Classify + Tag**: Add AI columns (Intent Type, Signal Strength, **Poster Type**, Is Healthcare Hiring, Is US Relevant, Company Type, Pain Signal) and run them
 4. **Filter**: Filter to qualified leads (HIGH/MEDIUM signal, healthcare, US-relevant)
-5. **Enrich**: Add enrichment AI columns (First/Last Name, Company Domain, Hiring Role, Role Hint, Phone, Email from post)
-6. **Dedup**: Run dedup on Post URL + Author Company
-7. **Qualify**: Add Outreach Priority AI column
-8. **Email Lookup**: Call `email-find-verify` for missing emails. Write to Verified Email + Email Status.
-9. **Outreach**: Add all 5 email draft AI columns — only for verified emails. See [email-templates.md](references/email-templates.md)
-10. **Export**: Push to CRM or export table
+5. **Split**: Create **"Person Hiring Signals"** and **"Company Hiring Signals"** derived tables from source by `Poster Type`. Source table stays intact.
+6. **Enrich**: Add enrichment AI columns (First/Last Name, Company Domain, Hiring Role, Role Hint, Phone, Email from post) — on all tables
+7. **Dedup**: Run dedup on Post URL + Author Company — on all tables
+8. **Qualify**: Add Outreach Priority AI column — on all tables
+9. **Email Lookup**: Call `email-find-verify` for missing emails. Write to Verified Email + Email Status.
+10. **Outreach**: Add all 5 email draft AI columns — only for verified emails. See [email-templates.md](references/email-templates.md)
+11. **Export**: Push to CRM or export tables
 
 ## Dependencies
 
@@ -303,6 +328,6 @@ Only generate drafts for rows where `Email Status` is "VERIFIED" or "LIKELY_VALI
 
 - Total posts scraped (all within last 14 days)
 - Qualified leads count by priority (P1/P2/P3) and by poster type (PERSON_POST / COMPANY_POST)
-- Meerkats table link with all enriched data
+- 3 Meerkats tables: source table (all rows) + "Person Hiring Signals" + "Company Hiring Signals"
 - Email drafts (1–5) for each lead with verified email
 - CRM export summary (if applicable)
