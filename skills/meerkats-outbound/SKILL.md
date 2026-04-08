@@ -453,7 +453,7 @@ Structure (every email follows this rhythm):
 ```
 [Name] —
 
-Noticed something [interesting/unexpected] in [sector].
+Noticed something [interesting/worth noting] in [sector].
 
 [What you observed — 1-2 short lines].
 
