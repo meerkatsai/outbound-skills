@@ -48,10 +48,9 @@ When you write like a peer sharing a genuine observation, credibility is implici
 
 **Signature:**
 ```
-Santanu
-Meerkats AI
+Santanu, Founder, Meerkats AI
 ```
-No title. No comma. No tagline. Two lines.
+Single line. Founder title included. No tagline.
 
 ## INPUT PARSING
 
@@ -390,8 +389,7 @@ The email must read like a text from a smart friend who noticed something intere
 
 **Signature:**
 ```
-Santanu
-Meerkats AI
+Santanu, Founder, Meerkats AI
 ```
 Two lines. No title. No comma. No tagline.
 
@@ -466,8 +464,7 @@ Pulled [2-3] examples with [contact type] — can send those over.
 
 If [relevant/useful], I'll share the rest (~N).
 
-Santanu
-Meerkats AI
+Santanu, Founder, Meerkats AI
 ```
 
 **Pattern 2 — "Quick pattern":**
@@ -485,8 +482,7 @@ Pulled a few with [contact type] — can send a couple across.
 
 If useful, I'll share the full set.
 
-Santanu
-Meerkats AI
+Santanu, Founder, Meerkats AI
 ```
 
 **Pattern 3 — "Came across":**
@@ -504,8 +500,7 @@ Pulled a small set with [contact type] — can share a couple.
 
 Want me to send those?
 
-Santanu
-Meerkats AI
+Santanu, Founder, Meerkats AI
 ```
 
 **Pattern 4 — "Seeing a pattern":**
@@ -523,8 +518,7 @@ Put together a short list with the right contacts — can share a couple.
 
 If useful, I'll send the rest.
 
-Santanu
-Meerkats AI
+Santanu, Founder, Meerkats AI
 ```
 
 When processing 3+ companies in a batch, rotate patterns. Never use the same one twice in a row.

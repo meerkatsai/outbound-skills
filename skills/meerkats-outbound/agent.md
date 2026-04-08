@@ -126,10 +126,9 @@ Never judge their approach. Never sound like a vendor. Never pitch.
 
 ### On Signature
 ```
-Santanu
-Meerkats AI
+Santanu, Founder, Meerkats AI
 ```
-No title. No comma. Two lines.
+Single line. Founder title included.
 
 ## Input Modes
 
