@@ -2,7 +2,7 @@
 name: healthcare-hiring-signals-v2
 description: "Detects healthcare hiring signals from LinkedIn via Apify boolean search, classifies intent, tags posts as Company Post or Person Post, enriches leads, and generates 5-email outreach sequences. Trigger on 'healthcare hiring signals v2,' 'hiring signal detection,' 'nurse hiring leads,' 'staffing agency pipeline,' 'healthcare staffing leads,' 'LinkedIn hiring scraper,' or 'signal-to-outreach pipeline.' Single-table variant with Poster Type tagging. Replaces Clay-based workflows."
 metadata:
-  version: 2.1.0
+  version: 2.2.0
   author: meerkatsai
 ---
 
@@ -24,8 +24,9 @@ Scrapes LinkedIn hiring posts via Apify boolean search, classifies hiring intent
 |------|--------|------|--------|
 | 1 | Scrape LinkedIn posts (boolean queries) | Apify | Raw posts (last 14 days) |
 | 2 | Classify intent + tag poster type | Meerkats AI column | Intent, signal strength, poster type |
-| 3 | Filter qualified leads | Meerkats filter_table_rows | Qualified leads (source table intact) |
-| 3b | Split into Person + Company derived tables | Meerkats create_table + add_table_rows_bulk | 2 derived tables; source unchanged |
+| 2b | **Poster Type validation gate** | Meerkats get_table_rows + filter_table_rows | 100% tagging confirmed before proceeding |
+| 3 | Filter qualified leads (dedicated pipeline op) | Meerkats filter_table_rows | Qualified leads (source table intact) |
+| 3b | Split into Person + Company derived tables (always create both) | Meerkats create_table + add_table_rows_bulk | 2 derived tables (even if empty); source unchanged |
 | 4 | Enrich contact/company data | Meerkats AI column | Email, phone, company domain |
 | 5 | Deduplicate | Meerkats dedup tools | Clean dataset |
 | 6 | Email lookup + verification | email-find-verify skill | Verified emails |
@@ -167,9 +168,24 @@ If no clear pain signal exists, return "No clear pain signal". Keep under 15 wor
 
 ---
 
-## Step 3 — Filter Qualified Leads
+## Step 3 — Filter Qualified Leads (Dedicated Pipeline Operation)
 
-**Filter criteria** (applied to the single table):
+> **This step is a dedicated pipeline operation.** It must complete fully before Step 3b begins. Do not interleave filtering with splitting.
+
+### Pre-condition: Poster Type Validation Gate
+
+**Before filtering begins**, verify that the `Poster Type` AI column has completed processing on **100% of ingested rows**. Do not rely solely on AI column classification status — perform a hard validation:
+
+1. Run `get_table_rows` on the source table and count total rows.
+2. Run `filter_table_rows` with `Poster Type` = `PERSON_POST` → count matches.
+3. Run `filter_table_rows` with `Poster Type` = `COMPANY_POST` → count matches.
+4. **Validate**: `PERSON_POST count + COMPANY_POST count` must equal `total row count`. If not, some rows have untagged or invalid `Poster Type` values — rerun the `Poster Type` AI column on unprocessed rows before proceeding.
+
+**Do NOT proceed to filtering or splitting until this validation passes.**
+
+### Filter Criteria
+
+Apply these filters to the source table:
 - `Is Healthcare Hiring` = "YES"
 - `Is US Relevant` = "YES" or "UNCLEAR"
 - `Signal Strength` IN ("VERY_HIGH", "HIGH", "MEDIUM")
@@ -181,7 +197,9 @@ Use `filter_table_rows` to apply filters. Optionally create a Meerkats sheet **"
 
 ## Step 3b — Split into Two Derived Tables (by Poster Type)
 
-**The source table remains intact.** After the `Poster Type` AI column has run on all rows, create two additional Meerkats tables by copying rows from the source table. The source table is never modified or deleted.
+> **This step executes immediately after Step 3 completes.** Both derived tables must be created in every run — even if one poster type has zero matching rows — to ensure downstream CRM export and email generation processes always have the correct target tables ready to accept data.
+
+**The source table remains intact.** After the `Poster Type` AI column has run on all rows and the validation gate in Step 3 has passed, create two additional Meerkats tables by copying rows from the source table. The source table is never modified or deleted.
 
 **Table 1 — "Person Hiring Signals — {date}"**:
 - Filter source table: `Poster Type` = `PERSON_POST`
@@ -193,12 +211,24 @@ Use `filter_table_rows` to apply filters. Optionally create a Meerkats sheet **"
 - Represents staffing agencies, recruitment firms, companies posting on behalf of their business
 - Use for partnership-oriented outreach
 
-**Execution**:
-1. Run `filter_table_rows` on the source table with `Poster Type` = `PERSON_POST` → capture rows
-2. `create_table` named **"Person Hiring Signals — {date}"** with the same columns as the source table
-3. `add_table_rows_bulk` — copy the filtered rows into the new table
-4. Repeat for `Poster Type` = `COMPANY_POST` → create **"Company Hiring Signals — {date}"**
-5. Confirm source table still has all original rows (no deletions)
+### Check & Create Rule
+
+**CRITICAL**: Both derived tables must always be created, regardless of row count. If a filter returns zero rows for a poster type (e.g., no `COMPANY_POST` rows in this batch), **still create the empty table** with the full column schema. This guarantees:
+- Downstream steps (enrichment, dedup, email generation, CRM export) always have valid table references.
+- No conditional branching or error handling is needed in later steps.
+- Schema consistency is maintained across all pipeline runs.
+
+### Execution (Coordinator Pattern)
+
+The following steps execute as an **automated sequence** — once the Poster Type validation gate passes, run all sub-steps without waiting for manual intervention:
+
+1. **Filter PERSON_POST rows**: Run `filter_table_rows` on the source table with `Poster Type` = `PERSON_POST` → capture rows (may be empty).
+2. **Create Person table**: `create_table` named **"Person Hiring Signals — {date}"** with the same columns as the source table.
+3. **Populate Person table**: If filtered rows exist, `add_table_rows_bulk` — copy them into the new table. If zero rows, table stays empty (schema-only).
+4. **Filter COMPANY_POST rows**: Run `filter_table_rows` on the source table with `Poster Type` = `COMPANY_POST` → capture rows (may be empty).
+5. **Create Company table**: `create_table` named **"Company Hiring Signals — {date}"** with the same columns as the source table.
+6. **Populate Company table**: If filtered rows exist, `add_table_rows_bulk` — copy them into the new table. If zero rows, table stays empty (schema-only).
+7. **Verify**: Confirm source table still has all original rows (no deletions). Confirm both derived tables exist and have correct column schema.
 
 All subsequent enrichment, dedup, email lookup, and outreach steps run on **all three tables** — the source table plus both derived tables — or on the derived tables only, depending on your workflow preference.
 
@@ -309,14 +339,15 @@ Only generate drafts for rows where `Email Status` is "VERIFIED" or "LIKELY_VALI
 1. **Search**: Run boolean queries on LinkedIn via Apify — only posts from last 14 days
 2. **Ingest**: Create single Meerkats source table and bulk-add raw post data
 3. **Classify + Tag**: Add AI columns (Intent Type, Signal Strength, **Poster Type**, Is Healthcare Hiring, Is US Relevant, Company Type, Pain Signal) and run them
-4. **Filter**: Filter to qualified leads (HIGH/MEDIUM signal, healthcare, US-relevant)
-5. **Split**: Create **"Person Hiring Signals"** and **"Company Hiring Signals"** derived tables from source by `Poster Type`. Source table stays intact.
-6. **Enrich**: Add enrichment AI columns (First/Last Name, Company Domain, Hiring Role, Role Hint, Phone, Email from post) — on all tables
-7. **Dedup**: Run dedup on Post URL + Author Company — on all tables
-8. **Qualify**: Add Outreach Priority AI column — on all tables
-9. **Email Lookup**: Call `email-find-verify` for missing emails. Write to Verified Email + Email Status.
-10. **Outreach**: Add all 5 email draft AI columns — only for verified emails. See [email-templates.md](references/email-templates.md)
-11. **Export**: Push to CRM or export tables
+4. **Validate Poster Type**: Confirm `PERSON_POST + COMPANY_POST` count equals total row count. Rerun AI column on any untagged rows. **Do not proceed until 100% tagged.**
+5. **Filter** (dedicated pipeline op): Filter to qualified leads (HIGH/MEDIUM signal, healthcare, US-relevant)
+6. **Split** (immediately after Filter): Create **both** "Person Hiring Signals" and "Company Hiring Signals" derived tables from source by `Poster Type` — **even if one type has zero rows**. Source table stays intact.
+7. **Enrich**: Add enrichment AI columns (First/Last Name, Company Domain, Hiring Role, Role Hint, Phone, Email from post) — on all tables
+8. **Dedup**: Run dedup on Post URL + Author Company — on all tables
+9. **Qualify**: Add Outreach Priority AI column — on all tables
+10. **Email Lookup**: Call `email-find-verify` for missing emails. Write to Verified Email + Email Status.
+11. **Outreach**: Add all 5 email draft AI columns — only for verified emails. See [email-templates.md](references/email-templates.md)
+12. **Export**: Push to CRM or export tables
 
 ## Dependencies
 

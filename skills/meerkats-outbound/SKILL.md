@@ -414,7 +414,7 @@ The CTA must make it clear: (1) what they'd get, (2) that it's free, (3) that th
 - Lead with a market observation that proves you understand their world. This observation must pass the Step 3 insight quality test — it connects two things the recipient hasn't connected.
 - Briefly describe what you'd build for them (the specific deliverable). Be concrete about what it contains but honest that you haven't built it yet.
 - CTA: offer to build it. Make the yes easy.
-- **HARD LIMIT: 75-125 words. Count before outputting. If over 125, cut ruthlessly.**
+- **HARD LIMIT: 75-100 words. Count before outputting. If over 100, cut ruthlessly.**
 
 **Email 2 (Day 3) — A Second Insight (different angle):**
 - DO NOT say "just following up" or "bumping this" or "circling back."
@@ -467,14 +467,14 @@ Additional variation rules:
 - Must include at least one insight that passes the Step 3 quality test
 - Tone must match the signal interpretation
 - Subject line: max 6 words, curiosity-driven, no clickbait
-- Email 1: 75-125 words. Email 2: 40-60 words. Email 3: 20-35 words.
+- Email 1: 75-100 words. Email 2: 40-60 words. Email 3: 20-35 words.
 - Sign off with personal sender line, not company pitch.
 - **NEVER judge or critique the prospect's current approach.** Don't say "that caps out," "your current method doesn't scale," "you're doing X wrong," or assume how they got their results (warm intros, founder-led, etc.). You don't know their story. Offer value without implying their existing work is broken. The email should feel like "here's something additional that might help" — not "here's what you're doing wrong."
 
 ```
 --- Email 1 (Day 0) ---
 Subject: [subject line]
-[body - 75-125 words]
+[body - 75-100 words]
 
 [Sender signature - personal, 1 line]
 
@@ -506,7 +506,7 @@ Before presenting the final email, verify:
 - [ ] No "we built" / no implied customer base
 - [ ] Tone matches the signal interpretation
 - [ ] No anti-pattern phrases used
-- [ ] Under 125 words (Email 1), under 60 (Email 2), under 35 (Email 3)
+- [ ] Under 100 words (Email 1), under 60 (Email 2), under 35 (Email 3)
 - [ ] No Meerkats product pitch (platform, features, etc.)
 - [ ] Timing/urgency present or explicitly handled as low-urgency
 - [ ] Different structural pattern from previous company in batch

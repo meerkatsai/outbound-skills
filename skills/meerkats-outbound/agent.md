@@ -165,7 +165,7 @@ Provide: company name, domain, and optionally hiring_sdrs/has_growth_team/funded
 1. Research JSON for each of the analysis steps (collapsible)
 2. Contact selected + reasoning
 3. 3-email sequence with word counts:
-   - Email 1 (Day 0): 75-125 words — insight + describe what you'd build + offer to do it
+   - Email 1 (Day 0): 75-100 words — insight + describe what you'd build + offer to do it
    - Email 2 (Day 3): 40-60 words — second insight (different angle) + lighter restate of offer
    - Email 3 (Day 7): 20-35 words — direct yes/no with explicit easy out
 4. Quality checklist (pass/fail):
