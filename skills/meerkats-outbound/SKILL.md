@@ -377,7 +377,7 @@ The email must read like a text from a smart friend who noticed something intere
 
 **Rules:**
 - Write like you're texting a peer about something you noticed. Casual. Curious. Low-stakes.
-- NEVER open with an analytical thesis statement. Open with: "Noticed something...", "Seeing a pattern...", "Quick thing I came across...", "Came across something odd..."
+- NEVER open with an analytical thesis statement. Open with: "Noticed something...", "Seeing a pattern...", "Quick thing I came across...", "Came across something interesting..."
 - Use "we've been tracking" / "we've been mapping" — positions as researcher sharing findings, not vendor selling services.
 - Short sentences. One idea per line. Blank line between every thought.
 - Max 12-15 words per line. If a line is longer, break it.
@@ -425,7 +425,7 @@ The #1 reason cold emails fail: they ask for too much too soon. "Should I build 
 **Email 1 (Day 0) — The observation + micro-offer:**
 
 Structure (every email follows this rhythm):
-1. **Casual hook** (1 line) — "Noticed something odd in [sector]."
+1. **Casual hook** (1 line) — "Noticed something interesting in [sector]."
 2. **The pattern** (2-3 short lines) — what you observed, plainly stated
 3. **Grounding** (1-2 lines) — "Came across a few recently" / "Spotted this with X and Y"
 4. **Credibility line** (1 line) — "We've been tracking/mapping [pattern] across [sector]."
@@ -453,7 +453,7 @@ Structure (every email follows this rhythm):
 ```
 [Name] —
 
-Noticed something [odd/interesting] in [sector].
+Noticed something [interesting/unexpected] in [sector].
 
 [What you observed — 1-2 short lines].
 
@@ -534,7 +534,7 @@ When processing 3+ companies in a batch, rotate patterns. Never use the same one
 - NO pitch language ("interested?", "worth it?", "want me to build?")
 - CTA offers 2-3 examples, not the full deliverable
 - Grounded evidence present ("saw this recently", "spotted a few", "including one from last week")
-- Subject line: max 5 words, lowercase feel, curiosity-driven (e.g., "quick hiring pattern", "odd overlap in NBFC hiring", "seeing something in APAC")
+- Subject line: max 5 words, lowercase feel, curiosity-driven (e.g., "quick hiring pattern", "interesting overlap in NBFC hiring", "seeing something in APAC")
 - Email 1: 60-90 words. Email 2: 30-50 words. Email 3: 15-25 words.
 - NEVER judge or critique the prospect's approach
 - Signature: "Santanu\nMeerkats AI" — no title, no comma

@@ -115,7 +115,7 @@ The first ask must be so small that saying no feels like more effort than saying
 - **Email 3 (15-25 words):** "No worries if not — just figured it might be useful."
 
 ### On Patterns (rotate in batches)
-1. "Noticed something [odd/interesting] in [sector]..."
+1. "Noticed something [interesting/unexpected] in [sector]..."
 2. "Quick [pattern/thing] I've been tracking..."
 3. "Came across [a weird overlap] in [sector]..."
 4. "Seeing a pattern with [type of company]..."
