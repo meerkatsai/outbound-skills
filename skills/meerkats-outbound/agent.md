@@ -80,77 +80,56 @@ The biggest failure mode is promising things we can't deliver. Every component o
 2. "Does this need anything from inside the prospect's systems?" — If yes, remove or reframe as a system we deliver that they connect to their own data.
 3. "Are we promising an outcome or delivering a system?" — We deliver systems. Never promise outcomes.
 
-### On Credibility (Zero Customers — THIS IS THE CORE CONSTRAINT)
-Meerkats is pre-revenue with zero customers. No logos, no case studies, no "we've helped X companies." This changes everything about how the emails work.
+### On Voice (THIS IS EVERYTHING)
+The email must read like a text from a smart friend who noticed something interesting about your industry. NOT a pitch. NOT a consultant presentation. NOT a vendor email.
 
-**Your credibility is the QUALITY OF YOUR THINKING, not proof of past work.**
+**The goal of Email 1 is to get a reply. Not a sale. Not a meeting. Just "sure, send those over."**
 
-The email must demonstrate you understand their market so well that the recipient naturally trusts you could build something valuable. The insight IS the audition tape. The deliverable comes after they say yes.
+Rules:
+- Write like you're texting a peer. Casual. Curious. Low-stakes.
+- Open with: "Noticed something...", "Seeing a pattern...", "Quick thing I came across..."
+- NEVER open with an analytical thesis statement or a dense paragraph
+- Short lines. Max 12-15 words per line. One idea per line.
+- Blank line between every thought. The email is mostly white space.
+- Use "we've been tracking" / "we've been mapping" — researcher sharing findings, not vendor selling
+- Don't explain methodology. No "cross-referenced via LinkedIn Jobs." Say "spotted a few doing this."
+- Ground in time: "including one from last week", "saw this with a couple of banks recently"
 
-**What this means:**
-- NEVER claim work is done that isn't done. No "I put together a list." No "I mapped 20 companies." You haven't. Don't lie.
-- Frame offers as INTENTIONS: "I'd like to build this for you" / "Here's what I'd put together" / "If you're interested, I'll build X."
-- The email sells your THINKING about their market. The deliverable is what they get after they engage.
-- When they say yes, you execute using the skill's pipeline + available data sources. THEN you deliver.
+### On CTA (Drip, Don't Pitch)
+NEVER offer the full deliverable. Offer 2-3 examples first.
+- BAD: "I'd like to build a list of 20 companies for you." (big ask from a stranger)
+- BAD: "Interested? A few hours and I'll build it." (vendor framing)
+- GOOD: "Pulled 3 examples with CDO contacts — can send those over."
+- GOOD: "Can share a couple. If useful, I'll send the rest."
+The first ask must be so small that saying no feels like more effort than saying yes.
 
-Language rules:
-- Say "I" not "we." You're a person with a point of view, not a company.
-- Never imply existing customers. No "we've done this for," no "companies like yours."
-- Be honest about your position. "I spend my time building GTM systems for SaaS teams" is true.
-- Sign with a personal line: `Santanu, CEO Meerkats AI`. Not a company pitch.
+### On Structure
+- Every line under 15 words
+- No paragraphs longer than 2 lines
+- Looks like a text message on mobile — short bursts, lots of white space
+- NO dense analytical paragraphs. NO compound sentences.
 
-**The credibility chain:** Sharp insight (proves you understand their world) → Specific offer description (proves you know how to solve it) → Easy yes (no call, no commitment, just a reply). This replaces logos and case studies.
+### On Sequence
+- **Email 1 (60-90 words):** Casual hook → pattern observed → grounding → "we've been tracking" → micro-CTA (offer 2-3 examples)
+- **Email 2 (30-50 words):** One more grounding detail. Soft restate: "still have those if you want a look"
+- **Email 3 (15-25 words):** "No worries if not — just figured it might be useful."
 
-### On Personalization
-Personalization is about understanding the prospect's customer's world — not the prospect's company name. The email should make the reader think "this person understands my market" not "this person read my homepage."
-
-### On Meerkats Positioning
-Never name Meerkats in the email body. Never pitch it as a product. The email offers a specific deliverable tailored to their situation. Meerkats powers it behind the scenes. Signature only, and keep it personal.
-
-### On Tone
-Tone is determined by signals:
-- **Hiring SDRs** → Direct, operational. Talk about execution risk and ramp speed.
-- **Has growth team** → Strategic, peer-level. Talk about compounding and leverage.
-- **No signal** → Insight-led, consultative. Lead with a market observation.
-
-### On Insight Quality
-Every email must contain at least one insight that passes this test:
-- "Would the prospect's Head of Sales already know this?" — If yes, it's not non-obvious enough.
-- The insight must connect TWO things the prospect hasn't connected. Not a category observation, but a novel link (e.g., "universities posting AI research computing jobs on LinkedIn → proxy for active tool evaluation cycle → searchable filter for targeting").
-
-### On CTAs
-CTAs must name a SPECIFIC deliverable the recipient can picture:
-- BAD: "Want me to send the playbook?" (what playbook? implies something exists)
-- GOOD: "I'd like to put together a targeting list of research methodology creators in STEM — subscriber counts, platforms, contact info. Worth it? Just a reply and I'll build it."
-The deliverable must be something you can actually produce from available data sources.
-
-### On Email Sequence Strategy
-The 3-email sequence escalates insight, not pressure:
-- **Email 1:** Sharp market insight + describe what you'd build for them + offer to do it (no claim it's done)
-- **Email 2:** A SECOND non-obvious insight (different angle, adds depth). Lighter restate of the offer. Proves you have real depth, not a one-trick observation.
-- **Email 3:** Direct yes/no. Restate offer in one line. Give an explicit easy out. Making it easy to say no is what makes people comfortable saying yes.
-
-### On Anti-Template (CRITICAL for batch runs)
-Never use the same email structure for consecutive companies. Rotate across these patterns:
-- **A — Insight First:** Market observation → deliverable → CTA
-- **B — Question First:** Provocative question → why it matters → what you found → CTA
-- **C — Problem First:** Specific problem outbound usually misses → why it happens → different approach → CTA
-- **D — Contrast:** What most companies do → why it fails → different approach → CTA
-- **E — Direct:** Here's what I'd build for your situation → exactly what it contains → interested?
-
-Also vary: opening format (not always "[Name] —"), sentence lengths, CTA phrasing. Five emails in a batch should read like five different humans wrote them.
+### On Patterns (rotate in batches)
+1. "Noticed something [odd/interesting] in [sector]..."
+2. "Quick [pattern/thing] I've been tracking..."
+3. "Came across [a weird overlap] in [sector]..."
+4. "Seeing a pattern with [type of company]..."
 
 ### On Anti-Patterns
-Never use: "scale your outbound", "increase pipeline", "streamline workflows", "leverage AI", "cutting-edge", "revolutionary", "game-changing", "I hope this finds you well", "I came across your company", "we built a system for companies like yours."
+Never use: "scale your outbound", "increase pipeline", "leverage AI", "I'd like to build", "a few hours of work", "targeting list", "interested?", dense paragraphs, analytical thesis statements, methodology explanations.
+Never judge their approach. Never sound like a vendor. Never pitch.
 
-Never judge their current approach: no "that caps out", "your method doesn't scale", "you're doing X wrong", or assumptions about how they got their results. You don't know their story. Offer value without implying their work is broken.
-
-### On Timing / "Why Now"
-Every email needs a reason the recipient should respond THIS WEEK:
-- Hiring signal = spending money NOW on GTM headcount
-- Funding round = board expects pipeline plan NOW
-- Market shift / seasonal pattern = window closing
-- If no urgency exists, don't fake it — make the CTA ultra-frictionless instead
+### On Signature
+```
+Santanu
+Meerkats AI
+```
+No title. No comma. Two lines.
 
 ## Input Modes
 
@@ -162,22 +141,15 @@ Provide: company name, domain, and optionally hiring_sdrs/has_growth_team/funded
 
 ## Expected Output Per Company
 
-1. Research JSON for each of the analysis steps (collapsible)
+1. Research JSON for each analysis step (collapsible)
 2. Contact selected + reasoning
-3. 3-email sequence with word counts:
-   - Email 1 (Day 0): 75-100 words — insight + describe what you'd build + offer to do it
-   - Email 2 (Day 3): 40-60 words — second insight (different angle) + lighter restate of offer
-   - Email 3 (Day 7): 20-35 words — direct yes/no with explicit easy out
-4. Quality checklist (pass/fail):
-   - ICP named specifically?
-   - Insight passes "would their sales lead know this?" test?
-   - CTA describes a specific, visualizable deliverable you'd BUILD (not one that already exists)?
-   - No "I put together" / "I mapped" / "I have" (implying work is done)?
-   - No "we built" / no implied customer base?
-   - Email 2 offers a genuinely different insight from Email 1?
-   - Timing/urgency present or explicitly handled?
-   - Different structural pattern from previous company in batch?
-   - Under word limits?
-   - No anti-pattern phrases?
-   - Easy to say yes (no call, no commitment, one-word reply enough)?
-   - Easy to say no (explicit out given)?
+3. 3-email sequence:
+   - Email 1 (60-90 words): casual observation + grounding + micro-CTA (offer 2-3 examples)
+   - Email 2 (30-50 words): one more detail + soft restate
+   - Email 3 (15-25 words): easy out, no pressure
+4. Quality check (5 items):
+   - Reads like a text from a smart friend, not a pitch?
+   - Every line under 15 words with breathing room?
+   - CTA offers 2-3 examples, not the full deliverable?
+   - Grounded evidence ("saw this recently", "spotted a few")?
+   - 60-90 words total (Email 1)?
