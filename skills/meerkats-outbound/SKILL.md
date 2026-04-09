@@ -38,19 +38,26 @@ The recipient should feel: "This is something I can use right now to improve pip
 
 ## CREDIBILITY APPROACH
 
-When you write like a peer sharing a genuine observation, credibility is implicit. The tone IS the proof. You don't need logos, case studies, or "zero customers" disclaimers.
+Credibility comes from three layers in the email:
+1. **The opener** — showing you actually looked at their company and understood it (not scraped it)
+2. **The mechanism** — explaining HOW you help with concrete signal examples relevant to their business
+3. **The proof** — directional client results tied to the mechanism
 
-**How it works:**
-- Position as a team that tracks patterns and shares findings — not a vendor offering services.
-- "We've been tracking [pattern] across [sector]" is credible because the observation in the email proves you actually did the tracking.
-- The email demonstrates market understanding. That's the only credibility that matters in a first cold touch.
-- Never mention company stage, customer count, or positioning. Just share the finding.
+**Meerkats in the email:**
+- DO mention what Meerkats does — but frame as outcome for similar teams: "We've been helping sales teams catch high-intent signals early"
+- NEVER pitch the platform: no "Meerkats is an agent operations platform"
+- NEVER mention company stage, funding, or "zero customers"
+
+**Directional proof (no named clients needed):**
+- "One of our clients automated this and saw a ~50% lift in conversions"
+- "Teams we've worked with typically see {{result}} within {{timeframe}}"
+- Always tie to the mechanism described, not generic stats
 
 **Signature:**
 ```
-Santanu, Founder, Meerkats AI
+– Santanu
+Founder, Meerkats AI
 ```
-Single line. Founder title included. No tagline.
 
 ## INPUT PARSING
 
@@ -365,179 +372,167 @@ If any `feasibility_check` field = false, reframe the flagged components and re-
 
 ### Step 6: Email Writing
 
-**Goal:** Get a reply. Not a sale. Not a meeting. Just a reply. "Sure, send those over" is the entire win.
+**Goal:** Get a reply — "Sure, send it over." That's the entire win.
 
 **Input:** All prior step outputs.
 
 ---
 
-**THE VOICE: Peer sharing a finding, NOT consultant presenting a thesis.**
+**THE VOICE: Polished founder outreach — warm, specific, human.**
 
-The email must read like a text from a smart friend who noticed something interesting about your industry. NOT a pitch deck compressed into email format.
+This is NOT a text message. NOT a pitch deck. It's a warm, well-crafted email from a founder who genuinely looked into this company, understood what they do, and has something specific to offer.
 
-**Rules:**
-- Write like you're texting a peer about something you noticed. Casual. Curious. Low-stakes.
-- NEVER open with an analytical thesis statement. Open with: "Noticed something...", "Seeing a pattern...", "Quick thing I came across...", "Came across something interesting..."
-- Use "we've been tracking" / "we've been mapping" — positions as researcher sharing findings, not vendor selling services.
-- Short sentences. One idea per line. Blank line between every thought.
-- Max 12-15 words per line. If a line is longer, break it.
-- The email should look like a text message on mobile — mostly white space with short bursts of text.
-- NO paragraphs longer than 2 lines.
-- NEVER explain your methodology. Don't say "cross-referenced via LinkedIn Jobs and Google News." Say "spotted a few doing this right now."
-- Ground everything in time: "including one from last week", "saw this with a couple of banks recently", "spotted this in Q1 data"
-- NEVER sound like a vendor. No "I'd like to build for you." No "a few hours of work." No framing as a service.
-
-**Signature:**
-```
-Santanu, Founder, Meerkats AI
-```
-Two lines. No title. No comma. No tagline.
+**The email should feel like it was written by a smart, busy founder who:**
+- Actually spent 10 minutes looking at the company
+- Understands their space well enough to say something specific
+- Has a real mechanism to offer, not just a vague "let's chat"
+- Includes proof that this works
+- Made something specifically for THEM
 
 ---
 
-**THE CTA: Drip, don't pitch.**
+**THE OPENER: React, don't report.**
 
-The #1 reason cold emails fail: they ask for too much too soon. "Should I build you a 20-company targeting list?" is a big ask from a stranger. "Can send a couple examples" is trivially easy.
+The #1 rule: **Don't REPORT what happened. REACT to what happened.**
+- ❌ "Noticed you're hiring an AI Lead." (report — AI-sounding)
+- ✅ "Hiring an AI Lead right now — feels like you're getting serious about scaling this." (reaction — human)
 
-**Rules:**
-- NEVER offer the full deliverable upfront. No "20 companies with contacts." No "full targeting list."
-- Offer 2-3 examples first: "Pulled 3 examples with [contact type] — can send those over."
-- Then a conditional upgrade: "If it's relevant, I'll share the rest (~20)."
-- The first ask must be so small that saying no feels like more effort than saying yes.
-- NO mention of turnaround time ("a few hours"). That frames you as doing work. Frame as sharing.
-- NO mention of "building" anything. You already have observations. You're offering to share them.
+**The opener MUST be company-specific and interpretive.** It should show you THOUGHT about them, not just scraped their LinkedIn.
 
-**BAD CTAs:**
-- "I'd like to build a list of 20 companies for you." (too big, too vendor-y)
-- "Interested? A few hours and I'll build it." (framed as work)
-- "Want me to put this together?" (still a big ask)
+**Trigger-dependent openers:**
 
-**GOOD CTAs:**
-- "Pulled 3 examples with CDO contacts — can send those over."
-- "Can share a couple. If useful, I'll send the rest."
-- "Put together a short list with the right contacts — can share a couple."
-- "Want me to send those?"
+**HIRING trigger:**
+- "{{Company}} stood out — especially with you bringing in a {{role}}. Feels like you're doubling down on {{initiative}}."
+- "Hiring a {{role}} right now — makes sense given where {{Company}} is heading."
+- "Building out {{team/function}} — interesting direction given where your market is."
+
+**FUNDING trigger:**
+- "{{Company}} stood out — especially after the {{round}}. Feels like a strong push into {{direction}}."
+- "Big move with the {{round}} — the way you're positioning for {{market}} is interesting."
+
+**CONTENT/POST trigger:**
+- "Your take on {{topic}} was interesting — especially {{specific point}}."
+- "That point about {{idea}} stuck with me — don't see many teams thinking that way."
+
+**NO trigger (fallback):**
+- "I've been reaching out to teams in {{their space}}, and {{Company}} stood out — especially {{specific observation about their product/positioning}}."
+- "Spent a bit of time looking into {{Company}} — the way you're approaching {{thing}} stood out."
+
+**NEVER use these template openers:**
+- "Noticed something interesting in [sector]..." — BANNED
+- "Quick pattern I've been tracking..." — BANNED
+- "Came across an interesting signal..." — BANNED
+- "Seeing a pattern with..." — BANNED
+- "Spotted a few doing this right now..." — BANNED
+
+---
+
+**THE BODY: Value → Mechanism → Contrast → Proof**
+
+After the opener, the email follows this flow (in natural paragraphs, NOT staccato bullet points):
+
+1. **Value** (1-2 sentences): What we do for similar teams — framed as OUTCOME, not product features.
+   - "We've been helping {{similar teams}} catch high-intent signals early — like {{signal examples relevant to their business}} — and connect that directly to the right decision-makers."
+
+2. **Contrast** (1 sentence): Before/after that makes the value concrete.
+   - "Instead of {{current way}}, this typically results in {{better outcome}} without {{main drawback}}."
+
+3. **Proof** (1 sentence): Directional client result — not named, but specific enough to be credible.
+   - "For example, one of our clients automated this and saw a ~50% lift in conversions by reaching prospects at the right moment."
+   - "Teams we've worked with typically see {{directional result}} within {{timeframe}}."
+
+4. **Company-specific CTA** (1-2 sentences): You made something for THEM. Low-pressure ask.
+   - "I pulled together a small list of companies currently showing these signals for {{CompanyName}}."
+   - "Would you like me to send it over?"
+
+---
+
+**WORD COUNT: 100-130 words for Email 1.** Natural flowing paragraphs. NOT staccato lines.
+
+---
+
+**MEERKATS IN THE EMAIL:**
+
+Yes — mention what Meerkats does. But frame it as what you DO for similar teams, not as a product pitch:
+- ✅ "We've been helping sales teams catch high-intent signals early"
+- ✅ "We've been working with teams in a similar space, helping them {{outcome}}"
+- ❌ "Meerkats is an agent operations platform that..."
+- ❌ "Our platform does X, Y, Z..."
+
+---
+
+**PROOF (zero customers reality):**
+
+Use directional claims — generic enough to be defensible, specific enough to be credible:
+- "One of our clients automated this and saw a ~50% lift in conversions"
+- "Teams we've worked with typically see a 30-40% reduction in {{metric}}"
+- Always tie the proof to the MECHANISM described, not a generic stat
 
 ---
 
 **3-EMAIL SEQUENCE:**
 
-**Email 1 (Day 0) — The observation + micro-offer:**
+**Email 1 (Day 0) — Full email: opener + value + mechanism + proof + CTA:**
+- 100-130 words
+- Natural flowing paragraphs
+- Company-specific throughout
+- Ends with "Would you like me to send it over?"
 
-Structure (every email follows this rhythm):
-1. **Casual hook** (1 line) — "Noticed something interesting in [sector]."
-2. **The pattern** (2-3 short lines) — what you observed, plainly stated
-3. **Grounding** (1-2 lines) — "Came across a few recently" / "Spotted this with X and Y"
-4. **Credibility line** (1 line) — "We've been tracking/mapping [pattern] across [sector]."
-5. **Micro-CTA** (1-2 lines) — "Pulled 3 examples — can send those over. If relevant, I'll share the rest."
-
-**HARD LIMIT: 60-90 words. If over 90, cut. Every word must earn its place.**
-
-**Email 2 (Day 3) — Soft nudge + one more detail:**
-- DO NOT say "following up" / "bumping this" / "circling back"
-- Add one more grounding detail or adjacent observation
-- Restate the offer casually: "Still have those if you want a look"
-- Keep the same casual peer tone
-- 30-50 words.
+**Email 2 (Day 3) — One more signal + soft restate:**
+- Add one more grounding detail, adjacent signal, or related observation
+- Restate casually: "Still have that list for {{Company}} if you'd like a look."
+- 40-60 words
 
 **Email 3 (Day 7) — Easy out:**
-- Ultra-short. No pressure. No guilt.
-- "No worries if not — just figured it might be useful. Let me know either way."
-- 15-25 words max.
+- "No worries if the timing's off — just figured it might be useful. Let me know either way."
+- 20-30 words
 
 ---
 
-**STRUCTURAL VARIATION (rotate across batches):**
-
-**Pattern 1 — "Noticed something":**
+**SIGNATURE:**
 ```
-[Name] —
-
-Noticed something [interesting/worth noting] in [sector].
-
-[What you observed — 1-2 short lines].
-
-[Grounding: "Came across a few recently" / "Saw this with X and Y"].
-We've been [tracking/mapping] [pattern] across [sector].
-
-Pulled [2-3] examples with [contact type] — can send those over.
-
-If [relevant/useful], I'll share the rest (~N).
-
-Santanu, Founder, Meerkats AI
+– Santanu
+Founder, Meerkats AI
 ```
 
-**Pattern 2 — "Quick pattern":**
-```
-[Name] —
+---
 
-Quick [pattern/thing] I've been tracking.
+**VARIATION ACROSS BATCHES:**
 
-[What the pattern is — 1-2 lines].
+When processing multiple companies, vary:
+- Which trigger type leads the opener (hiring / funding / content / fallback)
+- How the value proposition is framed (different outcomes for different ICPs)
+- Which mechanism examples are cited (different signal types)
+- CTA specifics (different deliverable types)
 
-Seeing this [quite a bit / across X sector] right now.
-We've been mapping [signal type] across [sector].
+The structure stays consistent (opener → value → contrast → proof → CTA) but the CONTENT inside each section changes completely per company. NO two emails in a batch should feel like they came from the same template.
 
-Pulled a few with [contact type] — can send a couple across.
+---
 
-If useful, I'll share the full set.
-
-Santanu, Founder, Meerkats AI
-```
-
-**Pattern 3 — "Came across":**
-```
-[Name] —
-
-Came across [a weird overlap / an interesting signal] in [sector].
-
-[What it is — 1-2 lines].
-
-Spotted [a few / several] doing this right now.
-We've been tracking [pattern] across [sector].
-
-Pulled a small set with [contact type] — can share a couple.
-
-Want me to send those?
-
-Santanu, Founder, Meerkats AI
-```
-
-**Pattern 4 — "Seeing a pattern":**
-```
-[Name] —
-
-Seeing a pattern with [type of company] in [sector].
-
-[What the pattern is — 1-2 lines] — [consequence in one short line].
-
-Came across a few recent ones ([grounding detail]).
-We've been mapping these across [sector].
-
-Put together a short list with the right contacts — can share a couple.
-
-If useful, I'll send the rest.
-
-Santanu, Founder, Meerkats AI
-```
-
-When processing 3+ companies in a batch, rotate patterns. Never use the same one twice in a row.
+**BANNED PHRASES (template markers that appeared in previous versions):**
+- "Noticed something interesting/worth noting in [sector]"
+- "Quick pattern I've been tracking"
+- "Came across an interesting signal/overlap"
+- "Seeing a pattern with [type of company]"
+- "Spotted a few doing this right now"
+- "We've been tracking/mapping [pattern] across [sector]"
+- "Pulled 3 examples with [contact type]"
+- "Can send those over"
+- "If useful, I'll share the rest"
+- Any opener that could apply to 20 different companies without changing a word
 
 ---
 
 **HARD RULES:**
-- Reads like a text from a smart friend, not a pitch from a vendor
-- Every line under 15 words. One idea per line. White space between thoughts.
-- NO dense paragraphs. NO compound sentences. NO analytical thesis statements.
-- NO explaining methodology ("cross-referenced via LinkedIn Jobs")
-- NO vendor language ("I'd like to build", "a few hours of work", "targeting list")
-- NO pitch language ("interested?", "worth it?", "want me to build?")
-- CTA offers 2-3 examples, not the full deliverable
-- Grounded evidence present ("saw this recently", "spotted a few", "including one from last week")
-- Subject line: max 5 words, lowercase feel, curiosity-driven (e.g., "quick hiring pattern", "interesting overlap in NBFC hiring", "seeing something in APAC")
-- Email 1: 60-90 words. Email 2: 30-50 words. Email 3: 15-25 words.
-- NEVER judge or critique the prospect's approach
-- Signature: "Santanu\nMeerkats AI" — no title, no comma
+- Opener MUST be company-specific and interpretive (react, don't report)
+- Natural flowing paragraphs — NOT staccato one-line-per-thought
+- Value is framed as outcome for similar teams, not product features
+- Mechanism is explained with concrete signal examples relevant to THEIR business
+- Proof is directional ("~50% lift", "30-40% reduction") — tied to mechanism
+- CTA names a specific deliverable made for THIS company
+- 100-130 words (Email 1), 40-60 (Email 2), 20-30 (Email 3)
+- NEVER judge or critique their current approach
+- Subject line: 4-6 words, warm curiosity, company-specific when possible
 
 ---
 
@@ -545,18 +540,18 @@ When processing 3+ companies in a batch, rotate patterns. Never use the same one
 
 Before presenting the final email, verify:
 
-- [ ] Does it read like a text from a smart friend, not a pitch?
-- [ ] Is every line under 15 words with white space between thoughts?
-- [ ] Does the CTA offer 2-3 examples, not the full deliverable?
-- [ ] Is there grounded evidence ("saw this recently", "spotted a few")?
-- [ ] Is total word count 60-90 (Email 1)?
-- [ ] Does it use "we've been tracking" framing (researcher, not vendor)?
-- [ ] No methodology explanation? No "cross-referenced via"?
-- [ ] No vendor language? No "I'd like to build" / "a few hours"?
-- [ ] Casual, lowercase-energy subject line?
-- [ ] Different pattern from previous company in batch?
+- [ ] Does the opener REACT to a trigger (not report it)?
+- [ ] Is it company-specific? (would this opener work for another company? If yes, redo)
+- [ ] Does it explain what Meerkats does for similar teams (outcome, not features)?
+- [ ] Is the mechanism explained with signal examples relevant to THEIR business?
+- [ ] Is there a before/after contrast?
+- [ ] Is there directional proof tied to the mechanism?
+- [ ] Does the CTA name a specific deliverable for THIS company?
+- [ ] Is it 100-130 words with natural flowing paragraphs?
+- [ ] No banned template phrases?
+- [ ] Would this email make the recipient think "this person actually understands my space"?
 
-If any check fails, regenerate the failing component before outputting.
+If any check fails, regenerate.
 
 ## FINAL OUTPUT FORMAT
 
