@@ -92,12 +92,16 @@ The email should feel like it was written by a smart, busy founder who spent 10 
 ### On Opener — Trigger-Dependent, Interpretive
 The opener MUST be company-specific. It should show you THOUGHT about them.
 
-**Hiring trigger:** "{{Company}} stood out — especially with you bringing in a {{role}}. Feels like you're doubling down on {{initiative}}."
-**Funding trigger:** "Big move with the {{round}} — feels like a strong push into {{direction}}."
-**Content trigger:** "Your take on {{topic}} was interesting — especially {{specific point}}."
-**No trigger:** "I've been reaching out to teams in {{space}}, and {{Company}} stood out — especially {{specific observation}}."
+**The opener has TWO beats:** (1) What stood out — using THEIR words, not your paraphrase. (2) Personal reaction — ice-breaker.
+- ❌ "{{Company}} stood out — especially your focus on X." (cold observer)
+- ✅ "{{Company}} stood out. Your focus on X is something I personally find very valuable." (warm human)
 
-**BANNED openers:** "Noticed something interesting...", "Quick pattern I've been tracking...", "Came across a signal...", "Seeing a pattern with...", "Spotted a few doing this..."
+**Hiring:** "{{Company}} stood out — especially with you bringing in a {{role}}. Building a dedicated {{function}} is something I think more companies should be doing."
+**Funding:** "Big move with the {{round}}. The way you're positioning for {{market}} is something I personally find really compelling."
+**Content:** "Your take on {{topic}} was interesting. The point about {{idea}} really stuck with me."
+**No trigger:** "I've been reaching out to teams in {{space}}, and {{Company}} stood out. Your focus on {{their exact words}} is something I personally find very valuable."
+
+**BANNED:** "Noticed something interesting...", "Quick pattern...", "Came across a signal...", "Seeing a pattern...", "Spotted a few...", any opener without a personal reaction
 
 ### On Email Structure — Opener → Value → Mechanism → Contrast → Proof → CTA
 Natural flowing paragraphs. NOT staccato one-line-per-thought.

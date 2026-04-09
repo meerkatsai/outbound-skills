@@ -391,32 +391,41 @@ This is NOT a text message. NOT a pitch deck. It's a warm, well-crafted email fr
 
 ---
 
-**THE OPENER: React, don't report.**
+**THE OPENER: Compliment + Personal Reaction (ice-breaker)**
 
-The #1 rule: **Don't REPORT what happened. REACT to what happened.**
-- ❌ "Noticed you're hiring an AI Lead." (report — AI-sounding)
-- ✅ "Hiring an AI Lead right now — feels like you're getting serious about scaling this." (reaction — human)
+The opener has TWO beats:
+1. **What stood out** — using THEIR actual words/positioning, not your paraphrase
+2. **Personal reaction** — how YOU genuinely feel about it (the ice-breaker)
 
-**The opener MUST be company-specific and interpretive.** It should show you THOUGHT about them, not just scraped their LinkedIn.
+**The difference:**
+- ❌ "{{Company}} stood out — especially your focus on X." (observer summarizing — cold)
+- ✅ "{{Company}} stood out. Your focus on X is something I personally find very valuable." (human reacting — warm)
 
-**Trigger-dependent openers:**
+**The personal reaction IS the ice-breaker.** It turns a cold observation into a warm human moment. Use phrases like:
+- "...is something I personally find very valuable."
+- "...really resonated with me."
+- "...is the right approach, and not many teams think about it this way."
+- "...is something I think more companies should be doing."
+
+**CRITICAL: Use THEIR actual language when describing what stood out.** Don't paraphrase or interpret. If their website says "AI OS to boost efficiency across teams," use those exact words — not your summary of what they do.
+
+**Trigger-dependent openers (all follow the 2-beat structure):**
 
 **HIRING trigger:**
-- "{{Company}} stood out — especially with you bringing in a {{role}}. Feels like you're doubling down on {{initiative}}."
-- "Hiring a {{role}} right now — makes sense given where {{Company}} is heading."
-- "Building out {{team/function}} — interesting direction given where your market is."
+- "{{Company}} stood out — especially with you bringing in a {{role}}. Building a dedicated {{function}} is something I think more companies should be doing."
+- "Hiring a {{role}} right now — the way you're investing in {{initiative using their words}} really resonated with me."
 
 **FUNDING trigger:**
-- "{{Company}} stood out — especially after the {{round}}. Feels like a strong push into {{direction}}."
-- "Big move with the {{round}} — the way you're positioning for {{market}} is interesting."
+- "Big move with the {{round}}. The way you're positioning for {{market using their words}} is something I personally find really compelling."
+- "{{Company}} stood out after the {{round}}. Your approach to {{their specific positioning}} is something I think is genuinely underappreciated in this space."
 
 **CONTENT/POST trigger:**
-- "Your take on {{topic}} was interesting — especially {{specific point}}."
-- "That point about {{idea}} stuck with me — don't see many teams thinking that way."
+- "Your take on {{topic}} was interesting. The point about {{specific idea}} really stuck with me — not many teams think about it that way."
+- "{{Company}} stood out. Your perspective on {{topic using their words}} is something I personally find valuable — it's a different way of framing the problem."
 
 **NO trigger (fallback):**
-- "I've been reaching out to teams in {{their space}}, and {{Company}} stood out — especially {{specific observation about their product/positioning}}."
-- "Spent a bit of time looking into {{Company}} — the way you're approaching {{thing}} stood out."
+- "I've been reaching out to teams in {{their space}}, and {{Company}} stood out. Your focus on {{specific thing using their exact words}} is something I personally find very valuable."
+- "Spent a bit of time looking into {{Company}}. The way you're approaching {{thing using their language}} really resonated with me."
 
 **NEVER use these template openers:**
 - "Noticed something interesting in [sector]..." — BANNED
@@ -424,6 +433,7 @@ The #1 rule: **Don't REPORT what happened. REACT to what happened.**
 - "Came across an interesting signal..." — BANNED
 - "Seeing a pattern with..." — BANNED
 - "Spotted a few doing this right now..." — BANNED
+- "{{Company}} stood out — especially {{paraphrase}}" WITHOUT a personal reaction — BANNED
 
 ---
 
