@@ -67,6 +67,7 @@ Payload styles used:
 
 ## Relevant Skills
 
+- chatmitra-integration
 - smartlead-outbound
 - apollo-outbound
 - hubspot-integration
