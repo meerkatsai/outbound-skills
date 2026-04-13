@@ -20,9 +20,10 @@ Quick reference for tools available in this repository.
 | lusha | Data Enrichment | ✓ | ✓ | [✓](clis/lusha.js) | - | [lusha.md](integrations/lusha.md) |
 | ocean | Data Enrichment | ✓ | ✓ | [✓](clis/ocean.js) | - | [ocean.md](integrations/ocean.md) |
 | cognism | Data Enrichment | ✓ | - | [✓](clis/cognism.js) | - | [cognism.md](integrations/cognism.md) |
+| chatmitra | WhatsApp Integration | ✓ | - | [✓](clis/chatmitra.js) | - | [chatmitra.md](integrations/chatmitra.md) |
 | zoominfo | Data Enrichment | ✓ | ✓ | [✓](clis/zoominfo.js) | - | [zoominfo.md](integrations/zoominfo.md) |
 | uplead | Data Enrichment | ✓ | - | [✓](clis/uplead.js) | - | [uplead.md](integrations/uplead.md) |
-| reversecontact | Data Enrichment | ✓ | - | - | - | [reversecontact.md](integrations/reversecontact.md) |
+| reversecontact | Data Enrichment | ✓ | - | [✓](clis/reversecontact.js) | - | [reversecontact.md](integrations/reversecontact.md) |
 | rb2b | Website Visitor ID | - | - | - | - | [rb2b.md](integrations/rb2b.md) |
 | canva | Design | ✓ | - | [✓](clis/canva.js) | ✓ | [canva.md](integrations/canva.md) |
 | remotion | Video Creation | - | - | ✓ | ✓ | [remotion.md](integrations/remotion.md) |
