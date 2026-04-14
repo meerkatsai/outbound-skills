@@ -397,31 +397,33 @@ Founder, Meerkats AI
 
 **WHAT TO CUSTOMIZE per company (ONLY these 3 things):**
 
-**1. Line 2 — Context opener (signal-dependent, casual):**
+**1. Line 2 — Context opener (signal → business reality):**
 
-Pick the FIRST signal that exists in the data and use it. Priority order:
+Pick the FIRST signal that exists and connect it to a BUSINESS REALITY the prospect now faces. Pattern: **"Saw [signal] — that usually means [business consequence].."**
 
-**IF hiring signal exists (they're actively posting roles):**
-- "Saw you're bringing in a {{role}} — makes sense given where {{space}} is heading.."
-- "Hiring a {{role}} right now — feels like {{Company}} is doubling down on {{initiative}}.."
+**IF hiring signal exists:**
+- "Saw you're hiring a {{role}} — that usually means the current setup can't keep up with growth.."
+- "Hiring a {{role}} right now — teams usually do that when the existing process hit a ceiling.."
 
-**ELIF funding signal exists (recent raise in Apollo data):**
-- "Saw the {{investor}}-led raise — makes sense given where {{space}} is heading.."
-- "Saw {{Company}}'s recent raise — scaling {{what they do in plain words}} feels like the right bet right now.."
+**ELIF funding signal exists:**
+- "Saw {{Company}}'s recent raise — that usually means a push to scale pipeline before the next board review.."
+- "Saw the {{investor}}-led round — post-raise is usually when pipeline pressure ramps up fast.."
 
-**ELIF content/milestone signal exists (news, launch, partnership):**
-- "Saw {{Company}}'s {{announcement/milestone}} — {{brief casual reaction}}.."
+**ELIF partnership/milestone signal exists:**
+- "Saw the {{partnership}} — that usually means the next 6 months are about proving it scales.."
+- "Saw {{Company}} hit {{milestone}} — that's usually when the GTM motion needs to match the traction.."
 
 **ELSE (no signal — fallback):**
 - "{{Company}} came up while I was researching companies {{doing X in Y space}}.."
 
 Examples:
-- "Saw the IIFL Fintech-led raise — makes sense given where voice AI for lending is heading.."
-- "Saw you're hiring a Head of Collections — feels like Fundamento is scaling the enterprise motion.."
-- "Saw Decube's recent raise — scaling a data trust platform for enterprise AI feels like the right bet right now.."
+- "Saw the IIFL Fintech-led round — post-raise is usually when pipeline pressure ramps up fast.."
+- "Saw you're hiring a Head of Collections — that usually means the current approach hit a ceiling.."
+- "Saw Decube's recent raise — that usually means a push to scale pipeline before the next board review.."
+- "Saw the Balenciaga partnership — that usually means the next 6 months are about proving it scales beyond one marquee client.."
 - "ForceEquals came up while I was researching companies building AI products for enterprise.."
 
-DO NOT quote their website. Just say what they do in plain casual words. Keep it ONE sentence.
+**HARD RULE:** After stating a signal, ALWAYS connect to a business reality using "that usually means" or similar. NEVER add an opinion, verdict, or compliment ("right bet", "category-defining", "resonated with me", "personally find valuable"). The inference about their situation IS the personalization.
 
 **2. Line 4 — Signal examples (2-3 signals relevant to their ICP's buying behavior):**
 - For BFSI: "like when a lender starts hiring for collections leadership or announces a new branch expansion"
