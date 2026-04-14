@@ -80,62 +80,40 @@ The biggest failure mode is promising things we can't deliver. Every component o
 2. "Does this need anything from inside the prospect's systems?" — If yes, remove or reframe as a system we deliver that they connect to their own data.
 3. "Are we promising an outcome or delivering a system?" — We deliver systems. Never promise outcomes.
 
-### On Voice — Polished Founder Outreach
-The email should feel like it was written by a smart, busy founder who spent 10 minutes looking at the company, understood their space, and has something specific to offer.
+### On Email Writing — Simple 7-Line Template
 
-**The goal:** Get a reply — "Sure, send it over."
+Use the SAME structure for every company. Only 3 things change:
 
-**Core rule: Don't REPORT what happened. REACT to what happened.**
-- ❌ "Noticed you're hiring an AI Lead." (report — AI-sounding)
-- ✅ "Hiring an AI Lead right now — feels like you're getting serious about scaling this." (reaction — human)
-
-### On Opener — Trigger-Dependent, Interpretive
-The opener MUST be company-specific. It should show you THOUGHT about them.
-
-**The opener has TWO beats:** (1) What stood out — using THEIR words, not your paraphrase. (2) Personal reaction — ice-breaker.
-- ❌ "{{Company}} stood out — especially your focus on X." (cold observer)
-- ✅ "{{Company}} stood out. Your focus on X is something I personally find very valuable." (warm human)
-
-**Hiring:** "{{Company}} stood out — especially with you bringing in a {{role}}. Building a dedicated {{function}} is something I think more companies should be doing."
-**Funding:** "Big move with the {{round}}. The way you're positioning for {{market}} is something I personally find really compelling."
-**Content:** "Your take on {{topic}} was interesting. The point about {{idea}} really stuck with me."
-**No trigger:** "I've been reaching out to teams in {{space}}, and {{Company}} stood out. Your focus on {{their exact words}} is something I personally find very valuable."
-
-**BANNED:** "Noticed something interesting...", "Quick pattern...", "Came across a signal...", "Seeing a pattern...", "Spotted a few...", any opener without a personal reaction
-
-### On Email Structure — Opener → Value → Mechanism → Contrast → Proof → CTA
-Natural flowing paragraphs. NOT staccato one-line-per-thought.
-
-1. **Opener** — company-specific, trigger-dependent, interpretive
-2. **Value** — "We've been helping {{similar teams}} {{outcome}}" — framed as what we DO, not product features
-3. **Mechanism** — HOW it works with concrete signal examples relevant to THEIR business
-4. **Contrast** — "Instead of {{current way}}, this creates {{better outcome}} without {{drawback}}"
-5. **Proof** — "One of our clients automated this and saw a ~50% lift in conversions"
-6. **CTA** — "I pulled together {{specific thing}} for {{Company}}. Would you like me to send it over?"
-
-### On Meerkats in the Email
-YES — mention what Meerkats does. But as outcome for similar teams:
-- ✅ "We've been helping sales teams catch high-intent signals early"
-- ❌ "Meerkats is an agent operations platform"
-
-### On Proof
-Directional claims — generic enough to be defensible, specific enough to be credible:
-- "One of our clients automated this and saw a ~50% lift in conversions"
-- Always tied to the mechanism described
-
-### On Sequence
-- **Email 1 (100-130 words):** Full email — opener + value + mechanism + contrast + proof + CTA
-- **Email 2 (40-60 words):** One more signal + soft restate
-- **Email 3 (20-30 words):** "No worries if the timing's off — just figured it might be useful."
-
-### On Signature
 ```
+Hey {{FirstName}},
+
+{{Company}} came up while I was researching companies {{doing X in Y space}}..
+
+The reason I'm reaching out is…
+
+We've been helping {{similar teams}} catch high-intent signals early — like {{signal 1}} or {{signal 2}} — and connect that directly to the right decision-makers.
+
+Instead of {{current way}}, you get {{better outcome}} without {{drawback}}.
+
+One of our clients saw a ~50% lift in conversions by reaching prospects at the right moment.
+
+I pulled together a small list of companies currently showing these signals for {{Company}}.
+
+Would you like me to send it over?
+
 – Santanu
 Founder, Meerkats AI
 ```
 
-### On Anti-Patterns
-BANNED template markers: "Noticed something interesting in [sector]", "Quick pattern I've been tracking", "Came across an interesting signal", "We've been tracking/mapping [pattern] across [sector]", "Pulled 3 examples with [contact type]", "Can send those over", "If useful, I'll share the rest"
+**What changes per company:** (1) Line 2: company + space in plain words, (2) Line 4: 2-3 signal examples for their ICP, (3) Line 5: simple contrast for their world.
+
+**What NEVER changes:** Line 1, Line 3, Line 6, Line 7, signature.
+
+**Rules:** Every sentence = its own paragraph. 80-110 words. DO NOT over-specify. DO NOT quote their website. DO NOT try to make each email unique — the structure IS the email.
+
+### On Email 2 and 3
+- Email 2 (40-50 words): One more signal + "Still have that list for {{Company}} if you'd like a look."
+- Email 3 (20-25 words): "No worries if the timing's off — just figured it might be useful. Let me know either way."
 
 ## Input Modes
 
