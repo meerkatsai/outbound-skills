@@ -80,40 +80,33 @@ The biggest failure mode is promising things we can't deliver. Every component o
 2. "Does this need anything from inside the prospect's systems?" — If yes, remove or reframe as a system we deliver that they connect to their own data.
 3. "Are we promising an outcome or delivering a system?" — We deliver systems. Never promise outcomes.
 
-### On Email Writing — Simple 7-Line Template
+### On Email Writing — Poke the Bear + Social Proof (~55 words)
 
-Use the SAME structure for every company. Only 3 things change:
-
+**WITH signal:**
 ```
 Hey {{FirstName}},
 
-{{Company}} came up while I was researching companies {{doing X in Y space}}..
+Saw {{signal}} — {{business reality}}..
 
-The reason I'm reaching out is…
+Quick question — {{blind spot question specific to their buyer type}}?
 
-We've been helping {{similar teams}} catch high-intent signals early — like {{signal 1}} or {{signal 2}} — and connect that directly to the right decision-makers.
+We've been helping similar teams catch those signals early — one of our clients saw a ~50% lift in conversions by timing it right.
 
-Instead of {{current way}}, you get {{better outcome}} without {{drawback}}.
-
-One of our clients saw a ~50% lift in conversions by reaching prospects at the right moment.
-
-I pulled together a small list of companies currently showing these signals for {{Company}}.
-
-Would you like me to send it over?
+Happy to share a few examples if useful.
 
 – Santanu
 Founder, Meerkats AI
 ```
 
-**What changes per company:** (1) Line 2: signal-dependent opener (hiring > funding > milestone > fallback). Use the FIRST signal that exists, (2) Line 4: 2-3 signal examples for their ICP, (3) Line 5: simple contrast for their world.
+**WITHOUT signal:** Replace Line 2 with: "{{Company}} came up while I was researching companies {{doing X in Y space}}.."
 
-**What NEVER changes:** Line 1, Line 3, Line 6, Line 7, signature.
+**What changes per company:** (1) Line 2: signal → business reality opener (hiring > funding > milestone > fallback), (2) Line 3: question specific to their ICP's buyer type. Everything else identical.
 
-**Rules:** Every sentence = its own paragraph. 80-110 words. DO NOT over-specify. DO NOT quote their website. DO NOT try to make each email unique — the structure IS the email.
+**Rules:** 50-65 words. Each sentence = own paragraph. No pitching. No opinions/compliments in opener. The question implies the problem. The proof implies the solution.
 
 ### On Email 2 and 3
-- Email 2 (40-50 words): One more signal + "Still have that list for {{Company}} if you'd like a look."
-- Email 3 (20-25 words): "No worries if the timing's off — just figured it might be useful. Let me know either way."
+- Email 2 (~35 words): One adjacent signal + "Still happy to share those examples for {{Company}} if you'd like a look."
+- Email 3 (~20 words): "No worries if the timing's off — just figured it might be useful. Let me know either way."
 
 ## Input Modes
 

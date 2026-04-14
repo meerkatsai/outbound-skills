@@ -370,24 +370,35 @@ If any `feasibility_check` field = false, reframe the flagged components and re-
 
 ---
 
-**THE TEMPLATE — use this exact structure for EVERY company:**
+**THE TEMPLATE — "Poke the Bear" with social proof. Use this for EVERY company:**
 
+**WITH signal:**
+```
+Hey {{FirstName}},
+
+Saw {{signal}} — {{business reality inference}}..
+
+Quick question — {{question about their blind spot, specific to their ICP's buyer type}}?
+
+We've been helping similar teams catch those signals early — one of our clients saw a ~50% lift in conversions by timing it right.
+
+Happy to share a few examples if useful.
+
+– Santanu
+Founder, Meerkats AI
+```
+
+**WITHOUT signal (fallback):**
 ```
 Hey {{FirstName}},
 
 {{Company}} came up while I was researching companies {{doing X in Y space}}..
 
-The reason I'm reaching out is…
+Quick question — {{question about their blind spot, specific to their ICP's buyer type}}?
 
-We've been helping {{similar teams}} catch high-intent signals early — like {{signal 1}} or {{signal 2}} — and connect that directly to the right decision-makers.
+We've been helping similar teams catch those signals early — one of our clients saw a ~50% lift in conversions by timing it right.
 
-Instead of {{current way}}, you get {{better outcome}} without {{drawback}}.
-
-One of our clients saw a ~50% lift in conversions by reaching prospects at the right moment.
-
-I pulled together a small list of companies currently showing these signals for {{Company}}.
-
-Would you like me to send it over?
+Happy to share a few examples if useful.
 
 – Santanu
 Founder, Meerkats AI
@@ -395,15 +406,14 @@ Founder, Meerkats AI
 
 ---
 
-**WHAT TO CUSTOMIZE per company (ONLY these 3 things):**
+**WHAT TO CUSTOMIZE per company (ONLY these 2 things):**
 
-**1. Line 2 — Context opener (signal → business reality):**
+**1. Line 2 — Signal opener (signal → business reality):**
 
-Pick the FIRST signal that exists and connect it to a BUSINESS REALITY the prospect now faces. Pattern: **"Saw [signal] — that usually means [business consequence].."**
+Pick the FIRST signal that exists. Pattern: **"Saw [signal] — [business reality].."**
 
 **IF hiring signal exists:**
 - "Saw you're hiring a {{role}} — that usually means the current setup can't keep up with growth.."
-- "Hiring a {{role}} right now — teams usually do that when the existing process hit a ceiling.."
 
 **ELIF funding signal exists:**
 - "Saw {{Company}}'s recent raise — that usually means a push to scale pipeline before the next board review.."
@@ -411,39 +421,29 @@ Pick the FIRST signal that exists and connect it to a BUSINESS REALITY the prosp
 
 **ELIF partnership/milestone signal exists:**
 - "Saw the {{partnership}} — that usually means the next 6 months are about proving it scales.."
-- "Saw {{Company}} hit {{milestone}} — that's usually when the GTM motion needs to match the traction.."
 
 **ELSE (no signal — fallback):**
 - "{{Company}} came up while I was researching companies {{doing X in Y space}}.."
 
-Examples:
-- "Saw the IIFL Fintech-led round — post-raise is usually when pipeline pressure ramps up fast.."
-- "Saw you're hiring a Head of Collections — that usually means the current approach hit a ceiling.."
-- "Saw Decube's recent raise — that usually means a push to scale pipeline before the next board review.."
-- "Saw the Balenciaga partnership — that usually means the next 6 months are about proving it scales beyond one marquee client.."
-- "ForceEquals came up while I was researching companies building AI products for enterprise.."
+**HARD RULE:** After the signal, connect to a business reality ("that usually means..."). NEVER add an opinion or compliment.
 
-**HARD RULE:** After stating a signal, ALWAYS connect to a business reality using "that usually means" or similar. NEVER add an opinion, verdict, or compliment ("right bet", "category-defining", "resonated with me", "personally find valuable"). The inference about their situation IS the personalization.
+**2. Line 3 — The question (specific to their ICP's buyer type):**
 
-**2. Line 4 — Signal examples (2-3 signals relevant to their ICP's buying behavior):**
-- For BFSI: "like when a lender starts hiring for collections leadership or announces a new branch expansion"
-- For SaaS: "like when a company starts hiring for AI leadership or announces transformation initiatives"
-- For Health: "like when a health system posts for a digital health lead or approaches a compliance inspection cycle"
-- For Retail: "like when a retailer starts hiring for merchandise planning or comes off a high-markdown season"
-- For Pharma: "like when a manufacturer receives a regulatory observation or files for a new market approval"
-- These should come from Step 3 (Market Mechanics) — use the customer_triggers identified there.
+This is a question that makes them think about a blind spot in how they find buyers. Examples by vertical:
 
-**3. Line 5 — Contrast (simple before/after for their world):**
-- "Instead of manual prospecting, you get an automated stream of qualified opportunities without extra SDR effort."
-- "Instead of cold-calling a broad NBFC list, you reach the ones actively in a procurement window."
-- "Instead of waiting for inbound, you catch them during the evaluation window."
-- Keep it ONE sentence. Simple.
+- BFSI: "how are you finding lenders who are actively evaluating right now, vs ones who are just browsing?"
+- SaaS/Enterprise: "how are you finding companies that are actively evaluating right now, vs ones still 12 months out?"
+- Health: "how are you finding health systems in an active evaluation window, vs ones still exploring?"
+- Retail: "how are you finding retailers actively restructuring their planning process, vs ones who are settled?"
+- Pharma: "how are you finding manufacturers in a live compliance window, vs ones not under pressure yet?"
+- Content/Creator: "how are you finding the right distribution partners who are actively looking, vs ones who are just open to a conversation?"
+
+Use the ICP and buyer triggers from Steps 2-3 to make this question specific to their world.
 
 **WHAT NEVER CHANGES (identical every time):**
 - Line 1: "Hey {{FirstName}},"
-- Line 3: "The reason I'm reaching out is…"
-- Line 6: "One of our clients saw a ~50% lift in conversions by reaching prospects at the right moment."
-- Line 7: "I pulled together a small list of companies currently showing these signals for {{Company}}. Would you like me to send it over?"
+- Line 4: "We've been helping similar teams catch those signals early — one of our clients saw a ~50% lift in conversions by timing it right."
+- Line 5: "Happy to share a few examples if useful."
 - Signature: "– Santanu / Founder, Meerkats AI"
 
 ---
@@ -451,31 +451,38 @@ Examples:
 **FORMATTING:**
 - EVERY sentence is its own paragraph (blank line between each)
 - NO dense multi-sentence paragraphs
-- Total: 80-110 words
+- Total: 50-65 words for Email 1
 
 ---
 
-**EMAIL 2 (Day 3, 40-50 words):**
-- Add ONE more signal or adjacent observation relevant to their space
-- End with: "Still have that list for {{Company}} if you'd like a look."
-- Same line-per-paragraph formatting
-- DO NOT say "following up" / "bumping this" / "circling back"
+**EMAIL 2 (Day 3, ~35 words):**
+```
+Hey {{FirstName}},
 
-**EMAIL 3 (Day 7, 20-25 words):**
-- "No worries if the timing's off — just figured it might be useful. Let me know either way."
-- Nearly identical every time. That's fine.
+One signal we've been seeing — {{specific adjacent signal relevant to their space}}.
+
+Still happy to share those examples for {{Company}} if you'd like a look.
+
+– Santanu
+```
+
+**EMAIL 3 (Day 7, ~20 words):**
+```
+No worries if the timing's off — just figured it might be useful. Let me know either way.
+
+– Santanu
+```
 
 ---
 
 **HARD RULES:**
-- Structure is IDENTICAL across all companies. Only the 3 fill-ins change.
-- DO NOT try to make each email unique. The structure IS the email. Only the fill-ins vary.
-- DO NOT quote their website or use their exact positioning language in the opener.
-- DO NOT over-specify the value prop. Keep it general: "helping {{teams}} catch high-intent signals early."
-- Each sentence = its own paragraph. Always.
-- 80-110 words for Email 1.
-- Proof line is the SAME every time. Don't vary it.
-- CTA structure is the SAME every time. Only company name changes.
+- 50-65 words for Email 1. NO exceptions. If over 65, cut.
+- Only 2 things change per company: Line 2 (signal opener) and Line 3 (the question).
+- Everything else is IDENTICAL. Do not vary Lines 4, 5, or signature.
+- Each sentence = its own paragraph.
+- NO pitching. The question implies the problem. The proof implies the solution.
+- NO opinions, verdicts, or compliments in the opener.
+- The question in Line 3 must be specific to their ICP's buyer type — not generic.
 
 ---
 
@@ -483,12 +490,12 @@ Examples:
 
 Before presenting the final email, verify:
 
-- [ ] Does Line 2 casually describe their space in 5-10 plain words (no website quotes)?
-- [ ] Are the signal examples in Line 4 relevant to their ICP's buying behavior?
-- [ ] Is every sentence its own paragraph (blank lines between)?
-- [ ] Is it 80-110 words?
-- [ ] Does it match the 7-line template structure exactly?
-- [ ] No dense paragraphs? No over-specific jargon?
+- [ ] Is Line 2 a signal → business reality (no opinions/compliments)?
+- [ ] Is Line 3 a specific question about their buyer-finding blind spot?
+- [ ] Are Lines 4 and 5 unchanged from the template?
+- [ ] Is it 50-65 words total?
+- [ ] Each sentence its own paragraph?
+- [ ] No pitching anywhere?
 
 If any check fails, simplify.
 
