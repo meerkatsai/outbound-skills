@@ -397,12 +397,31 @@ Founder, Meerkats AI
 
 **WHAT TO CUSTOMIZE per company (ONLY these 3 things):**
 
-**1. Line 2 — Company + space (casual, 5-10 words describing what they do):**
+**1. Line 2 — Context opener (signal-dependent, casual):**
+
+Pick the FIRST signal that exists in the data and use it. Priority order:
+
+**IF hiring signal exists (they're actively posting roles):**
+- "Saw you're bringing in a {{role}} — makes sense given where {{space}} is heading.."
+- "Hiring a {{role}} right now — feels like {{Company}} is doubling down on {{initiative}}.."
+
+**ELIF funding signal exists (recent raise in Apollo data):**
+- "Saw the {{investor}}-led raise — makes sense given where {{space}} is heading.."
+- "Saw {{Company}}'s recent raise — scaling {{what they do in plain words}} feels like the right bet right now.."
+
+**ELIF content/milestone signal exists (news, launch, partnership):**
+- "Saw {{Company}}'s {{announcement/milestone}} — {{brief casual reaction}}.."
+
+**ELSE (no signal — fallback):**
+- "{{Company}} came up while I was researching companies {{doing X in Y space}}.."
+
+Examples:
+- "Saw the IIFL Fintech-led raise — makes sense given where voice AI for lending is heading.."
+- "Saw you're hiring a Head of Collections — feels like Fundamento is scaling the enterprise motion.."
+- "Saw Decube's recent raise — scaling a data trust platform for enterprise AI feels like the right bet right now.."
 - "ForceEquals came up while I was researching companies building AI products for enterprise.."
-- "Decube came up while I was researching data governance platforms in APAC.."
-- "Fundamento came up while I was researching voice AI for lending.."
-- "HireBound came up while I was researching AI recruiting platforms for staffing firms.."
-- DO NOT quote their website. DO NOT interpret their positioning. Just say what they do in plain casual words.
+
+DO NOT quote their website. Just say what they do in plain casual words. Keep it ONE sentence.
 
 **2. Line 4 — Signal examples (2-3 signals relevant to their ICP's buying behavior):**
 - For BFSI: "like when a lender starts hiring for collections leadership or announces a new branch expansion"

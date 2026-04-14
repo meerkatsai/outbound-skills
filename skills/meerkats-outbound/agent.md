@@ -105,7 +105,7 @@ Would you like me to send it over?
 Founder, Meerkats AI
 ```
 
-**What changes per company:** (1) Line 2: company + space in plain words, (2) Line 4: 2-3 signal examples for their ICP, (3) Line 5: simple contrast for their world.
+**What changes per company:** (1) Line 2: signal-dependent opener (hiring > funding > milestone > fallback). Use the FIRST signal that exists, (2) Line 4: 2-3 signal examples for their ICP, (3) Line 5: simple contrast for their world.
 
 **What NEVER changes:** Line 1, Line 3, Line 6, Line 7, signature.
 
