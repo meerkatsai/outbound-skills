@@ -423,7 +423,9 @@ Pick the FIRST signal that exists. Pattern: **"Saw [signal] — [business realit
 - "Saw the {{partnership}} — that usually means the next 6 months are about proving it scales.."
 
 **ELSE (no signal — fallback):**
-- "{{Company}} came up while I was researching companies {{doing X in Y space}}.."
+- "{{Company}} came up while I was researching {{broad category in sector}}.."
+- Keep the description to BROAD CATEGORY + SECTOR. Max 5-6 words. No jargon. No sub-categories. A real human researches "AI tools in pharma" not "AI-powered GMP compliance intelligence platforms for pharmaceutical manufacturing."
+- Examples: "AI platforms in health sector", "AI tools for business reporting", "AI recruiting platforms", "voice AI in lending", "data governance tools", "design software for manufacturing", "logistics platforms in India"
 
 **HARD RULE:** After the signal, connect to a business reality ("that usually means..."). NEVER add an opinion or compliment.
 
