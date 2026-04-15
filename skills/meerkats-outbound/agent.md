@@ -90,7 +90,7 @@ Saw {{signal}} — {{business reality}}..
 
 Quick question — {{blind spot question specific to their buyer type}}?
 
-We've been helping similar teams catch those signals early — one of our clients saw a ~50% lift in conversions by timing it right.
+We've been helping similar teams automate their GTM workflows — sourcing, enrichment, and outreach — with AI agents. One of our clients saw a ~50% lift in conversions by running this hands-free.
 
 Happy to share a few examples if useful.
 

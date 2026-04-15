@@ -25,22 +25,22 @@ Personalization IS:
 
 ## MEERKATS POSITIONING (Internal — never dump this into emails)
 
-Meerkats is an agent operations platform for GTM teams:
-- Users build reusable "skills" (sourcing, enrichment, outreach, reporting)
-- Skills deploy as coordinated agents that autonomously execute workflows
-- No code. No RevOps dependency. Full GTM workflow orchestration.
-- Once a playbook is built, it becomes reusable infrastructure redeployable across campaigns, segments, and markets in minutes.
+Meerkats is the Agent Operations Platform for GTM teams:
+- Deploy, manage, and scale AI agents across your entire go-to-market
+- One platform for agent lifecycle, workflow orchestration, and team operations
+- Agents handle sourcing → enrichment → outreach → reporting autonomously
+- No code. No RevOps dependency. Reusable skills deployed as agents across clients, campaigns, and markets in minutes.
 
 **What we offer in outreach is NOT a product pitch.**
-We offer: a done-for-you, immediately usable outbound playbook tailored to the prospect's ICP, market dynamics, and GTM state — powered by Meerkats.
+We offer to show prospects how autonomous AI agents can handle their GTM workflows — sourcing, enrichment, outreach, reporting — without scaling headcount. The email should make them curious about how this works, not sell them a platform.
 
-The recipient should feel: "This is something I can use right now to improve pipeline."
+The recipient should feel: "This team understands my GTM execution problem."
 
 ## CREDIBILITY APPROACH
 
 Keep it simple. The email structure handles credibility:
-- Line 4 shows you understand their market (signal examples)
-- Line 6 provides proof ("~50% lift in conversions")
+- Line 3 (the question) shows you understand their GTM execution challenge
+- Line 4 shows you help similar teams automate GTM workflows with AI agents + provides proof (~50% lift)
 - The casual tone makes it feel human, not vendor
 
 Never mention Meerkats as a product. Never mention company stage. The signature handles identity.
@@ -313,6 +313,7 @@ ELSE:
 **Anti-patterns — NEVER use:**
 - "Scale your outbound"
 - "Increase pipeline"
+- "AI-powered platform" / "agent operations platform" — never pitch the product category
 - "Streamline workflows"
 - "Leverage AI"
 - Any phrase that could describe 50 other tools
@@ -380,7 +381,7 @@ Saw {{signal}} — {{business reality inference}}..
 
 Quick question — {{question about their blind spot, specific to their ICP's buyer type}}?
 
-We've been helping similar teams catch those signals early — one of our clients saw a ~50% lift in conversions by timing it right.
+We've been helping similar teams automate their GTM workflows — sourcing, enrichment, and outreach — with AI agents. One of our clients saw a ~50% lift in conversions by running this hands-free.
 
 Happy to share a few examples if useful.
 
@@ -396,7 +397,7 @@ Hey {{FirstName}},
 
 Quick question — {{question about their blind spot, specific to their ICP's buyer type}}?
 
-We've been helping similar teams catch those signals early — one of our clients saw a ~50% lift in conversions by timing it right.
+We've been helping similar teams automate their GTM workflows — sourcing, enrichment, and outreach — with AI agents. One of our clients saw a ~50% lift in conversions by running this hands-free.
 
 Happy to share a few examples if useful.
 
@@ -416,7 +417,7 @@ Pick the FIRST signal that exists. Pattern: **"Saw [signal] — [business realit
 - "Saw you're hiring a {{role}} — that usually means the current setup can't keep up with growth.."
 
 **ELIF funding signal exists:**
-- "Saw {{Company}}'s recent raise — that usually means a push to scale pipeline before the next board review.."
+- "Saw {{Company}}'s recent raise — that usually means a push to scale GTM execution before the next board review.."
 - "Saw the {{investor}}-led round — post-raise is usually when pipeline pressure ramps up fast.."
 
 **ELIF partnership/milestone signal exists:**
@@ -431,20 +432,21 @@ Pick the FIRST signal that exists. Pattern: **"Saw [signal] — [business realit
 
 **2. Line 3 — The question (specific to their ICP's buyer type):**
 
-This is a question that makes them think about a blind spot in how they find buyers. Examples by vertical:
+This is a question that makes them think about a blind spot in their GTM execution. Examples by vertical:
 
-- BFSI: "how are you finding lenders who are actively evaluating right now, vs ones who are just browsing?"
-- SaaS/Enterprise: "how are you finding companies that are actively evaluating right now, vs ones still 12 months out?"
-- Health: "how are you finding health systems in an active evaluation window, vs ones still exploring?"
-- Retail: "how are you finding retailers actively restructuring their planning process, vs ones who are settled?"
-- Pharma: "how are you finding manufacturers in a live compliance window, vs ones not under pressure yet?"
-- Content/Creator: "how are you finding the right distribution partners who are actively looking, vs ones who are just open to a conversation?"
+- BFSI: "how are you handling outbound to lenders at scale right now — is it still mostly manual, or have you started automating parts of it?"
+- SaaS/Enterprise: "are you running prospecting and enrichment manually right now, or have you started using agents for parts of it?"
+- Health: "how are you handling outreach to health systems at scale — is the team doing it manually, or is some of it automated?"
+- Retail: "are you running your retail outreach manually, or have you started automating the prospecting and enrichment side?"
+- Pharma: "how are you handling outbound to manufacturers right now — is it still manual prospecting, or have you started automating parts?"
+- Content/Creator: "how are you handling partner outreach at scale — is it mostly manual, or have you started automating parts of the sourcing?"
+- Agencies: "are you running GTM execution for each client manually, or have you started using agents to scale it across accounts?"
 
-Use the ICP and buyer triggers from Steps 2-3 to make this question specific to their world.
+Use the ICP from Steps 2-3 to make this question specific to their world. The question should always be about their GTM EXECUTION capacity, not about finding the right buyers.
 
 **WHAT NEVER CHANGES (identical every time):**
 - Line 1: "Hey {{FirstName}},"
-- Line 4: "We've been helping similar teams catch those signals early — one of our clients saw a ~50% lift in conversions by timing it right."
+- Line 4: "We've been helping similar teams automate their GTM workflows — sourcing, enrichment, and outreach — with AI agents. One of our clients saw a ~50% lift in conversions by running this hands-free."
 - Line 5: "Happy to share a few examples if useful."
 - Signature: "– Santanu / Founder, Meerkats AI"
 
