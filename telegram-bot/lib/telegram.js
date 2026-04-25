@@ -42,7 +42,7 @@ async function handleUpdate(update) {
   if (userText === "/start") {
     await sendMessage(
       chatId,
-      "Bot is connected. Send /chatid anytime and I will return this chat id."
+      "Bot is connected. Commands: /chatid, /ping, /notify <message>."
     );
     return;
   }
@@ -54,6 +54,28 @@ async function handleUpdate(update) {
 
   if (userText === "/ping") {
     await sendMessage(chatId, "pong");
+    return;
+  }
+
+  if (userText.startsWith("/notify")) {
+    const targetChatId = (process.env.TELEGRAM_CHAT_ID || "").trim();
+    if (!targetChatId) {
+      await sendMessage(chatId, "TELEGRAM_CHAT_ID is not set on the server.");
+      return;
+    }
+
+    if (String(chatId) !== String(targetChatId)) {
+      await sendMessage(chatId, "You are not allowed to use /notify.");
+      return;
+    }
+
+    const notifyText = userText.replace(/^\/notify(@\w+)?\s*/, "").trim();
+    if (!notifyText) {
+      await sendMessage(chatId, "Usage: /notify Your message here");
+      return;
+    }
+
+    await sendMessage(targetChatId, `Notification: ${notifyText}`);
     return;
   }
 
