@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: telegram-bot-starter
+    env: node
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "npm run start:webhook"
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: WEBHOOK_BASE_URL
+        sync: false

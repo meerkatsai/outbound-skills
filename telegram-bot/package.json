@@ -1,0 +1,15 @@
+{
+  "name": "telegram-bot-starter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Minimal Telegram bot starter using long polling and Node.js built-in fetch.",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node bot.js",
+    "start:webhook": "node webhook.js",
+    "send": "node send.js",
+    "webhook:set": "node scripts/set-webhook.js",
+    "webhook:info": "node scripts/webhook-info.js",
+    "webhook:clear": "node scripts/clear-webhook.js"
+  }
+}
