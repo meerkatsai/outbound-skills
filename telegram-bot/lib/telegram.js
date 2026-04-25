@@ -42,7 +42,7 @@ async function handleUpdate(update) {
   if (userText === "/start") {
     await sendMessage(
       chatId,
-      "Bot is connected. Commands: /chatid, /ping, /notify <message>."
+      "Bot is connected. Commands: /chatid, /ping, /notify <message>, /lead <mobile_number>."
     );
     return;
   }
@@ -76,6 +76,35 @@ async function handleUpdate(update) {
     }
 
     await sendMessage(targetChatId, `Notification: ${notifyText}`);
+    return;
+  }
+
+  if (userText.startsWith("/lead")) {
+    const rawPhone = userText.replace(/^\/lead(@\w+)?\s*/, "").trim();
+    if (!rawPhone) {
+      await sendMessage(chatId, "Usage: /lead +919876543210");
+      return;
+    }
+
+    const normalized = rawPhone.replace(/[\s()-]/g, "");
+    const isValidPhone = /^\+?\d{10,15}$/.test(normalized);
+    if (!isValidPhone) {
+      await sendMessage(chatId, "Please send a valid mobile number (10 to 15 digits).");
+      return;
+    }
+
+    const targetChatId = (process.env.TELEGRAM_CHAT_ID || "").trim();
+    const leadText = `New lead mobile number: ${normalized}`;
+
+    if (targetChatId) {
+      await sendMessage(targetChatId, leadText);
+      if (String(chatId) !== String(targetChatId)) {
+        await sendMessage(chatId, "Lead captured successfully.");
+      }
+      return;
+    }
+
+    await sendMessage(chatId, `${leadText}\nSet TELEGRAM_CHAT_ID on the server to forward leads.`);
     return;
   }
 
