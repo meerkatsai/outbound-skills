@@ -42,7 +42,7 @@ async function handleUpdate(update) {
   if (userText === "/start") {
     await sendMessage(
       chatId,
-      "Bot is connected. Commands: /chatid, /ping, /notify <message>, /lead <mobile_number>."
+      "Bot is connected. Commands: /chatid, /ping, /notify <message>, /lead <mobile_number>, /channel <message>."
     );
     return;
   }
@@ -105,6 +105,31 @@ async function handleUpdate(update) {
     }
 
     await sendMessage(chatId, `${leadText}\nSet TELEGRAM_CHAT_ID on the server to forward leads.`);
+    return;
+  }
+
+  if (userText.startsWith("/channel")) {
+    const operatorChatId = (process.env.TELEGRAM_CHAT_ID || "").trim();
+    const channelChatId = (process.env.TELEGRAM_CHANNEL_ID || "").trim();
+
+    if (!channelChatId) {
+      await sendMessage(chatId, "TELEGRAM_CHANNEL_ID is not set on the server.");
+      return;
+    }
+
+    if (!operatorChatId || String(chatId) !== String(operatorChatId)) {
+      await sendMessage(chatId, "You are not allowed to use /channel.");
+      return;
+    }
+
+    const channelText = userText.replace(/^\/channel(@\w+)?\s*/, "").trim();
+    if (!channelText) {
+      await sendMessage(chatId, "Usage: /channel Your channel message");
+      return;
+    }
+
+    await sendMessage(channelChatId, channelText);
+    await sendMessage(chatId, "Channel message sent.");
     return;
   }
 
